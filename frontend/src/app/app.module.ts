@@ -3,14 +3,18 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { IndexPageComponent } from './components/main-pages/index-page/index-page.component';
+import { SharedModule } from './components/shared-components/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    IndexPageComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    SharedModule
   ],
   providers: [
     provideClientHydration()
