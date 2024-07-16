@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <div class="col-7">
+            <form class="example-form w-100">
+                <mat-form-field class="example-full-width">
+                    <mat-label>Ce anume cauti?</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
+                        [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete">
+                        @for (option of options; track option) {
+                        <mat-option [value]="option">{{option}}</mat-option>
+                        }
+                    </mat-autocomplete>
+                </mat-form-field>
+            </form>
+        </div>
+        <div class="col">
+            <mat-form-field class="example-full-width">
+                <mat-label>Judet</mat-label>
+                <mat-select [(value)]="selected">
+                    <mat-option>Toata tara</mat-option>
+                    <mat-option value="option1">Toata tara</mat-option>
+                    <mat-option value="option2">Option 2</mat-option>
+                    <mat-option value="option3">Option 3</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <button class="btn btn-lg btn-danger" style="height: 55px;"><i class="fas fa-search"></i> Cauta</button>
+        </div>
+    </div>
+</div>

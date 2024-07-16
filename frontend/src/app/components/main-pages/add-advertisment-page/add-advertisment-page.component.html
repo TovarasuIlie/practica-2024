@@ -1,0 +1,61 @@
+<app-header></app-header>
+<div class="container my-5 py-5">
+    <h4 class="fw-semibold">Publica un anunt</h4>
+    <form>
+        <div class="container bg-white p-5 mb-3 shadow">
+            <h5 class="mb-3">Dă cat mai multe detalii!</h5>
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Adauga titlu</mat-label>
+                <input matInput #title placeholder="Ex. iPhone 11 aproape nou">
+                <mat-hint align="start">Introdu cel puțin 16 caractere</mat-hint>
+                <mat-hint align="end">{{title.value.length}} / 70</mat-hint>
+            </mat-form-field>
+
+            <mat-form-field class="w-100">
+                <mat-label>Categoria</mat-label>
+                <mat-select>
+                    @for (food of foods; track food) {
+                    <mat-option [value]="food">{{food}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="container bg-white p-5 mb-3 shadow">
+            <mat-form-field class="w-100">
+                <mat-label>Descriere</mat-label>
+                <textarea matInput #description placeholder="Incearca sa scrii ce ai vrea tu sa afli daca te-ai uita la acest anunt..." style="height: 300px;"></textarea>
+                <mat-hint align="start">Introdu cel puțin 40 caractere</mat-hint>
+                <mat-hint align="end">{{description.value.length}} / 9000</mat-hint>
+            </mat-form-field>
+        </div>
+        <div class="container bg-white p-5 mb-3 shadow">
+            <h5 class="mb-3">Imagini</h5>
+        </div>
+        <div class="container bg-white p-5 mb-3 shadow">
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Localitate</mat-label>
+                <input matInput #title placeholder="Ex. Beius">
+            </mat-form-field>
+        </div>
+        <div class="container bg-white p-5 mb-3 shadow">
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Persoana de contact</mat-label>
+                <input matInput #title placeholder="Ex. Beius">
+            </mat-form-field>
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Adresa de email</mat-label>
+                <input matInput #title placeholder="Ex. Beius">
+            </mat-form-field>
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Numarul de telefon</mat-label>
+                <input matInput #title placeholder="Ex. Beius">
+            </mat-form-field>
+        </div>
+        <div class="container bg-white p-5 shadow">
+            <div class="float-end">
+                <button class="btn btn-success"><i class="fas fa-plus"></i> Adauga anunt!</button>
+            </div>
+        </div>
+    </form>
+</div>
+<app-footer></app-footer>

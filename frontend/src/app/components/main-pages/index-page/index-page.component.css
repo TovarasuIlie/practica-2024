@@ -1,0 +1,32 @@
+.card {
+    border-color: white;
+    border-radius: 5px;
+    padding: 0;
+}
+
+.card:hover {
+    transition: 0.5s ease;
+    border-color: black;
+    cursor: pointer;
+}
+
+
+#index-card.card {
+    border: none;
+    margin-top: 50px;
+    cursor: default;
+}
+
+#index-card .card-img-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+  
+#index-card .object-fit {
+    width: 100%;
+    /* width of container */
+    height: 60vh;
+    /* height of container */
+    object-fit: cover;
+    object-position: 50% 50%;
+}
+

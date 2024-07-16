@@ -1,0 +1,19 @@
+.lh-5 {
+    line-height: 5px;
+}
+
+.object-fit {
+    width: 100%;
+    /* width of container */
+    height: 60vh;
+    /* height of container */
+    object-fit: scale-down;
+}
+
+.object-fit-avatar {
+    width: 100px;
+    /* width of container */
+    height: 100px;
+    /* height of container */
+    object-fit: scale-down;
+}
