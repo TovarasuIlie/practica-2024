@@ -27,7 +27,6 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
