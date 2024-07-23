@@ -1,0 +1,12 @@
+<div class="toast-container position-fixed bottom-0 end-0 p-3 fw-bold" *ngIf="toastService.toasts.length > 0">
+	<ngb-toast *ngFor="let toast of toastService.toasts" [autohide]="true" (hidden)="toastService.remove(toast)" [class]="toast.classname">
+		<ng-template ngbToastHeader>
+			<div class="me-auto">
+                <i [hidden]="toast.classname === 'text-success'" class="fa-solid fa-triangle-exclamation"></i> 
+                <i [hidden]="toast.classname === 'text-danger'" class="fa-solid fa-square-check"></i>
+                {{toast.title}}
+			</div>
+		</ng-template>
+		{{toast.message}}
+	</ngb-toast>
+</div>

@@ -9,7 +9,7 @@
                 <div class="modal-body p-4">
                     <mat-form-field class="w-100 mb-2">
                         <mat-label><i class="fas fa-at"></i> Email</mat-label>
-                        <input formControlName="email" matInput placeholder="example@gmail.com" [errorStateMatcher]="matcher">
+                        <input formControlName="username" matInput placeholder="example@gmail.com" [errorStateMatcher]="matcher">
                         @if (loginForm.get('email')?.hasError('email') && !loginForm.get('email')?.hasError('required')) {
                             <mat-error>Introduce-ti o adresa de email valida!</mat-error>
                         }

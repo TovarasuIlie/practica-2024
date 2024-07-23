@@ -26,6 +26,13 @@
                         </div>
                     </div>
                     <mat-form-field class="w-100 mb-2">
+                        <mat-label><i class="fas fa-at"></i> Nume Utilizator</mat-label>
+                        <input formControlName="username" matInput placeholder="example_example" [errorStateMatcher]="matcher">
+                        @if (registerForm.get('username')?.hasError('required')) {
+                            <mat-error>Adresa de email este <strong>obligatorie</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <mat-form-field class="w-100 mb-2">
                         <mat-label><i class="fas fa-at"></i> Email</mat-label>
                         <input formControlName="email" matInput placeholder="example@gmail.com" [errorStateMatcher]="matcher">
                         @if (registerForm.get('email')?.hasError('email') && !registerForm.get('email')?.hasError('required')) {
@@ -69,6 +76,11 @@
                             <mat-error>Judetul este <strong>obligatoriu</strong>.</mat-error>
                         }
                       </mat-form-field>
+                      <div *ngIf="errorMessages.length" class="alert alert-danger">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                      </div>
                       <hr>
                       <button type="submit" class="btn btn-info fw-semibold btn-lg w-100"><i class="far fa-plus-square"></i> Creaza cont!</button>
                 </form>
