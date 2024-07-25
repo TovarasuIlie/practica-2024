@@ -1,0 +1,67 @@
+<app-header></app-header>
+
+<div class="container-fluid pt-5 mt-5 bg-white shadow rounded mb-5">
+    <div class="container-lg">
+        <h3 class="fw-semibold mb-5 mt-3">Anunturile tale</h3>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu']" class="nav-link active" aria-current="page">Anunturi</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/mesaje']" class="nav-link">Mesaje</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/profil']" class="nav-link">Profil</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/setari']" class="nav-link">Setari</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-lg">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="active-ads-tab" data-bs-toggle="tab" data-bs-target="#active-ads-tab-pane"
+                type="button" role="tab" aria-controls="active-ads-tab-pane" aria-selected="true">Active</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="waiting-ads-tab" data-bs-toggle="tab" data-bs-target="#waiting-ads-tab-pane"
+                type="button" role="tab" aria-controls="waiting-ads-tab-pane" aria-selected="false">In Asteptare</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="disabled-ads-tab" data-bs-toggle="tab" data-bs-target="#disabled-ads-tab-pane"
+                type="button" role="tab" aria-controls="disabled-ads-tab-pane" aria-selected="false">Dezactivate</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="moderate-ads-tab" data-bs-toggle="tab" data-bs-target="#moderate-ads-tab-pane"
+                type="button" role="tab" aria-controls="moderate-ads-tab-pane" aria-selected="false">Moderate</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="adsTabContent">
+        <div class="tab-pane fade show active" id="active-ads-tab-pane" role="tabpanel" aria-labelledby="active-ads-tab"
+            tabindex="0">
+            <div class="container">
+                <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
+                    <div class="d-flex flex-column align-items-center my-5">
+                        <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
+                        <h4 class="fw-semibold">Momentant nu ai nici un anut activ</h4>
+                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au fost activate.</p>
+                        <button class="btn btn-lg btn-success fw-semibold">Adauga anunt</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="waiting-ads-tab-pane" role="tabpanel" aria-labelledby="waiting-ads-tab" tabindex="0">
+            ...
+        </div>
+        <div class="tab-pane fade" id="disabled-ads-tab-pane" role="tabpanel" aria-labelledby="disabled-ads-tab" tabindex="0">
+            ...
+        </div>
+        <div class="tab-pane fade" id="moderate-ads-tab-pane" role="tabpanel" aria-labelledby="moderate-ads-tab" tabindex="0">
+            ...
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

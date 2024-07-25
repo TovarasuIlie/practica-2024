@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'adauga-anunt',
     component: AddAdvertismentPageComponent
+  },
+  {
+    path: 'contul-meu',
+    loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule)
   }
 ];
 

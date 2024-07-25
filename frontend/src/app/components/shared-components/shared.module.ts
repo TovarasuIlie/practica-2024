@@ -14,6 +14,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterModule } from '@angular/router';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { ToastComponent } from './toast/toast.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 
 
@@ -22,12 +24,12 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
     HeaderComponent,
     FooterComponent,
     SearchBarComponent,
-    LoginModalComponent
+    LoginModalComponent,
+    ToastComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     FormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -36,7 +38,8 @@ import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/materi
     MatSelectModule,
     MatCheckboxModule,
     AsyncPipe,
-    RouterModule
+    RouterModule,
+    NgbModule
   ],
   exports: [
     HeaderComponent,
