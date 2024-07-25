@@ -1,18 +1,29 @@
 package com.PracticaVara.springJwt.service;
 
-import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.AuthenticationResponse;
+import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.repository.UserRepository;
+import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Role;
 import com.PracticaVara.springJwt.model.User;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @Service
 public class AuthenticationService {
@@ -28,39 +39,44 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public ResponseEntity<APIMessage> register(User request){
-        if(repository.findByUsername(request.getUsername()).isEmpty() && repository.findByEmail(request.getEmail()).isEmpty()) {
-            User user = new User();
-            user.setFirstName(request.getFirstName());
-            user.setLastName(request.getLastName());
-            user.setEmail(request.getEmail());
-            user.setUsername(request.getUsername());
-            user.setPassword(passwordEncoder.encode(request.getPassword()));
-            user.setRole(Role.USER);
-            user.setRegisteredDate(LocalDateTime.now());
+    public ResponseEntity<APIMessage> register(User request) {
+        if(repository.findByUsername(request.getUsername()).isEmpty()) {
+            if(repository.findByEmail(request.getEmail()).isEmpty()) {
+                User user = new User();
+                user.setFirstName(request.getFirstName());
+                user.setLastName(request.getLastName());
+                user.setUsername(request.getUsername());
+                user.setEmail(request.getEmail());
+                user.setPassword(passwordEncoder.encode(request.getPassword()));
+                user.setRole(Role.USER);
+                user.setRegisteredDate(LocalDateTime.now());
 
-            repository.save(user);
-
-            return ResponseEntity.ok(new APIMessage(HttpStatus.CREATED, "Contul a fost creat cu succes! Pentru a putea activa contul, trebuie sa accesati link-ul de pe email."));
-        } else {
-            if(!repository.findByUsername(request.getUsername()).isEmpty()) {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acest nume de utilizator este deja folost!"));
+                repository.save(user);
             } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acest email a fost deja folost pentru alt cont!"));
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acesta adresa de email este deja folosita!"));
             }
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acest nume de utilizator este deja folosit!"));
         }
+        return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Contul a fost creat cu succes!"));
     }
 
-    public ResponseEntity<Object> authenticate(User request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
-        User user = repository.findByUsername(request.getUsername()).orElseThrow();
-        String token = jwtService.generateToken(user);
+    public ResponseEntity<Object> authenticate(User request) {
+        try {
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+            if(auth.isAuthenticated()) {
+                User user = repository.findByUsername(request.getUsername()).orElseThrow();
+                user.setJwt(jwtService.generateToken(user));
+                return ResponseEntity.ok(user);
+            }
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Numele de utilizator / Email-ul sau Parola sunt gresite!"));
+        }
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "A avut loc o eroare!"));
+    }
 
+    public ResponseEntity<Object> refreshPage() {
+        Optional<User> user = repository.findByEmail(Claims.SUBJECT);
         return ResponseEntity.ok(user);
     }
 }

@@ -17,7 +17,8 @@ import { RegisterPageComponent } from './components/main-pages/auth-pages/regist
 import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/forgot-password-page.component';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
+import { AuthInterceptor } from './interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,6 @@ import { HttpClientModule } from '@angular/common/http';
     CommonModule,
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
@@ -43,7 +43,9 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [
     provideClientHydration(),
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
+    provideHttpClient(withFetch())
   ],
   bootstrap: [AppComponent]
 })

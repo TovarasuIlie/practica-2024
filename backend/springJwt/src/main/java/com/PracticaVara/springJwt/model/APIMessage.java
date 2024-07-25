@@ -3,23 +3,20 @@ package com.PracticaVara.springJwt.model;
 import org.springframework.http.HttpStatus;
 
 public class APIMessage {
-    private HttpStatus status;
+    private HttpStatus httpStatus;
     private String message;
 
-    public APIMessage(HttpStatus status, String message) {
-        this.status = status;
+    public APIMessage(HttpStatus httpStatus, String message) {
+        this.httpStatus = httpStatus;
         this.message = message;
     }
 
-    public APIMessage() {
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
     }
 
-    public HttpStatus getStatus() {
-        return status;
-    }
-
-    public void setStatus(HttpStatus status) {
-        this.status = status;
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
     }
 
     public String getMessage() {

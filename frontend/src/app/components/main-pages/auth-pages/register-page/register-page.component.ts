@@ -2,8 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AuthService } from '../../../../services/auth.service';
+import { response } from 'express';
 import { Router } from '@angular/router';
-import { ToastService } from '../../../../services/toast.service';
+import { UserRegister } from '../../../../models/user';
 
 @Component({
   selector: 'app-register-page',
@@ -16,7 +17,7 @@ export class RegisterPageComponent {
   matcher = new ErrorStateMatcher();
   errorMessages: string[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private toastService: ToastService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
 
   }
 
@@ -39,15 +40,20 @@ export class RegisterPageComponent {
   register() {
     this.errorMessages = [];
     if(this.registerForm.valid) {
-      this.authService.registerUser(this.registerForm.value).subscribe({
+      const newUser: UserRegister = {
+        username: this.registerForm.get('username')?.value,
+        firstName: this.registerForm.get('firstName')?.value,
+        lastName: this.registerForm.get('lastName')?.value,
+        email: this.registerForm.get('email')?.value,
+        password: this.registerForm.get('password')?.value
+      }
+      this.authService.registerUser(newUser).subscribe({
         next: (response: any) => {
-          console.log(response)
-          this.router.navigateByUrl("/");
-          this.toastService.show({title: "Cont creat cu succes!", message: response.message, classname: "text-success"});
+          this.router.navigateByUrl('/');
         },
         error: (response) => {
-          this.errorMessages.push(response.error.message)
           console.log(response)
+          this.errorMessages.push(response.error.message)
         }
       })
     }

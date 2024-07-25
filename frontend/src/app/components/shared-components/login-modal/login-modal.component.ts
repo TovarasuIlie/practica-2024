@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AuthService } from '../../../services/auth.service';
-import { TokenService } from '../../../services/token.service';
 
 @Component({
   selector: 'app-login-modal',
@@ -12,8 +11,10 @@ import { TokenService } from '../../../services/token.service';
 export class LoginModalComponent implements OnInit {
   loginForm: FormGroup = new FormGroup({});
   matcher = new ErrorStateMatcher();
+  errorMessages: string[] = [];
+  @ViewChild('closeModal') closeModal!: ElementRef;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private tokenService: TokenService) {
+  constructor(private fb: FormBuilder, private authService: AuthService) {
 
   }
 
@@ -24,20 +25,20 @@ export class LoginModalComponent implements OnInit {
   initializeForm() {
     this.loginForm = this.fb.group({
       username:    [null, [Validators.required]],
-      password: [null, [Validators.required, Validators.minLength(1)]]
+      password: [null, [Validators.required, Validators.minLength(8)]]
     })
   }
   
   login() {
+    this.errorMessages = [];
     if(this.loginForm.valid) {
       this.authService.loginUser(this.loginForm.getRawValue()).subscribe({
         next: (response: any) => {
           console.log(response)
-          this.tokenService.setToken = response.token as string;
+          this.closeModal.nativeElement.click();
         },
         error: (response) => {
-          console.log(response)
-          console.log("asda")
+          this.errorMessages.push(response.error.message);
         }
       })
     }

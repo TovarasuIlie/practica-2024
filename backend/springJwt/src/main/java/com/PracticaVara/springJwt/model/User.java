@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,11 +11,11 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User implements UserDetails {
     @Id
-            @GeneratedValue(strategy = GenerationType.IDENTITY)
-            @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
 
     @Column(name = "first_name")
@@ -41,6 +42,9 @@ public class User implements UserDetails {
     @Column(name = "address")
     private String address;
 
+    @Transient
+    private String jwt;
+
     public Integer getId() {
         return id;
     }
@@ -65,6 +69,18 @@ public class User implements UserDetails {
         this.lastName = lastName;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -73,36 +89,55 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public LocalDateTime getRegisteredDate() {
+        return registeredDate;
     }
 
     public void setRegisteredDate(LocalDateTime registeredDate) {
         this.registeredDate = registeredDate;
     }
+    //    public String getAddress() {
+//        return address;
+//    }
+//
+//    public void setAddress(String address) {
+//        this.address = address;
+//    }
 
-    public LocalDateTime getRegisteredDate() {
-        return registeredDate;
+    public String getJwt() {
+        return jwt;
     }
 
+    public void setJwt(String jwt) {
+        this.jwt = jwt;
+    }
+
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override
@@ -114,20 +149,7 @@ public class User implements UserDetails {
         return password;
     }
 
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 }

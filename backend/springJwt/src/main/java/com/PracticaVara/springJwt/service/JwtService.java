@@ -1,7 +1,6 @@
 package com.PracticaVara.springJwt.service;
 
 import com.PracticaVara.springJwt.model.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -9,7 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.function.Function;
@@ -49,17 +47,18 @@ public class JwtService {
 
     public String generateToken(User user){
         String token = Jwts
-                    .builder()
-                    .claim("username", user.getUsername())
-                    .claim("email", user.getEmail())
-                    .claim("registerDate", user.getRegisteredDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss")))
-                    .claim("role", user.getRole())
-                    .claim("firstName", user.getFirstName())
-                    .claim("lastName", user.getLastName())
-                    .issuedAt(new Date(System.currentTimeMillis()))
-                    .expiration(new Date(System.currentTimeMillis()+24*60*60*1000))
-                    .signWith(getSigninKey())
-                    .compact();
+                .builder()
+                .subject(user.getUsername())
+                .claim("username", user.getUsername())
+                .claim("email", user.getEmail())
+                .claim("registerDate", user.getRegisteredDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss")))
+                .claim("role", user.getRole())
+                .claim("firstName", user.getFirstName())
+                .claim("lastName", user.getLastName())
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis()+24*60*60*1000))
+                .signWith(getSigninKey())
+                .compact();
         return token;
     }
 
