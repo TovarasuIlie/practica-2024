@@ -1,15 +1,52 @@
 package com.PracticaVara.springJwt.model;
 
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "Announcement")
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer id;
+    @Column(name = "title")
     private String title;
+    @Column(name = "content")
     private String content;
+    @Column(name = "createdDate")
+    private LocalDateTime createdDate;
+    @Column(name = "expirationDate")
+    private LocalDateTime expirationDate;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getExpirationDate() {
+        return expirationDate;
+    }
+
+    public void setExpirationDate(LocalDateTime expirationDate) {
+        this.expirationDate = expirationDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;

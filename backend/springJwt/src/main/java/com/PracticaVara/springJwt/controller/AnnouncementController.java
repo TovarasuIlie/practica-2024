@@ -8,6 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
+@RestController
+@RequestMapping("api/Announcements")
 public class AnnouncementController {
     private final AnnouncementService announcementService;
 
@@ -28,14 +31,14 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public ResponseEntity<Announcement> createAnnouncement(@RequestBody Announcement announcement){
-        return ResponseEntity.ok(announcementService.save(announcement));
+    public ResponseEntity<Announcement> createAnnouncement(@RequestParam Integer userId, @RequestBody Announcement announcement){
+        return ResponseEntity.ok(announcementService.save(announcement, userId));
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement){
         announcement.setId(id);
-        return ResponseEntity.ok(announcementService.save(announcement));
+        return ResponseEntity.ok(announcementService.save(announcement, announcement.getUser().getId()));
 
     }
 

@@ -31,6 +31,9 @@ public class User implements UserDetails {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Announcement> announcements;
+
     public Integer getId() {
         return id;
     }
@@ -102,5 +105,13 @@ public class User implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public List<Announcement> getAnnouncements() {
+        return announcements;
+    }
+
+    public void setAnnouncements(List<Announcement> announcements) {
+        this.announcements = announcements;
     }
 }
