@@ -4,11 +4,13 @@ import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.User;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
