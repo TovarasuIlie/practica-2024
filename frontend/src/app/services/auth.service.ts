@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { map, of, ReplaySubject } from 'rxjs';
 import { User, UserLogin, UserRegister } from '../models/user';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
   private userSource = new ReplaySubject<User | null>(1);
   user$ = this.userSource.asObservable();
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   refreshUser(jwt: string | null) {
     if(jwt === null) {
@@ -41,6 +42,12 @@ export class AuthService {
         }
       })
     );
+  }
+
+  logOut() {
+    localStorage.removeItem(environment.USER_KEY);
+    this.userSource.next(null);
+    this.router.navigateByUrl('/');
   }
 
   registerUser(user: UserRegister) {

@@ -20,10 +20,16 @@
                     </a>
                     <ul class="dropdown-menu">
                         <div *ngIf="(authService.user$ | async) === null">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#login-modal"><i class="fas fa-sign-in-alt"></i> Autentificate</a></li>
+                            <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#login-modal"><i class="fas fa-sign-in-alt"></i> Autentificate</button></li>
                         </div>
                         <div *ngIf="(authService.user$ | async) !== null">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#login-modal"><i class="fas fa-sign-in-alt"></i> Test</a></li>
+                            <li><button class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                            <li><button class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                            <li><button class="dropdown-item"><i class="fa-solid fa-gears"></i> Setari</button></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                         </div>
                     </ul>
                 </li>

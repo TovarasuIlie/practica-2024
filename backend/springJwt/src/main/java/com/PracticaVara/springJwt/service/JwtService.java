@@ -25,7 +25,7 @@ public class JwtService {
         String username = extractUsername((token));
         return  (username.equals(user.getUsername()))&& !isTokenExpired(token);
     }
-    private boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
@@ -48,6 +48,7 @@ public class JwtService {
     public String generateToken(User user){
         String token = Jwts
                 .builder()
+                .setHeaderParam("typ","JWT")
                 .subject(user.getUsername())
                 .claim("username", user.getUsername())
                 .claim("email", user.getEmail())

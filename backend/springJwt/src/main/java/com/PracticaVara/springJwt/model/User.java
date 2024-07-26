@@ -96,6 +96,7 @@ public class User implements UserDetails {
     public void setRegisteredDate(LocalDateTime registeredDate) {
         this.registeredDate = registeredDate;
     }
+
     //    public String getAddress() {
 //        return address;
 //    }
@@ -140,6 +141,7 @@ public class User implements UserDetails {
         this.username = username;
     }
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

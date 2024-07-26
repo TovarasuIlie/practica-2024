@@ -34,9 +34,4 @@ public class AuthenticationController {
     public ResponseEntity<Object> refreshPage() {
         return authenticationService.refreshPage();
     }
-
-    @PostMapping("/admin_only")
-    public ResponseEntity<Object> adminOnly(){
-        return ResponseEntity.ok("test");
-    }
 }

@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.service;
 
+import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.model.AuthenticationResponse;
 import com.PracticaVara.springJwt.model.User;
 import com.PracticaVara.springJwt.repository.UserRepository;
@@ -31,12 +32,14 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final BearerTokenWrapper tokenWrapper;
 
-    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, BearerTokenWrapper tokenWrapper) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.tokenWrapper = tokenWrapper;
     }
 
     public ResponseEntity<APIMessage> register(User request) {
@@ -76,7 +79,17 @@ public class AuthenticationService {
     }
 
     public ResponseEntity<Object> refreshPage() {
-        Optional<User> user = repository.findByEmail(Claims.SUBJECT);
-        return ResponseEntity.ok(user);
+        String jwt = tokenWrapper.getToken();
+        if(!jwtService.isTokenExpired(jwt)) {
+            Optional<User> user = repository.findByUsername(jwtService.extractUsername(jwt));
+            user.get().setJwt(jwt);
+            if(jwtService.isValid(jwt, user.get())) {
+                return ResponseEntity.ok(user);
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A aparut o eroare la generarea token-ului!"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Token-ul a exipirat!"));
+        }
     }
 }
