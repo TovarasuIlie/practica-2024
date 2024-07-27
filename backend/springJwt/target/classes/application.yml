@@ -4,6 +4,11 @@ spring:
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
+  mail:
+    hostname: sandbox.smtp.mailtrap.io
+    port: 587
+    username: 35e073f5a00226
+    password: e5e3dfccf3a27f
   jpa:
     hibernate:
       ddl-auto: update

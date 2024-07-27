@@ -2,10 +2,10 @@ package com.PracticaVara.springJwt.service;
 
 import com.PracticaVara.springJwt.DTOs.UserDTO;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
-import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.PracticaVara.springJwt.model.APIMessage;
-import com.PracticaVara.springJwt.model.Role;
+import com.PracticaVara.springJwt.model.Account.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

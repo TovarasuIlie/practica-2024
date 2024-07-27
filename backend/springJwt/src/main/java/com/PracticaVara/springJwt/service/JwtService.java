@@ -1,6 +1,6 @@
 package com.PracticaVara.springJwt.service;
 
-import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.model.Account.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.model;
 
+import com.PracticaVara.springJwt.model.Account.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

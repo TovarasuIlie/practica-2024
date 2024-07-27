@@ -1,6 +1,5 @@
 package com.PracticaVara.springJwt.DTOs;
 
-import com.PracticaVara.springJwt.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

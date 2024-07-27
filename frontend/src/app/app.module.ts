@@ -14,7 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
-import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/forgot-password-page.component';
+import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/index-page/forgot-password-page.component';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, provideHttpClient, withFetch } from '@angular/common/http';
@@ -26,8 +26,7 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     IndexPageComponent,
     AdvertisementPageComponent,
     AddAdvertismentPageComponent,
-    RegisterPageComponent,
-    ForgotPasswordPageComponent
+    RegisterPageComponent
   ],
   imports: [
     CommonModule,
@@ -42,7 +41,6 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     BrowserAnimationsModule
   ],
   providers: [
-    provideClientHydration(),
     provideAnimationsAsync(),
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     provideHttpClient(withFetch())

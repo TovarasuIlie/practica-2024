@@ -9,7 +9,7 @@ import { User } from '../models/user';
   providedIn: 'root'
 })
 
-export class AuthGuard {
+export class UnauthGuard {
   constructor(private authService: AuthService, private toasterService: ToastService, private router: Router) {
   }
 
@@ -17,11 +17,11 @@ export class AuthGuard {
     return this.authService.user$.pipe(
       map((user: User | null) => {
         if(user) {
-          return true;
-        } else {
           this.toasterService.show({title: "Acces interzis!", message: "Pentru a intra pe acea pagina trebuie sa fi autentificat!", classname: "text-danger"});
           this.router.navigateByUrl('/');
           return false;
+        } else {
+          return true;
         }
       })
     );

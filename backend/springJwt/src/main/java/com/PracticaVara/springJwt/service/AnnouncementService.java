@@ -1,7 +1,7 @@
 package com.PracticaVara.springJwt.service;
 
 import com.PracticaVara.springJwt.model.Announcement;
-import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import org.springframework.stereotype.Service;

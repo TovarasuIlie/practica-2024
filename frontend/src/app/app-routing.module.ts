@@ -4,8 +4,9 @@ import { IndexPageComponent } from './components/main-pages/index-page/index-pag
 import { AdvertisementPageComponent } from './components/main-pages/advertisement-page/advertisement-page.component';
 import { AddAdvertismentPageComponent } from './components/main-pages/add-advertisment-page/add-advertisment-page.component';
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
-import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/forgot-password-page.component';
+import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/index-page/forgot-password-page.component';
 import { AuthGuard } from './route-guards/auth.guard';
+import { UnauthGuard } from './route-guards/unauth.guard';
 
 const routes: Routes = [
   {
@@ -13,12 +14,18 @@ const routes: Routes = [
     component: IndexPageComponent
   },
   {
-    path: "inregistreaza-te",
-    component: RegisterPageComponent
+    path: '',
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: "reseteaza-parola",
-    component: ForgotPasswordPageComponent
+    loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
+    // canActivate: [UnauthGuard]
+  },
+  {
+    path: 'inregistreaza-te',
+    component: RegisterPageComponent
   },
   {
     path: 'anunt/:adTitle',
@@ -26,11 +33,13 @@ const routes: Routes = [
   },
   {
     path: 'adauga-anunt',
-    component: AddAdvertismentPageComponent
+    component: AddAdvertismentPageComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'contul-meu',
     loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
+    canActivate: [AuthGuard]
   }
 ];
 

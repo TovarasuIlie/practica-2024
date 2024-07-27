@@ -14,7 +14,7 @@ export class AuthService {
   private userSource = new ReplaySubject<User | null>(1);
   user$ = this.userSource.asObservable();
 
-  constructor(private http: HttpClient, private router: Router, private localStorage: BrowserStorageService) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   refreshUser(jwt: string | null) {
     if(jwt === null) {
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   logOut() {
-    this.localStorage.removeItem("auth");
+    localStorage.removeItem("auth");
     this.userSource.next(null);
     this.router.navigateByUrl('/');
   }
@@ -56,12 +56,12 @@ export class AuthService {
   }
 
   private setUser(user: User) {
-    this.localStorage.setItem("auth", JSON.stringify(user));
+    localStorage.setItem("auth", JSON.stringify(user));
     this.userSource.next(user);
   }
 
   getJWT() {
-    const key = this.localStorage.getItem("auth");
+    const key = localStorage.getItem("auth");
     if(key) {
       const user: User = JSON.parse(key);
       return user.jwt;

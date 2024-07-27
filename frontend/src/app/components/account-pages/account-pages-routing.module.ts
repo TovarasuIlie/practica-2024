@@ -4,13 +4,11 @@ import { IndexPageComponent } from './index-page/index-page.component';
 import { MessagesPageComponent } from './messages-page/messages-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
-import { AuthGuard } from '../../route-guards/auth.guard';
 
 const routes: Routes = [
   {
     path: "",
     component: IndexPageComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: "mesaje",

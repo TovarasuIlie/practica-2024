@@ -1,6 +1,6 @@
 package com.PracticaVara.springJwt.filter;
 
-import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.JwtService;
 import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
 import jakarta.servlet.FilterChain;

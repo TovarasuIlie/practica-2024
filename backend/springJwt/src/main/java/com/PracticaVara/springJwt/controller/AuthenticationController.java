@@ -1,7 +1,7 @@
 package com.PracticaVara.springJwt.controller;
 
 import com.PracticaVara.springJwt.model.APIMessage;
-import com.PracticaVara.springJwt.model.User;
+import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.AuthenticationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
