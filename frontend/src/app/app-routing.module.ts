@@ -5,6 +5,7 @@ import { AdvertisementPageComponent } from './components/main-pages/advertisemen
 import { AddAdvertismentPageComponent } from './components/main-pages/add-advertisment-page/add-advertisment-page.component';
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
 import { ForgotPasswordPageComponent } from './components/main-pages/auth-pages/forgot-password-page/forgot-password-page.component';
+import { AuthGuard } from './route-guards/auth.guard';
 
 const routes: Routes = [
   {
@@ -29,7 +30,7 @@ const routes: Routes = [
   },
   {
     path: 'contul-meu',
-    loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule)
+    loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
   }
 ];
 

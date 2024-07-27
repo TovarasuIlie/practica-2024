@@ -1,29 +1,21 @@
 package com.PracticaVara.springJwt.service;
 
+import com.PracticaVara.springJwt.DTOs.UserDTO;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
-import com.PracticaVara.springJwt.model.AuthenticationResponse;
 import com.PracticaVara.springJwt.model.User;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Role;
-import com.PracticaVara.springJwt.model.User;
-import com.PracticaVara.springJwt.repository.UserRepository;
-import io.jsonwebtoken.Claims;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Service
@@ -70,7 +62,7 @@ public class AuthenticationService {
             if(auth.isAuthenticated()) {
                 User user = repository.findByUsername(request.getUsername()).orElseThrow();
                 user.setJwt(jwtService.generateToken(user));
-                return ResponseEntity.ok(user);
+                return ResponseEntity.ok(new UserDTO(user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getJwt()));
             }
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Numele de utilizator / Email-ul sau Parola sunt gresite!"));
@@ -84,7 +76,7 @@ public class AuthenticationService {
             Optional<User> user = repository.findByUsername(jwtService.extractUsername(jwt));
             user.get().setJwt(jwt);
             if(jwtService.isValid(jwt, user.get())) {
-                return ResponseEntity.ok(user);
+                return ResponseEntity.ok(new UserDTO(user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt()));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A aparut o eroare la generarea token-ului!"));
             }

@@ -23,7 +23,7 @@
                             <li><button class="dropdown-item" data-bs-toggle="modal" data-bs-target="#login-modal"><i class="fas fa-sign-in-alt"></i> Autentificate</button></li>
                         </div>
                         <div *ngIf="(authService.user$ | async) !== null">
-                            <li><button class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                            <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
                             <li><button class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>

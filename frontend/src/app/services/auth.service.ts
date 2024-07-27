@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { map, of, ReplaySubject } from 'rxjs';
 import { User, UserLogin, UserRegister } from '../models/user';
 import { Router } from '@angular/router';
+import { BrowserStorageService } from './browser-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,7 @@ export class AuthService {
   private userSource = new ReplaySubject<User | null>(1);
   user$ = this.userSource.asObservable();
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private localStorage: BrowserStorageService) { }
 
   refreshUser(jwt: string | null) {
     if(jwt === null) {
@@ -45,7 +46,7 @@ export class AuthService {
   }
 
   logOut() {
-    localStorage.removeItem(environment.USER_KEY);
+    this.localStorage.removeItem("auth");
     this.userSource.next(null);
     this.router.navigateByUrl('/');
   }
@@ -55,12 +56,12 @@ export class AuthService {
   }
 
   private setUser(user: User) {
-    localStorage.setItem(environment.USER_KEY, JSON.stringify(user));
+    this.localStorage.setItem("auth", JSON.stringify(user));
     this.userSource.next(user);
   }
 
   getJWT() {
-    const key = localStorage.getItem(environment.USER_KEY);
+    const key = this.localStorage.getItem("auth");
     if(key) {
       const user: User = JSON.parse(key);
       return user.jwt;
