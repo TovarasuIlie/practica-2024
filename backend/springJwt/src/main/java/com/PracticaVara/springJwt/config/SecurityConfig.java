@@ -36,7 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
-                        req.requestMatchers("/api/Authentification/login/**", "/api/Authentification/register/**", "/api/Account/forgot-password/**", "/api/Account/reset-password/**", "/api/Account/send-email").permitAll();
+                        req.requestMatchers("/api/Authentification/login/**", "/api/Authentification/register/**", "/api/Account/forgot-password/**", "/api/Account/reset-password/**", "/api/Account/confirm-email").permitAll();
                         req.requestMatchers("/api/Authentification/refresh-page").authenticated();
                         req.anyRequest().authenticated();
                     }

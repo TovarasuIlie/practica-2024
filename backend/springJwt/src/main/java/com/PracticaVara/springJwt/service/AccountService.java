@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.Random;
 
 @AllArgsConstructor
@@ -20,6 +21,7 @@ public class AccountService {
     private final UserRepository userRepository;
     private final ResetPasswordCodeRepository resetPasswordCodeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     public ResponseEntity<APIMessage> forgotPassword(String email) {
         if(!userRepository.findByEmail(email).isEmpty()) {
@@ -29,6 +31,11 @@ public class AccountService {
                 resetPasswordCode.setCode(getSaltString());
                 resetPasswordCode.setUser(user);
                 resetPasswordCodeRepository.save(resetPasswordCode);
+                try {
+                    emailService.sendHtmlCodeEmail(user, resetPasswordCode.getCode());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 return ResponseEntity.ok(new APIMessage(HttpStatus.OK, "Un email a fost trimis pe adresa de email asociata contului!"));
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Un cod a fost deja trimis."));
@@ -56,6 +63,23 @@ public class AccountService {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A avut loc o eroare, va rugam sa reincercati!"));
         }
+    }
+
+    public ResponseEntity<APIMessage> confirmEmail(JsonNode requestBody) {
+        String email = requestBody.get("email").asText();
+        String token = requestBody.get("token").asText();
+        if(!email.isEmpty() && !token.isEmpty()) {
+            Optional<User> user = userRepository.findByEmail(email);
+            if(!user.isEmpty()) {
+                user.get().setEmailVerifed(true);
+                userRepository.save(user.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Nu a fost gasit nici un cont asociat email-ului! Te rugam reincearca!"));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A aparut o eroare, te rugam sa reincerci!"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Email a fost confirmat cu succes! Acuma poti sa intri pe cont!"));
     }
 
     private String getSaltString() {

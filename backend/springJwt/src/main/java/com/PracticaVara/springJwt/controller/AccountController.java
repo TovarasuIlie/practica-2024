@@ -27,8 +27,8 @@ public class AccountController {
         return accountService.resetPassword(requestBody);
     }
 
-    @GetMapping("send-email")
-    public void sendEmail() {
-        emailService.sendEmail();
+    @PutMapping("confirm-email")
+    public ResponseEntity<APIMessage> confirmEmail(@RequestBody JsonNode requestBody) {
+        return accountService.confirmEmail(requestBody);
     }
 }

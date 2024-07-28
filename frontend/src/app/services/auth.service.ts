@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
 import { map, of, ReplaySubject } from 'rxjs';
-import { User, UserLogin, UserRegister } from '../models/user';
+import { ConfirmEmail, User, UserLogin, UserRegister } from '../models/user';
 import { Router } from '@angular/router';
 import { BrowserStorageService } from './browser-storage.service';
 
@@ -28,7 +28,6 @@ export class AuthService {
     return this.http.get<User>(environment.API_URL + "/api/Authentification/refresh-page", {headers}).pipe(
       map((user: User) => {
         if(user) {
-          console.log(user);
           this.setUser(user);
         }
       })
@@ -43,6 +42,10 @@ export class AuthService {
         }
       })
     );
+  }
+
+  confirmEmail(confirmEmail: ConfirmEmail) {
+    return this.http.put<ConfirmEmail>(environment.API_URL + "/api/Account/confirm-email", confirmEmail);
   }
 
   logOut() {

@@ -25,13 +25,15 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final BearerTokenWrapper tokenWrapper;
+    private final EmailService emailService;
 
-    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, BearerTokenWrapper tokenWrapper) {
+    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, BearerTokenWrapper tokenWrapper, EmailService emailService) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.tokenWrapper = tokenWrapper;
+        this.emailService = emailService;
     }
 
     public ResponseEntity<APIMessage> register(User request) {
@@ -47,13 +49,18 @@ public class AuthenticationService {
                 user.setRegisteredDate(LocalDateTime.now());
 
                 repository.save(user);
+                try {
+                    emailService.sendHtmlVerificationEmail(user);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acesta adresa de email este deja folosita!"));
             }
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new APIMessage(HttpStatus.CONFLICT, "Acest nume de utilizator este deja folosit!"));
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Contul a fost creat cu succes!"));
+        return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Contul a fost creat. Vei primi un email pentru ati confirma confirma contul!"));
     }
 
     public ResponseEntity<Object> authenticate(User request) {
