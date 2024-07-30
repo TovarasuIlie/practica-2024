@@ -2,6 +2,7 @@ package com.PracticaVara.springJwt.model.Account;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,20 +20,23 @@ public class User implements UserDetails {
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "first_name")
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "username", unique = true)
+    @Column(name = "username", unique = true, nullable = false)
     private String username;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "email_verified", columnDefinition = "bit(1) default 0", nullable = false)
+    private boolean emailVerifed;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -98,13 +102,22 @@ public class User implements UserDetails {
         this.registeredDate = registeredDate;
     }
 
-    //    public String getAddress() {
-//        return address;
-//    }
-//
-//    public void setAddress(String address) {
-//        this.address = address;
-//    }
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+
+    public boolean isEmailVerifed() {
+        return emailVerifed;
+    }
+
+    public void setEmailVerifed(boolean emailVerifed) {
+        this.emailVerifed = emailVerifed;
+    }
 
     public String getJwt() {
         return jwt;

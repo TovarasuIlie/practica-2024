@@ -18,3 +18,8 @@ export interface UserRegister {
     email: string;
     password: string;
 }
+
+export interface ConfirmEmail {
+    email: string;
+    token: string;
+}

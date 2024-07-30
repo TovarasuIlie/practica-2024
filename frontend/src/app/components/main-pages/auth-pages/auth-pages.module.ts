@@ -6,14 +6,14 @@ import { ForgotPasswordPageComponent } from './forgot-password-page/index-page/f
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ResetPasswordPageComponent } from './forgot-password-page/reset-password-page/reset-password-page.component';
 import { SharedModule } from '../../shared-components/shared.module';
+import { ResetPasswordPageComponent } from './forgot-password-page/reset-password-page/reset-password-page.component';
 
 
 @NgModule({
   declarations: [
     ForgotPasswordPageComponent,
-    ResetPasswordPageComponent
+    ResetPasswordPageComponent,
   ],
   imports: [
     CommonModule,

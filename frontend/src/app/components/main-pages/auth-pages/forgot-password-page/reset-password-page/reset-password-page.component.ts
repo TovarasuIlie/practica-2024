@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AccountService } from '../../../../../services/account.service';
 import { Router } from '@angular/router';
-import { ToastComponent } from '../../../../shared-components/toast/toast.component';
 import { ToastService } from '../../../../../services/toast.service';
 
 @Component({
@@ -26,7 +25,7 @@ export class ResetPasswordPageComponent {
     this.verifyCodeForm = this.fb.group({
       password:         [null, [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
       confirmPassword:  [null, [Validators.required, Validators.minLength(8)]],
-      code: [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
+      code:             [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
     })
   }
 
@@ -35,7 +34,7 @@ export class ResetPasswordPageComponent {
     if(this.verifyCodeForm.valid) {
       this.accountService.resetPassword(this.verifyCodeForm.get("code")?.value, this.verifyCodeForm.get("password")?.value).subscribe({
         next: (response: any) => {
-          this.toastService.show({title: "Resetare Parola", message: response.message, classname: "text-success"});
+          this.toastService.show({title: "Resetare Parola!", message: response.message, classname: "text-success"});
           this.router.navigateByUrl('/');
         },
         error: (response) => {

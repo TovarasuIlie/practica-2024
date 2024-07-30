@@ -5,10 +5,10 @@ spring:
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
-    hostname: sandbox.smtp.mailtrap.io
+    hostname: smtp-relay.brevo.com
     port: 587
-    username: 35e073f5a00226
-    password: e5e3dfccf3a27f
+    username: 797207001@smtp-brevo.com
+    password: 7fGDbFNKgYZzcRMW
   jpa:
     hibernate:
       ddl-auto: create-drop

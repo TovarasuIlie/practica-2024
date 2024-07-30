@@ -8,13 +8,15 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MessagesPageComponent } from './messages-page/messages-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { ConfirmEmailPageComponent } from './confirm-email-page/confirm-email-page.component';
 
 @NgModule({
   declarations: [
     IndexPageComponent,
     MessagesPageComponent,
     ProfilePageComponent,
-    SettingsPageComponent
+    SettingsPageComponent,
+    ConfirmEmailPageComponent
   ],
 
   imports: [

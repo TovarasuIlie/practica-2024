@@ -4,6 +4,7 @@ import { IndexPageComponent } from './index-page/index-page.component';
 import { MessagesPageComponent } from './messages-page/messages-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { SettingsPageComponent } from './settings-page/settings-page.component';
+import { ConfirmEmailPageComponent } from './confirm-email-page/confirm-email-page.component';
 
 const routes: Routes = [
   {
@@ -22,6 +23,10 @@ const routes: Routes = [
     path: "setari",
     component: SettingsPageComponent
   },
+  {
+    path: 'confirma-email',
+    component: ConfirmEmailPageComponent
+  }
 
 ];
 

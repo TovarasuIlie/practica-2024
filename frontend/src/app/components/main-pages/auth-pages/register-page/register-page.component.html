@@ -66,7 +66,7 @@
                     </mat-form-field>
                     <mat-form-field class="w-100 mb-2">
                         <mat-label><i class="fas fa-key"></i> Confirma Parola</mat-label>
-                        <input formControlName="confirmPassword" matInput type="password" placeholder="Scrie parola..."
+                        <input formControlName="confirmPassword" matInput type="password" placeholder="Confirma parola"
                             [errorStateMatcher]="matcher">
                         @if (registerForm.get('confirmPassword')?.hasError('minlength') &&
                         !registerForm.get('confirmPassword')?.hasError('required')) {
