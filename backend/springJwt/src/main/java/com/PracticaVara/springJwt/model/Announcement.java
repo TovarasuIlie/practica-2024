@@ -20,10 +20,23 @@ public class Announcement {
     private LocalDateTime createdDate;
     @Column(name = "expirationDate")
     private LocalDateTime expirationDate;
+    @Column(name = "imageUrl")
+    private String imageUrl;
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column(name = "is_deactivated")
+    private boolean isDeactivated = false;
 
     public LocalDateTime getCreatedDate() {
         return createdDate;

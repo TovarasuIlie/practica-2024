@@ -18,7 +18,8 @@ spring:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
-
+file:
+  upload-dir: uploads
 
 
 

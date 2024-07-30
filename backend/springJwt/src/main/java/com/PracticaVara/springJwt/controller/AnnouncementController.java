@@ -4,6 +4,7 @@ import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,14 +32,14 @@ public class AnnouncementController {
     }
 
     @PostMapping
-    public ResponseEntity<Announcement> createAnnouncement(@RequestParam Integer userId, @RequestBody Announcement announcement){
-        return ResponseEntity.ok(announcementService.save(announcement, userId));
+    public ResponseEntity<Announcement> createAnnouncement(@RequestParam Integer userId, @RequestBody Announcement announcement, @RequestParam("image")MultipartFile imageFile){
+        return ResponseEntity.ok(announcementService.save(announcement, userId, imageFile));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement){
+    public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image")MultipartFile imageFile){
         announcement.setId(id);
-        return ResponseEntity.ok(announcementService.save(announcement, announcement.getUser().getId()));
+        return ResponseEntity.ok(announcementService.save(announcement, announcement.getUser().getId(), imageFile));
 
     }
 
