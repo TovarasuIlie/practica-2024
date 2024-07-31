@@ -23,13 +23,8 @@ public class Announcement {
     @Column(name = "imageUrl")
     private String imageUrl;
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
+    @Column(name = "photo_number")
+    private int photoNumber;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -38,6 +33,29 @@ public class Announcement {
     @Column(name = "is_deactivated")
     private boolean isDeactivated = false;
 
+    public int getPhotoNumber() {
+        return photoNumber;
+    }
+
+    public void setPhotoNumber(int photoNumber) {
+        this.photoNumber = photoNumber;
+    }
+
+    public boolean isDeactivated() {
+        return isDeactivated;
+    }
+
+    public void setDeactivated(boolean deactivated) {
+        isDeactivated = deactivated;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
     public LocalDateTime getCreatedDate() {
         return createdDate;
     }
