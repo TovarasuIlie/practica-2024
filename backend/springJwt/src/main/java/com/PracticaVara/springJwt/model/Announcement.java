@@ -2,106 +2,48 @@ package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Setter
+@Getter
 @Table(name = "announcements")
 public class Announcement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
-    @Column(name = "content")
+    @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
-    @Column(name = "createdDate")
+    @Column(name = "createdDate", nullable = false)
     private LocalDateTime createdDate;
-    @Column(name = "expirationDate")
+    @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
-    @Column(name = "imageUrl")
+    @Column(name = "imageUrl", nullable = false)
     private String imageUrl;
-
-    @Column(name = "photo_number")
+    @Column(name = "photo_number", nullable = false)
     private int photoNumber;
-
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(name = "is_deactivated")
+    @Column(name = "is_deactivated", nullable = false)
     private boolean isDeactivated = false;
-
-    public int getPhotoNumber() {
-        return photoNumber;
-    }
-
-    public void setPhotoNumber(int photoNumber) {
-        this.photoNumber = photoNumber;
-    }
-
-    public boolean isDeactivated() {
-        return isDeactivated;
-    }
-
-    public void setDeactivated(boolean deactivated) {
-        isDeactivated = deactivated;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    @Column(name = "price", nullable = false)
+    private double price;
+    @Column(name = "currency", nullable = false)
+    private String currency;
+    @Column(name = "url", nullable = false)
+    private String url;
+    @Column(name = "contact_person_name", nullable = false)
+    private String contactPersonName;
+    @Column(name = "phone_number", nullable = false, length = 10)
+    private String phoneNumber;
+    @Column(name = "address", nullable = false)
+    private String address;
 
 }

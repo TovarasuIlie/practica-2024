@@ -6,6 +6,7 @@ import { AddAdvertismentPageComponent } from './components/main-pages/add-advert
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
 import { AuthGuard } from './route-guards/auth.guard';
 import { UnauthGuard } from './route-guards/unauth.guard';
+import { annoucementResolver } from './resovers/annoucement.resolver';
 
 const routes: Routes = [
   {
@@ -18,26 +19,31 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: "reseteaza-parola",
-    loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
-    // canActivate: [UnauthGuard]
-  },
-  {
     path: 'inregistreaza-te',
     component: RegisterPageComponent
   },
   {
     path: 'anunt/:adTitle',
-    component: AdvertisementPageComponent
+    component: AdvertisementPageComponent,
+    resolve: {ad: annoucementResolver}
   },
   {
     path: 'adauga-anunt',
     component: AddAdvertismentPageComponent,
-    canActivate: [AuthGuard]
+    // canActivate: [AuthGuard]
   },
   {
     path: 'contul-meu',
     loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
+  },
+  {
+    path: "reseteaza-parola",
+    loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
+    // canActivate: [UnauthGuard]
+  },
+  {
+    path: "dashboard",
+    loadChildren: () => import("./components/dashboard-pages/dashboard-pages.module").then(module => module.DashboardPagesModule)
   }
 ];
 

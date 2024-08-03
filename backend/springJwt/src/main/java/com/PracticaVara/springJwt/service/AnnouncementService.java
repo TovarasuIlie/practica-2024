@@ -8,18 +8,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Security;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AnnouncementService {
@@ -39,6 +35,10 @@ public class AnnouncementService {
         return announcementRepository.findById(id);
     }
 
+    public Optional<Announcement> findByUrl(String url) {
+        return announcementRepository.findByUrl(url);
+    }
+
     public Announcement save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -48,6 +48,7 @@ public class AnnouncementService {
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
+            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[$&+,:;=?@#|'<>.-^*()%! ]", "-"));
 
             if(imageFile != null && imageFile.length > 0){
                 String folderUUID = UUID.randomUUID().toString();
@@ -56,19 +57,17 @@ public class AnnouncementService {
                     Files.createDirectories(userDir);
                 }
 
-                int photoNumber = 0;
                 for(int i = 0; i < imageFile.length; i++){
                     MultipartFile file = imageFile[i];
                     if(!file.isEmpty()){
-                        String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
+                        String filename = folderUUID + "-" + i + ".jpeg";
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
-                        photoNumber++;
                     }
                 }
 
                 announcement.setImageUrl(userDir.toString());
-                announcement.setPhotoNumber(photoNumber);
+                announcement.setPhotoNumber(imageFile.length);
             } else {
                 throw new RuntimeException("Please provide at least one image for the announcement.");
             }
@@ -147,33 +146,6 @@ public class AnnouncementService {
 
         } else {
             throw new RuntimeException("Announcement not found");
-        }
-    }
-    private String saveImage(MultipartFile file, User user){
-        try {
-            String folderUUID = UUID.randomUUID().toString();
-            Path userDir = rootLocation.resolve(folderUUID);
-
-            if (!Files.exists(userDir)) {
-                Files.createDirectories(userDir);
-            }
-
-            List<Path> userImages = Files.list(userDir)
-                    .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-
-            if (userImages.size() >= 5) {
-                throw new RuntimeException("You have reached the maximum number of 5 images.");
-            }
-
-            String filename = (userImages.size() + 1) + "-" + file.getOriginalFilename();
-            Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-            Files.copy(file.getInputStream(), destinationFile);
-
-            return destinationFile.toString();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }
     }
 }
