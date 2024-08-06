@@ -15,6 +15,7 @@ export interface Announcement {
     address: string;
     contactPersonName: string;
     phoneNumber: string;
+    photoNumber: number;
 }
 
 export interface AddAnnouncement {

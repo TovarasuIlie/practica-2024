@@ -4,11 +4,13 @@ import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import jakarta.servlet.ServletContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,7 +23,16 @@ import java.util.UUID;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
-    private final Path rootLocation = Paths.get("uploads");
+//    private final Path rootLocation = Paths.get("public/ad-imgs");
+    private final Path rootLocation;
+
+    {
+        try {
+            rootLocation = Paths.get(ServletContext.class.getClassLoader().getResource("public/ads-imgs").toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public AnnouncementService(AnnouncementRepository announcementRepository, UserRepository userRepository) {
         this.announcementRepository = announcementRepository;
@@ -66,7 +77,7 @@ public class AnnouncementService {
                     }
                 }
 
-                announcement.setImageUrl(userDir.toString());
+                announcement.setImageUrl(folderUUID);
                 announcement.setPhotoNumber(imageFile.length);
             } else {
                 throw new RuntimeException("Please provide at least one image for the announcement.");

@@ -69,7 +69,7 @@ public class AuthenticationService {
             if(auth.isAuthenticated()) {
                 User user = repository.findByUsername(request.getUsername()).orElseThrow();
                 user.setJwt(jwtService.generateToken(user));
-                return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getJwt(), user.getRegisteredDate()));
+                return ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getJwt(), user.getRegisteredDate(), user.getRole()));
             }
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Numele de utilizator / Email-ul sau Parola sunt gresite!"));
@@ -83,7 +83,7 @@ public class AuthenticationService {
             Optional<User> user = repository.findByUsername(jwtService.extractUsername(jwt));
             user.get().setJwt(jwt);
             if(jwtService.isValid(jwt, user.get())) {
-                return ResponseEntity.ok(new UserDTO(user.get().getId(), user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt(), user.get().getRegisteredDate()));
+                return ResponseEntity.ok(new UserDTO(user.get().getId(), user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt(), user.get().getRegisteredDate(), user.get().getRole()));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A aparut o eroare la generarea token-ului!"));
             }

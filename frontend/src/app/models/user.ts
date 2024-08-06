@@ -6,6 +6,7 @@ export interface User {
     jwt: string;
     registeredDate: string;
     address: string;
+    role: string;
 }
 
 export interface UserLogin {

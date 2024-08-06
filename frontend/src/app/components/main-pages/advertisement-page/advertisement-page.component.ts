@@ -40,4 +40,8 @@ export class AdvertisementPageComponent implements OnInit {
       }
     })
   }
+
+  getImage(fileName: string, index: string) {
+    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+  }
 }

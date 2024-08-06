@@ -48,7 +48,7 @@ public class AnnouncementController {
     }
 
     @SneakyThrows
-    @PutMapping("/{id}")
+    @PutMapping("edit-ad/{id}")
     public ResponseEntity<Announcement> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image") MultipartFile[] imageFile){
         announcement.setId(id);
         return ResponseEntity.ok(announcementService.updateAnnouncement(id, announcement, imageFile));

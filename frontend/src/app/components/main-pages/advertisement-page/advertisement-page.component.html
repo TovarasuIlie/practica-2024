@@ -14,22 +14,12 @@
                     <div id="carouselExampleIndicators" class="carousel slide carousel-fade carousel-dark"
                         data-bs-ride="true">
                         <div class="carousel-indicators">
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0"
-                                class="active" aria-current="true" aria-label="Slide 1"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"
-                                aria-label="Slide 2"></button>
-                            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"
-                                aria-label="Slide 3"></button>
+                            <button *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index" type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i"
+                                [class.active]="i === 0" aria-current="true" [attr.aria-label]="'Slide' + i"></button>
                         </div>
                         <div class="carousel-inner">
-                            <div class="carousel-item active">
-                                <img src="assets/site-imgs/image.png" class="img-fluid object-fit" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="assets/site-imgs/image1.png" class="img-fluid object-fit" alt="...">
-                            </div>
-                            <div class="carousel-item">
-                                <img src="assets/site-imgs/image.png" class="img-fluid object-fit" alt="...">
+                            <div class="carousel-item" *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index" [class.active]="i == 0">
+                                <img [src]="getImage(currentAd.imageUrl, i.toString())" class="img-fluid object-fit" alt="...">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"

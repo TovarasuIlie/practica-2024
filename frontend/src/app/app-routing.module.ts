@@ -14,9 +14,9 @@ const routes: Routes = [
     component: IndexPageComponent
   },
   {
-    path: '',
-    redirectTo: '',
-    pathMatch: 'full'
+    path: "adauga-anunt",
+    canActivate: [AuthGuard],
+    component: AddAdvertismentPageComponent
   },
   {
     path: 'inregistreaza-te',
@@ -28,23 +28,22 @@ const routes: Routes = [
     resolve: {ad: annoucementResolver}
   },
   {
-    path: 'adauga-anunt',
-    component: AddAdvertismentPageComponent,
-    // canActivate: [AuthGuard]
-  },
-  {
     path: 'contul-meu',
     loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
   },
   {
     path: "reseteaza-parola",
     loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
-    // canActivate: [UnauthGuard]
   },
   {
     path: "dashboard",
     loadChildren: () => import("./components/dashboard-pages/dashboard-pages.module").then(module => module.DashboardPagesModule)
-  }
+  },
+  {
+    path: '**',
+    redirectTo: "eroarea-404",
+    pathMatch: "full",
+  },
 ];
 
 @NgModule({

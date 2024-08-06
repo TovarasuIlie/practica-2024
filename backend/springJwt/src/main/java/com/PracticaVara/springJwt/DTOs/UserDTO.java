@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.DTOs;
 
+import com.PracticaVara.springJwt.model.Account.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,5 @@ public class UserDTO {
     private String lastName;
     private String jwt;
     private LocalDateTime registeredDate;
-
+    private Role role;
 }
