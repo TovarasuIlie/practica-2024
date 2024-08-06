@@ -3,6 +3,8 @@ import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/ro
 import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
 import { environment } from '../../environments/environment.development';
+import { map, Observable } from 'rxjs';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +14,17 @@ export class AuthGuard {
   constructor(private authService: AuthService, private toasterService: ToastService, private router: Router) {
   }
 
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
-    return new Promise((resolve) => {
-      if(localStorage.getItem(environment.USER_KEY)) {
-        resolve(true)
-      } else {
-        this.toasterService.show({title: "Acces interzis!", message: "Pentru a intra pe acea pagina trebuie sa fi autentificat!", classname: "text-danger"});
-        resolve(false)
-      }
-    })
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.authService.user$.pipe(
+      map((user: User | null) => {
+        if(user) {
+          return true;
+        } else {
+          this.toasterService.show({title: "Acces interzis!", message: "Pentru a intra pe acea pagina trebuie sa fi autentificat!", classname: "text-danger"});
+          this.router.navigateByUrl('/');
+          return false;
+        }
+      })
+    );
   }
 }

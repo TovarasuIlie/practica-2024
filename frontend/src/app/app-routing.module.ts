@@ -7,6 +7,7 @@ import { RegisterPageComponent } from './components/main-pages/auth-pages/regist
 import { AuthGuard } from './route-guards/auth.guard';
 import { UnauthGuard } from './route-guards/unauth.guard';
 import { annoucementResolver } from './resovers/annoucement.resolver';
+import { AdminGuard } from './route-guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
   },
   {
     path: 'inregistreaza-te',
+    canActivate: [UnauthGuard],
     component: RegisterPageComponent
   },
   {
@@ -29,14 +31,17 @@ const routes: Routes = [
   },
   {
     path: 'contul-meu',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
   },
   {
     path: "reseteaza-parola",
+    canActivate: [UnauthGuard],
     loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
   },
   {
     path: "dashboard",
+    canActivate: [AuthGuard, AdminGuard],
     loadChildren: () => import("./components/dashboard-pages/dashboard-pages.module").then(module => module.DashboardPagesModule)
   },
   {

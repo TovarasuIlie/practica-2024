@@ -17,7 +17,7 @@ export class UnauthGuard {
     return this.authService.user$.pipe(
       map((user: User | null) => {
         if(user) {
-          this.toasterService.show({title: "Acces interzis!", message: "Pentru a intra pe acea pagina trebuie sa fi autentificat!", classname: "text-danger"});
+          this.toasterService.show({title: "Acces interzis!", message: "Pentru a intra pe acea pagina trebuie sa nu fi autentificat!", classname: "text-danger"});
           this.router.navigateByUrl('/');
           return false;
         } else {

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("api/Authentification")
@@ -26,7 +28,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<Object> login(@RequestBody User request){
+    public CompletableFuture<ResponseEntity<Object>> login(@RequestBody User request){
         return authenticationService.authenticate(request);
     }
 
