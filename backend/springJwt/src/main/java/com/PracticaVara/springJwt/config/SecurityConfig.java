@@ -6,7 +6,6 @@ import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -36,6 +36,7 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
+<<<<<<< HEAD
                         req.requestMatchers("/api/Authentification/login/**",
                                 "/api/Authentification/register/**",
                                 "/api/Account/forgot-password/**",
@@ -45,6 +46,13 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/announcements/**").hasAnyRole("ADMIN", "MODERATOR");
                         req.requestMatchers("/api/announcements/user/**").hasAnyRole("ADMIN", "MODERATOR","USER");
                         req.requestMatchers("/admin/users/confirm-email/**").hasRole("ADMIN");
+=======
+                        req.requestMatchers("/ads-imgs/**").permitAll();
+                        req.requestMatchers("/api/Authentification/login/**", "/api/Authentification/register/**", "/api/Account/forgot-password/**", "/api/Account/reset-password/**", "/api/Account/confirm-email").permitAll();
+                        req.requestMatchers("/api/Authentification/refresh-page").authenticated();
+                        req.requestMatchers("/api/Announcements/get-all-ads", "/api/Announcements/get-ad-by-url/**").permitAll();
+                        req.requestMatchers("/api/Announcements/**").authenticated();
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
                         req.anyRequest().authenticated();
                     }
                 )
@@ -54,6 +62,12 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .build();
 
     }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/public/**").addResourceLocations("/public/");
+    }
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();

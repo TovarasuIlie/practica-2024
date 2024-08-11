@@ -28,13 +28,17 @@
                             <li><button class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
                             <li><button class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
                             <li><button class="dropdown-item"><i class="fa-solid fa-gears"></i> Setari</button></li>
+                            <div *ngIf="(authService.user$ | async)?.role == 'ADMIN'">
+                                <li><hr class="dropdown-divider"></li>
+                                <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                            </div>
                             <li><hr class="dropdown-divider"></li>
                             <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                         </div>
                     </ul>
                 </li>
                 <li class="nav-item">
-                    <button [routerLink]="['adauga-anunt']" class="nav-link btn btn-success"><i class="fas fa-plus-square"></i> Adauga anunt nou</button>
+                    <button [routerLink]="['/adauga-anunt']" class="nav-link btn btn-success"><i class="fas fa-plus-square"></i> Adauga anunt nou</button>
                 </li>
             </ul>
         </div>

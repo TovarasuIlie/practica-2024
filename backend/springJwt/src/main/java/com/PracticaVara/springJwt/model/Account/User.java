@@ -1,7 +1,7 @@
 package com.PracticaVara.springJwt.model.Account;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -10,18 +10,25 @@ import lombok.Setter;
 
 import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.lang.NonNull;
+=======
+import lombok.Getter;
+import lombok.Setter;
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 @Data
 @Entity
+<<<<<<< HEAD
 @NoArgsConstructor
 @AllArgsConstructor
+=======
+@Setter
+@Getter
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 @Table(name = "users")
 public class User implements UserDetails {
     @Id
@@ -64,6 +71,7 @@ public class User implements UserDetails {
     @Transient
     private String jwt;
 
+<<<<<<< HEAD
 
     @JsonIgnore
     @Override
@@ -90,9 +98,33 @@ public class User implements UserDetails {
     }
 
     @JsonIgnore
+=======
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        return List.of();
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 }

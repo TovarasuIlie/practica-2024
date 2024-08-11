@@ -4,6 +4,9 @@ export interface User {
     lastName: string;
     email: string;
     jwt: string;
+    registeredDate: string;
+    address: string;
+    role: string;
 }
 
 export interface UserLogin {

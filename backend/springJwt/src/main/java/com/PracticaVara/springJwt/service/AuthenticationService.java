@@ -6,8 +6,11 @@ import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.Role;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -17,9 +20,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class AuthenticationService {
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationService.class);
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
@@ -36,6 +41,7 @@ public class AuthenticationService {
         this.emailService = emailService;
     }
 
+    @Async("asyncTaskExecutor")
     public ResponseEntity<APIMessage> register(User request) {
         if(repository.findByUsername(request.getUsername()).isEmpty()) {
             if(repository.findByEmail(request.getEmail()).isEmpty()) {
@@ -63,27 +69,29 @@ public class AuthenticationService {
         return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Contul a fost creat. Vei primi un email pentru ati confirma confirma contul!"));
     }
 
-    public ResponseEntity<Object> authenticate(User request) {
+    @Async("asyncTaskExecutor")
+    public CompletableFuture<ResponseEntity<Object>> authenticate(User request) {
         try {
             Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
             if(auth.isAuthenticated()) {
                 User user = repository.findByUsername(request.getUsername()).orElseThrow();
                 user.setJwt(jwtService.generateToken(user));
-                return ResponseEntity.ok(new UserDTO(user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getJwt()));
+                return CompletableFuture.completedFuture(ResponseEntity.ok(new UserDTO(user.getId(), user.getUsername(), user.getEmail(), user.getFirstName(), user.getLastName(), user.getJwt(), user.getRegisteredDate(), user.getRole())));
             }
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Numele de utilizator / Email-ul sau Parola sunt gresite!"));
+            return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Numele de utilizator / Email-ul sau Parola sunt gresite!")));
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "A avut loc o eroare!"));
+        return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "A avut loc o eroare!")));
     }
 
+//    @Async("asyncTaskExecutor")
     public ResponseEntity<Object> refreshPage() {
         String jwt = tokenWrapper.getToken();
         if(!jwtService.isTokenExpired(jwt)) {
             Optional<User> user = repository.findByUsername(jwtService.extractUsername(jwt));
             user.get().setJwt(jwt);
             if(jwtService.isValid(jwt, user.get())) {
-                return ResponseEntity.ok(new UserDTO(user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt()));
+                return ResponseEntity.ok(new UserDTO(user.get().getId(), user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt(), user.get().getRegisteredDate(), user.get().getRole()));
             } else {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "A aparut o eroare la generarea token-ului!"));
             }

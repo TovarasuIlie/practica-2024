@@ -31,7 +31,7 @@
                         <mat-label><i class="fas fa-at"></i> Email</mat-label>
                         <input formControlName="email" matInput placeholder="example@gmail.com"
                             [errorStateMatcher]="matcher">
-                        @if (registerForm.get('email')?.hasError('email') &&
+                        @if ((registerForm.get('email')?.hasError('email') || registerForm.get('email')?.hasError('pattern')) &&
                         !registerForm.get('email')?.hasError('required')) {
                         <mat-error>Introduce-ti o adresa de email valida!</mat-error>
                         }
@@ -40,11 +40,20 @@
                         }
                     </mat-form-field>
                     <mat-form-field class="w-100 mb-2">
-                        <mat-label><i class="fas fa-at"></i> Nume Utilizator</mat-label>
-                        <input formControlName="username" matInput placeholder="example@gmail.com"
+                        <mat-label><i class="fa-solid fa-user"></i> Nume Utilizator</mat-label>
+                        <input formControlName="username" matInput placeholder="popescu_ionel"
                             [errorStateMatcher]="matcher">
                         @if (registerForm.get('username')?.hasError('required')) {
-                        <mat-error>Adresa de email este <strong>obligatorie</strong>.</mat-error>
+                            <mat-error>Numele de utilizator este <strong>obligatorie</strong>.</mat-error>
+                        }
+                        @if (registerForm.get('username')?.hasError('pattern') && !registerForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator nu poate contine caractere speciale, inafara de "-" si "_".</mat-error>
+                        }
+                        @if (registerForm.get('username')?.hasError('minlength') && !registerForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator trebuie sa aiba minim <strong>8 caractere</strong>.</mat-error>
+                        }
+                        @if (registerForm.get('username')?.hasError('maxlength') && !registerForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator trebuie sa aiba maxim <strong>20 caractere</strong>.</mat-error>
                         }
                     </mat-form-field>
                     <mat-form-field class="w-100 mb-2">
@@ -93,8 +102,9 @@
                             <li *ngFor="let error of errorMessages">{{ error }}</li>
                         </ul>
                     </div>
-                    <button type="submit" class="btn btn-info fw-semibold btn-lg w-100"><i
-                            class="far fa-plus-square"></i> Creaza cont!</button>
+                    <button type="submit" class="btn btn-info fw-semibold btn-lg w-100 mb-3"><i class="far fa-plus-square"></i> Creaza cont!</button>
+                    <h6 class="fw-semibold text-center">SAU</h6>
+                    <p class="text-center">Daca ai un cont, <a href="#login-modal" data-bs-toggle="modal" data-bs-target="#login-modal" class="text-decoration-none">click aici</a>!</p>
                 </form>
             </div>
         </div>

@@ -1,8 +1,9 @@
 import { Injectable} from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { Observable, map } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { ToastService } from '../services/toast.service';
+import { environment } from '../../environments/environment.development';
+import { map, Observable } from 'rxjs';
 import { User } from '../models/user';
 
 @Injectable({

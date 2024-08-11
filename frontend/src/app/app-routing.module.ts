@@ -6,6 +6,8 @@ import { AddAdvertismentPageComponent } from './components/main-pages/add-advert
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
 import { AuthGuard } from './route-guards/auth.guard';
 import { UnauthGuard } from './route-guards/unauth.guard';
+import { annoucementResolver } from './resovers/annoucement.resolver';
+import { AdminGuard } from './route-guards/admin.guard';
 
 const routes: Routes = [
   {
@@ -13,32 +15,40 @@ const routes: Routes = [
     component: IndexPageComponent
   },
   {
-    path: '',
-    redirectTo: '',
-    pathMatch: 'full'
-  },
-  {
-    path: "reseteaza-parola",
-    loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
-    // canActivate: [UnauthGuard]
+    path: "adauga-anunt",
+    canActivate: [AuthGuard],
+    component: AddAdvertismentPageComponent
   },
   {
     path: 'inregistreaza-te',
+    canActivate: [UnauthGuard],
     component: RegisterPageComponent
   },
   {
     path: 'anunt/:adTitle',
-    component: AdvertisementPageComponent
-  },
-  {
-    path: 'adauga-anunt',
-    component: AddAdvertismentPageComponent,
-    canActivate: [AuthGuard]
+    component: AdvertisementPageComponent,
+    resolve: {ad: annoucementResolver}
   },
   {
     path: 'contul-meu',
+    canActivate: [AuthGuard],
     loadChildren: () => import('./components/account-pages/account-pages.module').then(module => module.AccountPagesModule),
-  }
+  },
+  {
+    path: "reseteaza-parola",
+    canActivate: [UnauthGuard],
+    loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
+  },
+  {
+    path: "dashboard",
+    canActivate: [AuthGuard, AdminGuard],
+    loadChildren: () => import("./components/dashboard-pages/dashboard-pages.module").then(module => module.DashboardPagesModule)
+  },
+  {
+    path: '**',
+    redirectTo: "eroarea-404",
+    pathMatch: "full",
+  },
 ];
 
 @NgModule({

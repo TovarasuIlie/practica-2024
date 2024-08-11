@@ -1,0 +1,32 @@
+<div class="logo">
+    <a href="https://www.creative-tim.com" class="simple-text logo-mini">
+        <div class="logo-image-small">
+            <img src="../assets/img/logo-small.png">
+        </div>
+    </a>
+    <a href="https://www.creative-tim.com" class="simple-text logo-normal">
+        Creative Tim
+    </a>
+</div>
+<div class="sidebar-wrapper">
+    <ul class="nav">
+        <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+            <a [routerLink]="['/dashboard']">
+                <i class="fa-solid fa-chart-line"></i>
+                <p>Dashboard</p>
+            </a>
+        </li>
+        <li [routerLinkActive]="['active']">
+            <a [routerLink]="['/dashboard', 'utilizatori']">
+                <i class="fa-solid fa-users"></i>
+                <p>Utilizatori</p>
+            </a>
+        </li>
+        <li [routerLinkActive]="['active']">
+            <a [routerLink]="['/dashboard', 'categorii']">
+                <i class="fa-solid fa-layer-group"></i>
+                <p>Categorii</p>
+            </a>
+        </li>
+    </ul>
+</div>

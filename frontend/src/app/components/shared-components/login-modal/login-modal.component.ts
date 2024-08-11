@@ -2,6 +2,8 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { AuthService } from '../../../services/auth.service';
+import { ToastService } from '../../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-modal',
@@ -14,7 +16,7 @@ export class LoginModalComponent implements OnInit {
   errorMessages: string[] = [];
   @ViewChild('closeModal') closeModal!: ElementRef;
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private toastService: ToastService, private router: Router) {
 
   }
 
@@ -34,8 +36,9 @@ export class LoginModalComponent implements OnInit {
     if(this.loginForm.valid) {
       this.authService.loginUser(this.loginForm.getRawValue()).subscribe({
         next: (response: any) => {
-          console.log(response)
+          this.toastService.show({title: "Esti Autentificat", message: "Bun venit, te-ai autentificat cu succes!", classname: "text-success"});
           this.closeModal.nativeElement.click();
+          this.router.navigateByUrl("/");
         },
         error: (response) => {
           this.errorMessages.push(response.error.message);

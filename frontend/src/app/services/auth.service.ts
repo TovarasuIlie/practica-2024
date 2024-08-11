@@ -4,7 +4,6 @@ import { environment } from '../../environments/environment.development';
 import { map, of, ReplaySubject } from 'rxjs';
 import { ConfirmEmail, User, UserLogin, UserRegister } from '../models/user';
 import { Router } from '@angular/router';
-import { BrowserStorageService } from './browser-storage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +22,7 @@ export class AuthService {
     }
 
     let headers = new HttpHeaders();
-    headers = headers.set("Authorization", "Bearer " + jwt);
+    headers = headers.append("Authorization", "Bearer " + jwt);
 
     return this.http.get<User>(environment.API_URL + "/api/Authentification/refresh-page", {headers}).pipe(
       map((user: User) => {

@@ -91,141 +91,14 @@
 <div class="container-fluid bg-transparent p-5">
     <h2 class="text-center fw-semibold mb-5">Anunturi recente</h2>
     <div class="row row-cols-3 row-cols-lg-4 g-3 g-lg-3 mb-5">
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', 'anunt-test']">
+        <div class="col" *ngFor="let ad of ads">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
                 <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
                     alt="...">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', 'anunt-test']">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
-                        </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
-                </div>
-            </div>
-        </div>
-        <div class="col">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <h6 class="card-title">Vw Passat 2021 / 2.0 Tdi - 150 Cp / Distronic / Keyless / Led / Navi</h6>
+                            <h6 class="card-title">{{ ad.title }}</h6>
                         </div>
                         <div class="col-2">
                             <i class="far fa-heart"></i>

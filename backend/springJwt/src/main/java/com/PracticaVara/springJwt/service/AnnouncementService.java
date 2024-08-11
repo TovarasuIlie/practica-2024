@@ -4,28 +4,35 @@ import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import jakarta.servlet.ServletContext;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.security.Security;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
-    private final Path rootLocation = Paths.get("uploads");
+//    private final Path rootLocation = Paths.get("public/ad-imgs");
+    private final Path rootLocation;
+
+    {
+        try {
+            rootLocation = Paths.get(ServletContext.class.getClassLoader().getResource("public/ads-imgs").toURI());
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
     public AnnouncementService(AnnouncementRepository announcementRepository, UserRepository userRepository) {
         this.announcementRepository = announcementRepository;
@@ -39,6 +46,10 @@ public class AnnouncementService {
         return announcementRepository.findById(id);
     }
 
+    public Optional<Announcement> findByUrl(String url) {
+        return announcementRepository.findByUrl(url);
+    }
+
     public Announcement save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -48,6 +59,7 @@ public class AnnouncementService {
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
+            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[$&+,:;=?@#|'<>.-^*()%! ]", "-"));
 
             if(imageFile != null && imageFile.length > 0){
                 String folderUUID = UUID.randomUUID().toString();
@@ -56,18 +68,30 @@ public class AnnouncementService {
                     Files.createDirectories(userDir);
                 }
 
+<<<<<<< HEAD
                 int photoNumber = 0;
                 for(int i = 0; i < imageFile.length; i++) {
                     MultipartFile file = imageFile[i];
                     if (!file.isEmpty()) {
                         String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
+=======
+                for(int i = 0; i < imageFile.length; i++){
+                    MultipartFile file = imageFile[i];
+                    if(!file.isEmpty()){
+                        String filename = folderUUID + "-" + i + ".jpeg";
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
-                        photoNumber++;
                     }
                 }
+<<<<<<< HEAD
                 announcement.setImageUrl(userDir.toString());
                 announcement.setPhotoNumber(photoNumber);
+=======
+
+                announcement.setImageUrl(folderUUID);
+                announcement.setPhotoNumber(imageFile.length);
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
             } else {
                 throw new RuntimeException("Please provide at least one image for the announcement.");
             }
@@ -175,6 +199,7 @@ public class AnnouncementService {
             throw new RuntimeException("User not found");
         }
     }
+<<<<<<< HEAD
     private String saveImage(MultipartFile file, User user){
         try {
             String folderUUID = UUID.randomUUID().toString();
@@ -221,4 +246,6 @@ public class AnnouncementService {
         announcementRepository.save(announcement);
     }
 
+=======
+>>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 }
