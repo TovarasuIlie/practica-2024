@@ -2,9 +2,15 @@ package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "announcements")
 public class Announcement {
@@ -33,75 +39,7 @@ public class Announcement {
     @Column(name = "is_deactivated")
     private boolean isDeactivated = false;
 
-    public int getPhotoNumber() {
-        return photoNumber;
-    }
-
-    public void setPhotoNumber(int photoNumber) {
-        this.photoNumber = photoNumber;
-    }
-
-    public boolean isDeactivated() {
-        return isDeactivated;
-    }
-
-    public void setDeactivated(boolean deactivated) {
-        isDeactivated = deactivated;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getExpirationDate() {
-        return expirationDate;
-    }
-
-    public void setExpirationDate(LocalDateTime expirationDate) {
-        this.expirationDate = expirationDate;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    @Column(name = "is_approved")
+    private boolean isApproved = false;
 
 }

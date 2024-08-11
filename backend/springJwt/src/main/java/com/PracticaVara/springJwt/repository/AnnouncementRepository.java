@@ -8,4 +8,9 @@ import java.util.List;
 
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
     List<Announcement> findByExpirationDateBefore(LocalDateTime now);
+    List<Announcement> findByIsDeactivatedFalse();
+    List<Announcement> findByIsApprovedTrue();
+    List<Announcement> findByIsApprovedFalse();
+
+    List<Announcement> findByTitleContainingIgnoreCaseAndIsApprovedTrue(String title);
 }

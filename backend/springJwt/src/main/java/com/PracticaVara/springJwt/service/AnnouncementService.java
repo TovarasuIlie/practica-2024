@@ -35,7 +35,7 @@ public class AnnouncementService {
     public List<Announcement> findAll(){
         return announcementRepository.findAll();
     }
-    public Optional<Announcement> findByid(Integer id){
+    public Optional<Announcement> findById(Integer id){
         return announcementRepository.findById(id);
     }
 
@@ -57,16 +57,15 @@ public class AnnouncementService {
                 }
 
                 int photoNumber = 0;
-                for(int i = 0; i < imageFile.length; i++){
+                for(int i = 0; i < imageFile.length; i++) {
                     MultipartFile file = imageFile[i];
-                    if(!file.isEmpty()){
+                    if (!file.isEmpty()) {
                         String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
                         photoNumber++;
                     }
                 }
-
                 announcement.setImageUrl(userDir.toString());
                 announcement.setPhotoNumber(photoNumber);
             } else {
@@ -79,28 +78,38 @@ public class AnnouncementService {
 
     }
     public void deleteById(Integer id) {
-        Optional<Announcement> announcement = announcementRepository.findById(id);
-        if (announcement.isPresent()) {
-            String folderPath = announcement.get().getImageUrl();
-            Path userDir = Paths.get(folderPath);
-            if (Files.exists(userDir)) {
-                try {
-                    Files.walk(userDir)
-                            .sorted((a, b) -> b.compareTo(a)) // to delete files before directories
-                            .forEach(p -> {
-                                try {
-                                    Files.delete(p);
-                                } catch (IOException e) {
-                                    throw new RuntimeException("Error deleting file: " + p.getFileName(), e);
-                                }
-                            });
-                } catch (IOException e) {
-                    throw new RuntimeException("Error accessing the directory for deletion.", e);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> currentUser = userRepository.findByUsername(username);
+        if(currentUser.isPresent()){
+            Optional<Announcement> announcement = announcementRepository.findById(id);
+            if (announcement.isPresent()) {
+                String folderPath = announcement.get().getImageUrl();
+                Path userDir = Paths.get(folderPath);
+                if(!announcement.get().getUser().getUsername().equals(username)
+                && !currentUser.get().getRole().name().equals("ADMIN")
+                && !currentUser.get().getRole().name().equals("MODERATOR")){
+                    throw new RuntimeException("ERROR: You can delete only your announcements.");
                 }
+                if (Files.exists(userDir)) {
+                    try {
+                        Files.walk(userDir)
+                                .sorted((a, b) -> b.compareTo(a)) // to delete files before directories
+                                .forEach(p -> {
+                                    try {
+                                        Files.delete(p);
+                                    } catch (IOException e) {
+                                        throw new RuntimeException("Error deleting file: " + p.getFileName(), e);
+                                    }
+                                });
+                    } catch (IOException e) {
+                        throw new RuntimeException("Error accessing the directory for deletion.", e);
+                    }
+                }
+                announcementRepository.deleteById(id);
+            } else {
+                throw new RuntimeException("Announcement with ID " + id + " not found.");
             }
-            announcementRepository.deleteById(id);
-        } else {
-            throw new RuntimeException("Announcement with ID " + id + " not found.");
         }
     }
     public void deleteExpiredAnnouncements() {
@@ -112,41 +121,58 @@ public class AnnouncementService {
     }
 
     public Announcement updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
-        Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
-        if (existingAnnouncement.isPresent()) {
-            Announcement announcement = existingAnnouncement.get();
-            announcement.setTitle(updatedAnnouncement.getTitle());
-            announcement.setContent(updatedAnnouncement.getContent());
-            announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> currentUser = userRepository.findByUsername(username);
 
-            if (imageFiles != null && imageFiles.length > 0) {
-                String folderUUID = UUID.randomUUID().toString();
-                Path userDir = rootLocation.resolve(folderUUID);
-                if (!Files.exists(userDir)) {
-                    Files.createDirectories(userDir);
-                }
+        if(currentUser.isPresent()){
+            Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
 
-                int photoNumber = 0;
-                for (int i = 0; i < imageFiles.length; i++) {
-                    MultipartFile file = imageFiles[i];
-                    if (!file.isEmpty()) {
-                        String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
-                        Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-                        Files.copy(file.getInputStream(), destinationFile);
-                        photoNumber++;
-                    }
-                }
-
-                announcement.setImageUrl(userDir.toString());
-                announcement.setPhotoNumber(photoNumber);
-            } else {
-                throw new RuntimeException("Please provide at least one image for the announcement update.");
+            if (!existingAnnouncement.get().getUser().getUsername().equals(username)
+                    && !currentUser.get().getRole().name().equals("ADMIN")
+                    && !currentUser.get().getRole().name().equals("MODERATOR")) {
+                throw new RuntimeException("ERROR: You can edit only your announcements");
             }
 
-            return announcementRepository.save(announcement);
+            if (existingAnnouncement.isPresent()) {
+                Announcement announcement = existingAnnouncement.get();
+                announcement.setTitle(updatedAnnouncement.getTitle());
+                announcement.setContent(updatedAnnouncement.getContent());
+                announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
 
+                announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
+
+                if (imageFiles != null && imageFiles.length > 0) {
+                    String folderUUID = UUID.randomUUID().toString();
+                    Path userDir = rootLocation.resolve(folderUUID);
+                    if (!Files.exists(userDir)) {
+                        Files.createDirectories(userDir);
+                    }
+
+                    int photoNumber = 0;
+                    for (int i = 0; i < imageFiles.length; i++) {
+                        MultipartFile file = imageFiles[i];
+                        if (!file.isEmpty()) {
+                            String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
+                            Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
+                            Files.copy(file.getInputStream(), destinationFile);
+                            photoNumber++;
+                        }
+                    }
+
+                    announcement.setImageUrl(userDir.toString());
+                    announcement.setPhotoNumber(photoNumber);
+                } else {
+                    throw new RuntimeException("Please provide at least one image for the announcement update.");
+                }
+
+                return announcementRepository.save(announcement);
+
+            } else {
+                throw new RuntimeException("Announcement not found");
+            }
         } else {
-            throw new RuntimeException("Announcement not found");
+            throw new RuntimeException("User not found");
         }
     }
     private String saveImage(MultipartFile file, User user){
@@ -176,4 +202,23 @@ public class AnnouncementService {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }
     }
+
+    public List<Announcement> findByTitle(String title) {
+        return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
+    }
+
+    public void approveAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
+        announcement.setApproved(true);
+        announcementRepository.save(announcement);
+    }
+
+    public void rejectAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
+        announcement.setApproved(false);
+        announcementRepository.save(announcement);
+    }
+
 }
