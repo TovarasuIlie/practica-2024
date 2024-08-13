@@ -23,28 +23,12 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void updateUserIpAdress(HttpServletRequest request){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-
-        Optional<User> optionalUser = userRepository.findByUsername(username);
-        if(optionalUser.isPresent()){
-            User user = optionalUser.get();
-            String ipAdress = request.getRemoteAddr();
-            user.setIpAddress(ipAdress);
-            userRepository.save(user);
-
-        } else {
-            throw new RuntimeException("User not found");
-        }
-    }
-
     public List<User> findAllUsersOrdered(){
         return userRepository.findAllByOrderByRoleAscIdAsc();
     }
-    public User findUserById(Integer id){
-        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found."));
 
+    public User findUserById(Integer id){
+        return userRepository.findById(id).get();
     }
     public User updateUser(Integer id, User updatedUserDetails) {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));

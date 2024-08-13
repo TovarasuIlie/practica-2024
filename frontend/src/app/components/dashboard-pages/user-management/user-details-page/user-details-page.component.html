@@ -134,14 +134,13 @@
         <div class="content">
             <div class="row">
                 <div class="col">
-                    <div class="card">
-                        <div class="card-header">
-                            Admin Tools
+                    <div class="card mb-5">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            Detalii Utilizator
                         </div>
-                        <div class="card-body">
+                        <div class="card-body mx-5">
                             <table class="table">
-
-                                <body>
+                                <tbody>
                                     <tr>
                                         <td>SQL ID:</td>
                                         <td class="fw-semibold">{{ user.id }}</td>
@@ -202,14 +201,35 @@
                                         <td class="fw-semibold">{{ user.registeredDate | date:"dd.MM.YYYY HH:mm:ss" }}
                                         </td>
                                     </tr>
-                                </body>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            IP Log
+                        </div>
+                        <div class="card-body mx-5">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Adresa IP</th>
+                                        <th>Folosit din data de</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let ip of user.ipLogs">
+                                        <td>{{ ip.ipAddress }}</td>
+                                        <td>{{ ip.usedFrom | date:"HH:mm:ss dd.MM.YYYY"}}</td>
+                                    </tr>
+                                </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="card">
-                        <div class="card-header">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
                             Admin Tools
                         </div>
                         <div class="card-body">

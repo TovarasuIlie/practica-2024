@@ -39,6 +39,7 @@ export interface UserAdmin {
     registeredDate: string;
     address: string;
     ipAddress: string;
+    ipLogs: IPLogs[];
 }
 
 export interface UserEdit {
@@ -46,4 +47,9 @@ export interface UserEdit {
     lastName: string;
     email: string;
     address: string;
+}
+
+export interface IPLogs {
+    ipAddress: string;
+    usedFrom: string;
 }

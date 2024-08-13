@@ -1,22 +1,24 @@
 package com.PracticaVara.springJwt.model.Account;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.Join;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.lang.NonNull;
-import lombok.Getter;
-import lombok.Setter;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +30,7 @@ import java.util.List;
 @Setter
 @Getter
 @Table(name = "users")
+@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class, property="id")
 public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,6 +69,11 @@ public class User implements UserDetails {
 
     @Transient
     private String jwt;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JsonManagedReference
+    private List<IPLogs> ipLogs;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
