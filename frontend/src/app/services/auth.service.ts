@@ -49,7 +49,7 @@ export class AuthService {
   }
 
   logOut() {
-    localStorage.removeItem("auth");
+    localStorage.removeItem(environment.USER_KEY);
     this.userSource.next(null);
     this.router.navigateByUrl('/');
   }
@@ -59,12 +59,12 @@ export class AuthService {
   }
 
   private setUser(user: User) {
-    localStorage.setItem("auth", JSON.stringify(user));
+    localStorage.setItem(environment.USER_KEY, JSON.stringify(user));
     this.userSource.next(user);
   }
 
   getJWT() {
-    const key = localStorage.getItem("auth");
+    const key = localStorage.getItem(environment.USER_KEY);
     if(key) {
       const user: User = JSON.parse(key);
       return user.jwt;

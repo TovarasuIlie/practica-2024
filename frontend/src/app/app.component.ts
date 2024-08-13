@@ -19,10 +19,12 @@ export class AppComponent implements OnInit {
     if(jwt) {
       this.authService.refreshUser(jwt).subscribe({
         next: _ => {},
-        error: _ => {}
+        error: _ => {
+          this.authService.logOut();
+        }
       });
     } else {
-      this.authService.logOut();
+      this.authService.refreshUser(null).subscribe();
     }
   }
 

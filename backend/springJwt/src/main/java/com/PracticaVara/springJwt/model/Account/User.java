@@ -65,7 +65,7 @@ public class User implements UserDetails {
     @Transient
     private String jwt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<IPLogs> ipLogs;
