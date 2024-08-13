@@ -2,14 +2,11 @@ package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
 import jakarta.persistence.*;
-<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-=======
 import lombok.Getter;
 import lombok.Setter;
->>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 
 import java.time.LocalDateTime;
 
@@ -42,11 +39,8 @@ public class Announcement {
     private User user;
     @Column(name = "is_deactivated", nullable = false)
     private boolean isDeactivated = false;
-<<<<<<< HEAD
-
-    @Column(name = "is_approved")
+    @Column(name = "is_approved" ,nullable = false)
     private boolean isApproved = false;
-=======
     @Column(name = "price", nullable = false)
     private double price;
     @Column(name = "currency", nullable = false)
@@ -59,6 +53,5 @@ public class Announcement {
     private String phoneNumber;
     @Column(name = "address", nullable = false)
     private String address;
->>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
 
 }

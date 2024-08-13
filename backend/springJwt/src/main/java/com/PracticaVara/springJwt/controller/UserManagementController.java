@@ -4,12 +4,15 @@ import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/admin/users")
+@RequestMapping("api/UserManagement")
 public class UserManagementController {
     private final UserService userService;
 
@@ -17,7 +20,7 @@ public class UserManagementController {
         this.userService = userService;
     }
 
-    @GetMapping
+    @GetMapping("get-all-users")
     public ResponseEntity<List<User>> getAllUsers(){
         List<User> users = userService.findAllUsersOrdered();
         return new ResponseEntity<>(users, HttpStatus.OK);
@@ -44,9 +47,10 @@ public class UserManagementController {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    @PostMapping("/confirm-email/{id}")
+
+    @GetMapping("/confirm-email/{id}")
     public ResponseEntity<Void> confirmEmail(@PathVariable Integer id) {
         userService.confirmEmail(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 }

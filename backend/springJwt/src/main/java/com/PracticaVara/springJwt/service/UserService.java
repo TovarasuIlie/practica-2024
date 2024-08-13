@@ -1,5 +1,8 @@
 package com.PracticaVara.springJwt.service;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,33 +50,11 @@ public class UserService {
         User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         //Aici eu am pus toate la rand, te rog scoate daca ceva nu are sens sa fie pus aici
-        if (updatedUserDetails.getFirstName() != null) {
-            existingUser.setFirstName(updatedUserDetails.getFirstName());
-        }
-        if (updatedUserDetails.getLastName() != null) {
-            existingUser.setLastName(updatedUserDetails.getLastName());
-        }
-        if (updatedUserDetails.getUsername() != null) {
-            existingUser.setUsername(updatedUserDetails.getUsername());
-        }
-        if (updatedUserDetails.getEmail() != null) {
-            existingUser.setEmail(updatedUserDetails.getEmail());
-        }
-        if (updatedUserDetails.getPassword() != null) {
-            existingUser.setPassword(updatedUserDetails.getPassword());
-        }
-        if (updatedUserDetails.isEmailVerifed() != existingUser.isEmailVerifed()) {
-            existingUser.setEmailVerifed(updatedUserDetails.isEmailVerifed());
-        }
-        if (updatedUserDetails.getRole() != null) {
-            existingUser.setRole(updatedUserDetails.getRole());
-        }
-        if (updatedUserDetails.getAddress() != null) {
-            existingUser.setAddress(updatedUserDetails.getAddress());
-        }
-        if (updatedUserDetails.getIpAddress() != null) {
-            existingUser.setIpAddress(updatedUserDetails.getIpAddress());
-        }
+        existingUser.setFirstName(updatedUserDetails.getFirstName());
+        existingUser.setLastName(updatedUserDetails.getLastName());
+        existingUser.setUsername(updatedUserDetails.getUsername());
+        existingUser.setEmail(updatedUserDetails.getEmail());
+        existingUser.setAddress(updatedUserDetails.getAddress());
         return userRepository.save(existingUser);
     }
 
@@ -81,6 +62,7 @@ public class UserService {
         userRepository.deleteById(id);
         // sa nu uit sa bag si ceva mesaj idk
     }
+
 
     public void confirmEmail(Integer id){
         User user = findUserById(id);
