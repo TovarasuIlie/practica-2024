@@ -1,6 +1,6 @@
 package com.PracticaVara.springJwt.model.Account;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class IPLogs {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", nullable = false)
-    @JsonManagedReference
+    @JsonBackReference
     private User user;
 
     @Column(name = "ip_address", nullable = false)

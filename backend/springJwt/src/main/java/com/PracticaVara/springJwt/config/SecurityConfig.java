@@ -46,11 +46,11 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/ads-imgs/**").permitAll();
                         req.requestMatchers("/api/Announcements/get-all-ads", "/api/Announcements/get-ad-by-url/**").permitAll();
                         req.requestMatchers("/api/Announcements/**").authenticated();
-                        req.requestMatchers("/api/Announcements-management/**").hasRole("ADMIN");
+                        req.requestMatchers("/api/Announcements-management/**").hasAnyRole("ADMIN", "MODERATOR");
                         req.requestMatchers("/api/UserManagement/**").hasRole("ADMIN");
                         req.requestMatchers("/api/Reports/**").authenticated();
                         req.requestMatchers("/api/Reports-management/**").hasRole("ADMIN");
-
+                        req.requestMatchers("/api/Categories/**").hasRole("ADMIN");
                         req.anyRequest().authenticated();
                     }
                 )

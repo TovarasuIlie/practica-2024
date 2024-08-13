@@ -6,6 +6,9 @@ import { CategoryPageComponent } from './category-page/category-page.component';
 import { AuthGuard } from '../../route-guards/auth.guard';
 import { UserDetailsPageComponent } from './user-management/user-details-page/user-details-page.component';
 import { userByIdResolver } from '../../resovers/user-by-id.resolver';
+import { AdsManagementComponent } from './ads-management-pages/ads-management/ads-management.component';
+import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/ad-details-page.component';
+import { announcementManagementResolver } from '../../resovers/announcement-management.resolver';
 
 const routes: Routes = [
   {
@@ -25,6 +28,22 @@ const routes: Routes = [
         component: UserDetailsPageComponent,
         resolve: {
           user: userByIdResolver
+        }
+      }
+    ]
+  },
+  {
+    path: "management-anunturi",
+    children: [
+      {
+        path: "",
+        component: AdsManagementComponent
+      },
+      {
+        path: "detalii-anunt/:id",
+        component: AdDetailsPageComponent,
+        resolve: {
+          ad: announcementManagementResolver
         }
       }
     ]

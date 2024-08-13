@@ -15,6 +15,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { AdsManagementComponent } from './ads-management-pages/ads-management/ads-management.component';
+import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/ad-details-page.component';
 
 
 @NgModule({
@@ -22,7 +24,9 @@ import { MatSelectModule } from '@angular/material/select';
     IndexPageComponent,
     UsersListPageComponent,
     CategoryPageComponent,
-    UserDetailsPageComponent
+    UserDetailsPageComponent,
+    AdsManagementComponent,
+    AdDetailsPageComponent
   ],
   imports: [
     CommonModule,

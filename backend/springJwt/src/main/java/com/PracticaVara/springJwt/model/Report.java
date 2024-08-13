@@ -25,6 +25,6 @@ public class Report {
     @Column(name = "message", nullable = false)
     private String message;
     @Column(name = "is_solved",nullable = false)
-    private boolean isSolved = false;
+    private boolean solved = false;
 
 }
