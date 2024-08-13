@@ -31,19 +31,16 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("add-category")
     public Category addCategory(@RequestPart("category") Category category, @RequestPart("file") MultipartFile file) throws IOException {
         return categoryService.addCategory(category, file);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("edit-category/{id}")
     public Category updateCategory(@PathVariable Long id, @RequestPart("category") Category categoryDetails, @RequestPart("file") MultipartFile file) throws IOException {
         return categoryService.updateCategory(id, categoryDetails, file);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("delete-category/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);

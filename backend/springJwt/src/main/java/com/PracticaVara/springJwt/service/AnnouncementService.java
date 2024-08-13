@@ -72,7 +72,7 @@ public class AnnouncementService {
                 for(int i = 0; i < imageFile.length; i++){
                     MultipartFile file = imageFile[i];
                     if(!file.isEmpty()){
-                        String filename = folderUUID + "-" + i + "-" ;
+                        String filename = folderUUID + "-" + i + ".jpeg" ;
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
                         //photoNumber++;
