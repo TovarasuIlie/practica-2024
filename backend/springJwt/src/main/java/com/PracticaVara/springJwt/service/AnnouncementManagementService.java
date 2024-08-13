@@ -1,7 +1,7 @@
 package com.PracticaVara.springJwt.service;
 
-import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.Account.User;
+import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import jakarta.servlet.ServletContext;
@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -21,10 +22,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class AnnouncementService {
+public class AnnouncementManagementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
-//    private final Path rootLocation = Paths.get("public/ad-imgs");
     private final Path rootLocation;
     {
         try {
@@ -34,15 +34,32 @@ public class AnnouncementService {
         }
     }
 
-    public AnnouncementService(AnnouncementRepository announcementRepository, UserRepository userRepository) {
+    public AnnouncementManagementService(AnnouncementRepository announcementRepository, UserRepository userRepository) {
         this.announcementRepository = announcementRepository;
         this.userRepository = userRepository;
     }
 
-    public List<Announcement> findAll(){
-        return announcementRepository.findByIsApprovedTrueAndIsDeactivatedFalse();
+    public void approveAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
+        announcement.setApproved(true);
+        announcementRepository.save(announcement);
     }
 
+    public void rejectAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
+        announcement.setApproved(false);
+        announcementRepository.save(announcement);
+    }
+
+    public List<Announcement> findByTitle(String title) {
+        return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
+    }
+
+    public List<Announcement> findAll(){
+        return announcementRepository.findAll();
+    }
     public Optional<Announcement> findById(Integer id){
         return announcementRepository.findById(id);
     }
@@ -68,14 +85,14 @@ public class AnnouncementService {
                 if (!Files.exists(userDir)) {
                     Files.createDirectories(userDir);
                 }
-                //int photoNumber = 0;
+                int photoNumber = 0;
                 for(int i = 0; i < imageFile.length; i++){
                     MultipartFile file = imageFile[i];
                     if(!file.isEmpty()){
                         String filename = folderUUID + "-" + i + "-" ;
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
-                        //photoNumber++;
+                        photoNumber++;
                     }
                 }
 
@@ -94,12 +111,8 @@ public class AnnouncementService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
-
         if(currentUser.isPresent()){
             Optional<Announcement> announcement = announcementRepository.findById(id);
-            if (announcement.get().getUser().getId() != currentUser.get().getId()){
-                throw new RuntimeException("Eroare! Poti sterge doar anunturile tale!");
-            }
             if (announcement.isPresent()) {
                 String folderPath = announcement.get().getImageUrl();
                 Path userDir = Paths.get(folderPath);
@@ -125,19 +138,21 @@ public class AnnouncementService {
             }
         }
     }
+    public void deleteExpiredAnnouncements() {
+        LocalDateTime now = LocalDateTime.now();
+        List<Announcement> expiredAnnouncements = announcementRepository.findByExpirationDateBefore(now);
+        for (Announcement announcement : expiredAnnouncements) {
+            deleteById(announcement.getId());
+        }
+    }
 
     public Announcement updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
 
-
         if(currentUser.isPresent()){
             Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
-
-            if (existingAnnouncement.get().getUser().getId() != currentUser.get().getId()){
-                throw new RuntimeException("Eroare! Poti edita doar anunturile tale!");
-            }
 
             if (existingAnnouncement.isPresent()) {
                 Announcement announcement = existingAnnouncement.get();
@@ -180,7 +195,7 @@ public class AnnouncementService {
             throw new RuntimeException("User not found");
         }
     }
-    /*private String saveImage(MultipartFile file, User user){
+   /*private String saveImage(MultipartFile file, User user){
         try {
             String folderUUID = UUID.randomUUID().toString();
             Path userDir = rootLocation.resolve(folderUUID);
@@ -207,10 +222,5 @@ public class AnnouncementService {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }
     }*/
-
-    public List<Announcement> findByTitle(String title) {
-        return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
-    }
-
 
 }

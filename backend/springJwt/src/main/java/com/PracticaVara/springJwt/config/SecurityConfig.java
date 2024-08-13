@@ -3,6 +3,7 @@ package com.PracticaVara.springJwt.config;
 import com.PracticaVara.springJwt.filter.JwtAuthenticationFilter;
 import com.PracticaVara.springJwt.interceptors.BearerTokenInterceptor;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
+import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -36,23 +37,17 @@ public class SecurityConfig implements WebMvcConfigurer {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req -> {
-<<<<<<< HEAD
                         req.requestMatchers("/api/Authentification/login/**",
                                 "/api/Authentification/register/**",
                                 "/api/Account/forgot-password/**",
                                 "/api/Account/reset-password/**",
                                 "/api/Account/confirm-email").permitAll();
                         req.requestMatchers("/api/Authentification/refresh-page").authenticated();
-                        req.requestMatchers("/api/announcements/**").hasAnyRole("ADMIN", "MODERATOR");
-                        req.requestMatchers("/api/announcements/user/**").hasAnyRole("ADMIN", "MODERATOR","USER");
-                        req.requestMatchers("/admin/users/confirm-email/**").hasRole("ADMIN");
-=======
                         req.requestMatchers("/ads-imgs/**").permitAll();
-                        req.requestMatchers("/api/Authentification/login/**", "/api/Authentification/register/**", "/api/Account/forgot-password/**", "/api/Account/reset-password/**", "/api/Account/confirm-email").permitAll();
-                        req.requestMatchers("/api/Authentification/refresh-page").authenticated();
                         req.requestMatchers("/api/Announcements/get-all-ads", "/api/Announcements/get-ad-by-url/**").permitAll();
                         req.requestMatchers("/api/Announcements/**").authenticated();
->>>>>>> 530ca60b0d74dabf86a139d435838508ad43e13e
+                        req.requestMatchers("/api/Announcements-management/**").hasRole("ADMIN");
+                        req.requestMatchers("/api/UserManagement/**").hasRole("ADMIN");
                         req.anyRequest().authenticated();
                     }
                 )
