@@ -2,6 +2,7 @@ export interface User {
     id: number;
     firstName: string;
     lastName: string;
+    username: string;
     email: string;
     jwt: string;
     registeredDate: string;
@@ -25,4 +26,24 @@ export interface UserRegister {
 export interface ConfirmEmail {
     email: string;
     token: string;
+}
+
+export interface UserAdmin {
+    id: string;
+    firstName: string;
+    lastName: string;
+    username: string;
+    email: string;
+    emailVerifed: boolean;
+    role: string;
+    registeredDate: string;
+    address: string;
+    ipAddress: string;
+}
+
+export interface UserEdit {
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
 }

@@ -4,6 +4,7 @@ import { environment } from '../../environments/environment.development';
 import { map, of, ReplaySubject } from 'rxjs';
 import { ConfirmEmail, User, UserLogin, UserRegister } from '../models/user';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -67,6 +68,17 @@ export class AuthService {
     if(key) {
       const user: User = JSON.parse(key);
       return user.jwt;
+    } else {
+      return null;
+    }
+  }
+
+  getID() {
+    const key = localStorage.getItem(environment.USER_KEY);
+    if(key) {
+      const user: User = JSON.parse(key);
+      const decodedToken: any = jwtDecode(user.jwt);
+      return decodedToken.id;
     } else {
       return null;
     }

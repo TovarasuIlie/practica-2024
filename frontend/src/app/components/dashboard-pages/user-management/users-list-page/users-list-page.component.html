@@ -32,32 +32,37 @@
         <!-- End Navbar -->
         <div class="content">
             <div class="card card-body">
-                <table class="table">
+                <table class="table table-hover">
                     <thead class="table-dark">
                         <tr>
                             <th scope="col">#</th>
-                            <th scope="col">First</th>
-                            <th scope="col">Last</th>
-                            <th scope="col">Handle</th>
+                            <th scope="col">Nume Utilizator</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Rol</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>fat</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>twitter</td>
+                        <tr [routerLink]="['detalii-utilizator', user.id]" *ngFor="let user of users">
+                            <th scope="row">{{ user.id }}</th>
+                            <td>{{ user.firstName + " " + user.lastName }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                                @if (user.role == "ROLE_ADMIN") {
+                                    <div class="badge bg-danger">
+                                        Admin
+                                    </div>
+                                }
+                                @if (user.role == "ROLE_MODERATOR") {
+                                    <div class="badge bg-primary">
+                                        Moderator
+                                    </div>
+                                }
+                                @if (user.role == "ROLE_USER") {
+                                    <div class="badge bg-secondary">
+                                        Client
+                                    </div>
+                                }
+                            </td>
                         </tr>
                     </tbody>
                 </table>

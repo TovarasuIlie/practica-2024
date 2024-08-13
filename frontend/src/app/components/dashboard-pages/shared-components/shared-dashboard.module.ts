@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SideMenuComponent } from './side-menu/side-menu.component';
 import { RouterModule } from '@angular/router';
 import { FooterComponent } from './footer/footer.component';
+import { SharedModule } from "../../shared-components/shared.module";
 
 
 
@@ -13,11 +14,12 @@ import { FooterComponent } from './footer/footer.component';
   ],
   imports: [
     CommonModule,
-    RouterModule
-  ],
+    RouterModule,
+    SharedModule
+],
   exports: [
     SideMenuComponent,
-    FooterComponent
+    FooterComponent,
   ]
 })
-export class SharedModule { }
+export class SharedDashboardModule { }

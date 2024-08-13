@@ -8,7 +8,7 @@ export interface Announcement {
     expirationDate: string;
     imageUrl: string;
     user: User;
-    idDeactivated: boolean,
+    isDeactivated: boolean,
     price: number;
     currency: string;
     url: string;
@@ -16,12 +16,23 @@ export interface Announcement {
     contactPersonName: string;
     phoneNumber: string;
     photoNumber: number;
+    approved: boolean;
 }
 
 export interface AddAnnouncement {
     title: string;
     content: string;
     image: File[]
+    address: string;
+    contactPersonName: string;
+    phoneNumber: string;
+    price: number;
+    currency: string;
+}
+
+export interface EditAnnouncement {
+    title: string;
+    content: string;
     address: string;
     contactPersonName: string;
     phoneNumber: string;

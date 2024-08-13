@@ -1,10 +1,10 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Announcement } from '../../../models/announcement';
-import { AuthService } from '../../../services/auth.service';
-import { AnnouncementService } from '../../../services/announcement.service';
-import { ToastService } from '../../../services/toast.service';
+import { Announcement } from '../../../../models/announcement';
+import { AuthService } from '../../../../services/auth.service';
+import { AnnouncementService } from '../../../../services/announcement.service';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-advertisement-page',
@@ -13,7 +13,8 @@ import { ToastService } from '../../../services/toast.service';
 })
 export class AdvertisementPageComponent implements OnInit {
   currentAd: Announcement = {} as Announcement;
-  @ViewChild("closeModal") closeModal!: ElementRef
+  @ViewChild("closeModal") closeModal!: ElementRef;
+  callSeller: string = "Suna Vanzatorul";
 
   constructor(private activatedRoute: ActivatedRoute, public authService: AuthService, private adService: AnnouncementService, private toastService: ToastService, private router: Router) {}
 
@@ -43,5 +44,13 @@ export class AdvertisementPageComponent implements OnInit {
 
   getImage(fileName: string, index: string) {
     return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+  }
+
+  changeText() {
+    if(this.authService.getID()) {
+      this.callSeller = this.currentAd.phoneNumber;
+    } else {
+      this.toastService.show({title: "Eroare", message: "Nu poti sa vezi numarul de telefon, daca nu esti logat.", classname: "text-danger"})
+    }
   }
 }

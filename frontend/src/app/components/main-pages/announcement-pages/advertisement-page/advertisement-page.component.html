@@ -8,6 +8,9 @@
                 <li class="breadcrumb-item active" aria-current="page">Library</li>
             </ol>
         </nav>
+        <div *ngIf="!currentAd.approved" class="alert alert-danger">
+            Anuntul momentan nu este publicat, trebuie sa astepti aprobarea unui <strong>Morderator</strong> sau <strong>Administrator</strong>
+        </div>
         <div class="row">
             <div class="col-md">
                 <div class="container bg-white p-5 mb-5 shadow p-3 mb-5 bg-body rounded">
@@ -63,18 +66,16 @@
                             <img src="assets/site-imgs/unknown-person-icon.png" alt="" class="object-fit-avatar">
                         </div>
                         <div class="col p-3">
-                            <p class="fw-semibold lh-5">{{ currentAd.user.firstName }} {{ currentAd.user.lastName }}</p>
-                            <p class="lh-5 text-muted" style="font-size: 14px;">Pe [nume] din {{
+                            <p class="fw-semibold lh-5">{{ currentAd.contactPersonName }}</p>
+                            <p class="text-muted" style="font-size: 13px;">Pe [nume] din {{
                                 currentAd.user.registeredDate | date: "dd-MM-yyyy HH:mm"}}</p>
-                            <p class="lh-5 text-muted" style="font-size: 14px;">Activ 14.07.2024</p>
                         </div>
                     </div>
                     <div class="d-flex flex-column gap-3">
                         <button class="btn btn-success btn-lg w-100"><i class="fas fa-paper-plane"></i> Trimite
                             mesaj</button>
-                        <button class="btn btn-outline-success btn-lg w-100"><i class="fas fa-phone-alt"></i> Suna
-                            Vanzatorul</button>
-                        <a href="" class="text-decoration-none text-muted text-center">Mai multe anunturi ale acestui
+                        <button class="btn btn-outline-success btn-lg w-100" (click)="changeText()"><i class="fas fa-phone-alt"></i> {{ callSeller }}</button>
+                        <a [routerLink]="['/oferte', currentAd.user.username]" class="text-decoration-none text-muted text-center">Mai multe anunturi ale acestui
                             vanzator <i class="fas fa-chevron-circle-right"></i></a>
                     </div>
                 </div>
@@ -87,7 +88,7 @@
                     class="container bg-white p-4 shadow p-3 mb-5 bg-body rounded gap-3">
                     <h6 class="text-uppercase fw-semibold  mb-4">Actiuni</h6>
                     <div class="d-flex flex-column gap-3">
-                        <button class="btn btn-warning btn-lg w-100"><i class="fas fa-paper-plane"></i> Editeaza
+                        <button [routerLink]="['/adauga-anunt/editeaza', currentAd.id]" class="btn btn-warning btn-lg w-100"><i class="fas fa-paper-plane"></i> Editeaza
                             Anunt</button>
                         <button type="button" class="btn btn-danger btn-lg w-100" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fas fa-phone-alt"></i> Sterge
                             Anunt</button>

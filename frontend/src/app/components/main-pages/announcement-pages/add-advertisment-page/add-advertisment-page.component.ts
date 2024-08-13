@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AnnouncementService } from '../../../services/announcement.service';
-import { AuthService } from '../../../services/auth.service';
-import { ToastService } from '../../../services/toast.service';
+import { AnnouncementService } from '../../../../services/announcement.service';
+import { AuthService } from '../../../../services/auth.service';
+import { ToastService } from '../../../../services/toast.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -59,7 +59,6 @@ export class AddAdvertismentPageComponent implements OnInit {
 
   addNewAd() {
     if(this.addAdForm.valid) {
-      console.log(this.addAdForm.value)
       this.adService.addNewAd(this.addAdForm.value).subscribe({
         next: (response: any) => {
           this.toastService.show({title: "Anunt adauga!", message: "Anuntul a fost adaugat cu succes. Va fi publicand cand un Moderator il va apoba!", classname: "text-success"});

@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddAnnouncement, Announcement } from '../models/announcement';
+import { AddAnnouncement, Announcement, EditAnnouncement } from '../models/announcement';
 import { environment } from '../../environments/environment.development';
 
 @Injectable({
@@ -28,6 +28,14 @@ export class AnnouncementService {
 
   getAnnouncementByUrl(url: string) {
     return this.http.get<Announcement>(environment.API_URL + "/api/Announcements/get-ad-by-url/" + url);
+  }
+
+  getAnnouncementById(id: string) {
+    return this.http.get<Announcement>(environment.API_URL + "/api/Announcements/get-ad-by-id/" + id);
+  }
+
+  updateAnnouncement(id: number, editedAd: EditAnnouncement) {
+    return this.http.put(environment.API_URL + "/api/Announcements/edit-ad/" + id, editedAd);
   }
 
   deleteAnnouncement(id: number) {

@@ -7,8 +7,8 @@ import { AppComponent } from './app.component';
 import { IndexPageComponent } from './components/main-pages/index-page/index-page.component';
 import { SharedModule } from './components/shared-components/shared.module';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { AdvertisementPageComponent } from './components/main-pages/advertisement-page/advertisement-page.component';
-import { AddAdvertismentPageComponent } from './components/main-pages/add-advertisment-page/add-advertisment-page.component';
+import { AdvertisementPageComponent } from './components/main-pages/announcement-pages/advertisement-page/advertisement-page.component';
+import { AddAdvertismentPageComponent } from './components/main-pages/announcement-pages/add-advertisment-page/add-advertisment-page.component';
 
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -22,6 +22,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { FilePondModule, registerPlugin } from 'ngx-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
+import { EditAdvertisementPageComponent } from './components/main-pages/announcement-pages/edit-advertisement-page/edit-advertisement-page.component';
+import { AllAdsFromComponent } from './components/main-pages/announcement-pages/all-ads-from/all-ads-from.component';
 
 registerPlugin(FilePondPluginImagePreview);
 registerPlugin(FilePondPluginFileValidateType);
@@ -32,7 +34,9 @@ registerPlugin(FilePondPluginFileValidateType);
     IndexPageComponent,
     AdvertisementPageComponent,
     AddAdvertismentPageComponent,
-    RegisterPageComponent
+    RegisterPageComponent,
+    EditAdvertisementPageComponent,
+    AllAdsFromComponent
   ],
   imports: [
     CommonModule,

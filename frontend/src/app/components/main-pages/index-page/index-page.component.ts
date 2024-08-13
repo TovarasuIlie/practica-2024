@@ -13,7 +13,7 @@ export class IndexPageComponent implements OnInit {
   constructor(private adService: AnnouncementService) {}
   
   ngOnInit(): void {
-    // this.initializeAds();
+    this.initializeAds();
   }
 
   initializeAds() {

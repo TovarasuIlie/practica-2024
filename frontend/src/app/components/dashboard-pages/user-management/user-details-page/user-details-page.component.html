@@ -1,0 +1,227 @@
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Stergere cont</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca doresti sa stergi contul <strong>{{ user.username }}</strong>?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-danger" (click)="deleteUser()">Sterge cont!</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editeaza cont</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="editUserForm" (ngSubmit)="editUser()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field class="w-100 mb-2">
+                                <mat-label><i class="fas fa-user-tie"></i> Nume</mat-label>
+                                <input formControlName="firstName" matInput placeholder="Popescu"
+                                    [errorStateMatcher]="matcher">
+                                @if (editUserForm.get('firstName')?.hasError('required')) {
+                                <mat-error>Numele este <strong>obligatoriu</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field class="w-100 mb-2">
+                                <mat-label><i class="fas fa-user-tie"></i> Prenume</mat-label>
+                                <input formControlName="lastName" matInput placeholder="Ionel"
+                                    [errorStateMatcher]="matcher">
+                                @if (editUserForm.get('lastName')?.hasError('required')) {
+                                <mat-error>Prenumele este <strong>obligatoriu</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <mat-form-field class="w-100 mb-2">
+                        <mat-label><i class="fas fa-at"></i> Email</mat-label>
+                        <input formControlName="email" matInput placeholder="example@gmail.com"
+                            [errorStateMatcher]="matcher">
+                        @if ((editUserForm.get('email')?.hasError('email') || editUserForm.get('email')?.hasError('pattern')) &&
+                        !editUserForm.get('email')?.hasError('required')) {
+                        <mat-error>Introduce-ti o adresa de email valida!</mat-error>
+                        }
+                        @if (editUserForm.get('email')?.hasError('required')) {
+                        <mat-error>Adresa de email este <strong>obligatorie</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <mat-form-field class="w-100 mb-2">
+                        <mat-label><i class="fa-solid fa-user"></i> Nume Utilizator</mat-label>
+                        <input formControlName="username" matInput placeholder="popescu_ionel"
+                            [errorStateMatcher]="matcher">
+                        @if (editUserForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator este <strong>obligatorie</strong>.</mat-error>
+                        }
+                        @if (editUserForm.get('username')?.hasError('pattern') && !editUserForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator nu poate contine caractere speciale, inafara de "-" si "_".</mat-error>
+                        }
+                        @if (editUserForm.get('username')?.hasError('minlength') && !editUserForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator trebuie sa aiba minim <strong>8 caractere</strong>.</mat-error>
+                        }
+                        @if (editUserForm.get('username')?.hasError('maxlength') && !editUserForm.get('username')?.hasError('required')) {
+                            <mat-error>Numele de utilizator trebuie sa aiba maxim <strong>20 caractere</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <mat-form-field class="w-100 mb-2">
+                        <mat-label><i class="fas fa-key"></i> Adresa</mat-label>
+                        <input formControlName="address" matInput type="text" placeholder="Scrie parola..."
+                            [errorStateMatcher]="matcher">
+                        @if (editUserForm.get('password')?.hasError('required')) {
+                        <mat-error>Adresa este <strong>obligatorie</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <div *ngIf="errorMessages.length > 0" class="alert alert-danger">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                    <button type="submit" class="btn btn-primary">Salveaza schimbarile!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="black" data-active-color="success">
+        <app-side-menu></app-side-menu>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <h5 class="text-uppercase mx-4">Utilizatori</h5>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header">
+                            Admin Tools
+                        </div>
+                        <div class="card-body">
+                            <table class="table">
+
+                                <body>
+                                    <tr>
+                                        <td>SQL ID:</td>
+                                        <td class="fw-semibold">{{ user.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nume Utilizator:</td>
+                                        <td class="fw-semibold">{{ user.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email:</td>
+                                        <td class="fw-semibold">{{ user.email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email Verificat:</td>
+                                        <td>
+                                            <div *ngIf="user.emailVerifed" class="badge bg-success">
+                                                Verificat
+                                            </div>
+                                            <div *ngIf="!user.emailVerifed" class="badge bg-danger">
+                                                Neverificat
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nume Complet:</td>
+                                        <td class="fw-semibold">{{ user.firstName + " " + user.lastName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IP:</td>
+                                        <td class="fw-semibold">{{ user.ipAddress }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Rol:</td>
+                                        <td>
+                                            @if (user.role == "ROLE_ADMIN") {
+                                            <div class="badge bg-danger">
+                                                Admin
+                                            </div>
+                                            }
+                                            @if (user.role == "ROLE_MODERATOR") {
+                                            <div class="badge bg-primary">
+                                                Moderator
+                                            </div>
+                                            }
+                                            @if (user.role == "ROLE_USER") {
+                                            <div class="badge bg-secondary">
+                                                Client
+                                            </div>
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adresa:</td>
+                                        <td class="fw-semibold">{{ user.address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Inregistrat la data de:</td>
+                                        <td class="fw-semibold">{{ user.registeredDate | date:"dd.MM.YYYY HH:mm:ss" }}
+                                        </td>
+                                    </tr>
+                                </body>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header">
+                            Admin Tools
+                        </div>
+                        <div class="card-body">
+                            <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#edit-modal">Editeaza Cont</button>
+                            <button class="btn btn-outline-warning w-100" (click)="forceConfirmEmail()">Confirma Fortat
+                                Email-ul</button>
+                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Cont</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</div>
