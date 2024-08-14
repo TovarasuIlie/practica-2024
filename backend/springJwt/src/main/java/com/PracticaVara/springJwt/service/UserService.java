@@ -6,7 +6,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
+import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,34 +26,51 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<User> findAllUsersOrdered(){
-        return userRepository.findAllByOrderByRoleAscIdAsc();
+    public ResponseEntity<?> findAllUsersOrdered(){
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findAllByOrderByRoleAscIdAsc());
     }
 
-    public User findUserById(Integer id){
-        return userRepository.findById(id).get();
-    }
-    public User updateUser(Integer id, User updatedUserDetails) {
-        User existingUser = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public ResponseEntity<?> findUserById(Integer id){
 
-        //Aici eu am pus toate la rand, te rog scoate daca ceva nu are sens sa fie pus aici
-        existingUser.setFirstName(updatedUserDetails.getFirstName());
-        existingUser.setLastName(updatedUserDetails.getLastName());
-        existingUser.setUsername(updatedUserDetails.getUsername());
-        existingUser.setEmail(updatedUserDetails.getEmail());
-        existingUser.setAddress(updatedUserDetails.getAddress());
-        return userRepository.save(existingUser);
+        return ResponseEntity.status(HttpStatus.OK).body(userRepository.findById(id));
+    }
+    public ResponseEntity<?> updateUser(Integer id, User updatedUserDetails) {
+        Optional<User> existingUser = userRepository.findById(id);
+        if(existingUser.isPresent()){
+            User existingUserDetails = existingUser.get();
+            //Aici eu am pus toate la rand, te rog scoate daca ceva nu are sens sa fie pus aici
+            //s-a modificat putin 14.08.2024
+            existingUserDetails.setFirstName(updatedUserDetails.getFirstName());
+            existingUserDetails.setLastName(updatedUserDetails.getLastName());
+            existingUserDetails.setUsername(updatedUserDetails.getUsername());
+            existingUserDetails.setEmail(updatedUserDetails.getEmail());
+            existingUserDetails.setAddress(updatedUserDetails.getAddress());
+            userRepository.save(existingUserDetails);
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizator editat cu succes."));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista."));
+        }
+
     }
 
-    public void deleteUser(Integer id){
+    public ResponseEntity<?> deleteUser(Integer id){
         userRepository.deleteById(id);
-        // sa nu uit sa bag si ceva mesaj idk
+        return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul o fost sters cu succes."));
     }
 
 
-    public void confirmEmail(Integer id){
-        User user = findUserById(id);
-        user.setEmailVerifed(true);
-        userRepository.save(user);
+    public ResponseEntity<?> confirmEmail(Integer id){
+        Optional<User> currentUser = userRepository.findById(id);
+        if(currentUser.isPresent()){
+            User user = currentUser.get();
+            user.setEmailVerifed(true);
+            userRepository.save(user);
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Emailul a fost confirmat."));
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Emailul nu exista."));
+        }
+
+
+
     }
 }

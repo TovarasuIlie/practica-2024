@@ -1,10 +1,13 @@
 package com.PracticaVara.springJwt.service;
 
+import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import jakarta.servlet.ServletContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -51,7 +55,7 @@ public class AnnouncementService {
         return announcementRepository.findByUrl(url);
     }
 
-    public Announcement save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
+    public ResponseEntity<Object> save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> user = userRepository.findByUsername(username);
@@ -82,11 +86,14 @@ public class AnnouncementService {
                 announcement.setImageUrl(folderUUID);
                 announcement.setPhotoNumber(imageFile.length);
             } else {
-                throw new RuntimeException("Please provide at least one image for the announcement.");
+                //throw new RuntimeException("Please provide at least one image for the announcement.");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim o imagine"));
             }
-            return announcementRepository.save(announcement);
+            announcementRepository.save(announcement);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.OK, "Anuntul a fost creat."));
         } else {
-            throw new RuntimeException("User not found.");
+            //throw new RuntimeException("User not found.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }
 
@@ -97,10 +104,10 @@ public class AnnouncementService {
 
         if(currentUser.isPresent()){
             Optional<Announcement> announcement = announcementRepository.findById(id);
-            if (announcement.get().getUser().getId() != currentUser.get().getId()){
-                throw new RuntimeException("Eroare! Poti sterge doar anunturile tale!");
-            }
             if (announcement.isPresent()) {
+                if (!Objects.equals(announcement.get().getUser().getId(), currentUser.get().getId())){
+                    throw new RuntimeException("Eroare! Poti sterge doar anunturile tale!");
+                }
                 String folderPath = announcement.get().getImageUrl();
                 Path userDir = Paths.get(folderPath);
 
@@ -126,7 +133,7 @@ public class AnnouncementService {
         }
     }
 
-    public Announcement updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
+    public ResponseEntity<Object> updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
@@ -134,12 +141,11 @@ public class AnnouncementService {
 
         if(currentUser.isPresent()){
             Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
+            if(existingAnnouncement.isPresent()){
+                if (existingAnnouncement.get().getUser().getId() != currentUser.get().getId()){
+                    throw new RuntimeException("Eroare! Poti edita doar anunturile tale!");
+                }
 
-            if (existingAnnouncement.get().getUser().getId() != currentUser.get().getId()){
-                throw new RuntimeException("Eroare! Poti edita doar anunturile tale!");
-            }
-
-            if (existingAnnouncement.isPresent()) {
                 Announcement announcement = existingAnnouncement.get();
                 announcement.setTitle(updatedAnnouncement.getTitle());
                 announcement.setContent(updatedAnnouncement.getContent());
@@ -168,16 +174,20 @@ public class AnnouncementService {
                     announcement.setImageUrl(userDir.toString());
                     announcement.setPhotoNumber(photoNumber);
                 } else {
-                    throw new RuntimeException("Please provide at least one image for the announcement update.");
+                    //throw new RuntimeException("Please provide at least one image for the announcement update.");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim o poza"));
                 }
 
-                return announcementRepository.save(announcement);
-
+                announcementRepository.save(announcement);
+                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anuntul a fost editat."));
             } else {
-                throw new RuntimeException("Announcement not found");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul nu exista"));
             }
+
+
         } else {
-            throw new RuntimeException("User not found");
+            //throw new RuntimeException("User not found");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }
     /*private String saveImage(MultipartFile file, User user){

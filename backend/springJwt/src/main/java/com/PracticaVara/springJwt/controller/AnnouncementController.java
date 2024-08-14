@@ -2,8 +2,7 @@ package com.PracticaVara.springJwt.controller;
 
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementService;
-import lombok.SneakyThrows;
-import org.springframework.http.HttpStatus;
+
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,7 @@ public class AnnouncementController {
     @PostMapping(value = "create-ad", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") Announcement announcement, @RequestPart("image") MultipartFile[] imageFile){
         try {
-            return ResponseEntity.ok(announcementService.save(announcement, imageFile));
+            return announcementService.save(announcement, imageFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -50,7 +49,7 @@ public class AnnouncementController {
     public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image") MultipartFile[] imageFile) {
         announcement.setId(id);
         try {
-            return ResponseEntity.ok(announcementService.updateAnnouncement(id, announcement, imageFile));
+            return announcementService.updateAnnouncement(id, announcement, imageFile);
         } catch (Exception e) {
             e.printStackTrace();
         }
