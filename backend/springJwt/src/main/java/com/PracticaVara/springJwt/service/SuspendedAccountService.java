@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +55,7 @@ public class SuspendedAccountService {
                     isPermanent = true;
                 }
                 SuspendedAccount suspendedAccount = new SuspendedAccount();
-                suspendedAccount.setUser(suspendedUser);
+                suspendedAccount.setUserSuspend(suspendedUser);
                 suspendedAccount.setAdmin(adminUser);
                 suspendedAccount.setPermanentSuspend(isPermanent);
                 suspendedAccount.setSuspendReason(reason);
@@ -62,7 +63,7 @@ public class SuspendedAccountService {
                 suspendedAccount.setStartingDate(now);
                 suspendedAccount.setEndingDate(now.plusDays(numberOfDaysSuspended));
                 suspendedAccountRepository.save(suspendedAccount);
-                return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Utilizatorul" +suspendedUser.getUsername() + " a fost suspendat pana pe data de: " + suspendedAccount.getEndingDate()));
+                return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Utilizatorul " +suspendedUser.getUsername() + " a fost suspendat pana pe data de: " + suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));
             }
@@ -76,7 +77,7 @@ public class SuspendedAccountService {
         Optional<SuspendedAccount> suspendedAccount = suspendedAccountRepository.findById(id);
         if (suspendedAccount.isPresent()) {
             suspendedAccountRepository.delete(suspendedAccount.get());
-            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUser().getUsername()+ "nu mai este suspendat." ));
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUserSuspend().getUsername()+ "nu mai este suspendat." ));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));
         }

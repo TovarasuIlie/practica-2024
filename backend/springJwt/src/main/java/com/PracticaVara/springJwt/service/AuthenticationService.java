@@ -28,6 +28,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
@@ -104,13 +105,12 @@ public class AuthenticationService {
 
     @Async("asyncTaskExecutor")
     public CompletableFuture<ResponseEntity<Object>> authenticate(User request, HttpServletRequest servletRequest) {
-
-        Optional<SuspendedAccount> currentSuspendedAccount = suspendedAccountRepository.findSuspendedAccountByUser(request);
+        User user = repository.findByUsername(request.getUsername()).orElseThrow();
+        Optional<SuspendedAccount> currentSuspendedAccount = suspendedAccountRepository.findSuspendedAccountByUserSuspend(user);
         if(currentSuspendedAccount.isEmpty()) {
             try {
                 Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
                 if(auth.isAuthenticated()) {
-                    User user = repository.findByUsername(request.getUsername()).orElseThrow();
                     if(!user.getIpAddress().equals(servletRequest.getRemoteAddr())) {
                         user.setIpAddress(servletRequest.getRemoteAddr());
                         IPLogs ipLogs = new IPLogs();
@@ -133,11 +133,11 @@ public class AuthenticationService {
             if(suspendedAccount.isPermanentSuspend()) {
                 return CompletableFuture.completedFuture(ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
-                        .body(new APIMessage(HttpStatus.UNAUTHORIZED, "Contul a fost suspendat permanent de catre " + suspendedAccount.getAdmin() + " pe motivul ca: " + suspendedAccount.getSuspendReason())));
+                        .body(new APIMessage(HttpStatus.UNAUTHORIZED, "Contul a fost suspendat PERMANENT de catre " + suspendedAccount.getAdmin().getUsername() + " pe motivul: " + suspendedAccount.getSuspendReason() + ".")));
             } else {
                 return CompletableFuture.completedFuture(ResponseEntity
                         .status(HttpStatus.UNAUTHORIZED)
-                        .body(new APIMessage(HttpStatus.UNAUTHORIZED, "Contul a fost suspendat pana pe data de " + suspendedAccount.getEndingDate() + " de catre: "+ suspendedAccount.getAdmin()+ "pe motivul ca: " + suspendedAccount.getSuspendReason())));
+                        .body(new APIMessage(HttpStatus.UNAUTHORIZED, "Contul a fost suspendat pana pe data de " + suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) + " de catre: "+ suspendedAccount.getAdmin().getUsername() + " pe motivul: " + suspendedAccount.getSuspendReason()+ ".")));
             }
         }
 

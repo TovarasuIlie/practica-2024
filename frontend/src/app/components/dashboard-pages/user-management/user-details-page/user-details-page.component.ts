@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, Renderer2, ɵsetClassMetadataAsync } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChildren, ɵsetClassMetadataAsync } from '@angular/core';
 import { User, UserAdmin } from '../../../../models/user';
 import { DOCUMENT } from '@angular/common';
 import { AuthService } from '../../../../services/auth.service';
@@ -9,6 +9,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { __values } from 'tslib';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { SuspendDays } from '../../../../models/suspend';
+import { SuspendAccountsService } from '../../../../services/suspend-accounts.service';
+import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 @Component({
   selector: 'app-user-details-page',
@@ -18,12 +21,36 @@ import { ErrorStateMatcher } from '@angular/material/core';
 export class UserDetailsPageComponent implements OnInit {
   user: UserAdmin = <UserAdmin>{};
   editUserForm: FormGroup = new FormGroup({});
+  suspendUserForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
   matcher = new ErrorStateMatcher();
+  @ViewChildren('closeModal') closeModal!: QueryList<ElementRef>
   counties: string[] = ['Alba', 'Arad', 'Arges', 'Bacau', 'Bihor', 'Bistrita-Nasaud'];
+  suspendDays: SuspendDays[] = [
+    {
+      text: "O zi",
+      numberOfDays: 1
+    },
+    {
+      text: "2 zile",
+      numberOfDays: 2
+    },
+    {
+      text: "3 zile",
+      numberOfDays: 3
+    },
+    {
+      text: "O saptamana",
+      numberOfDays: 7
+    },
+    {
+      text: "Permanent",
+      numberOfDays: 0
+    }
+  ]
 
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private userManageService: UserManagementService, 
-              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder) {
+              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder, private suspendAccService: SuspendAccountsService) {
     const link = this._renderer2.createElement('link');
     link.href = "/assets/dashboard/css/style.css";
     link.rel = "stylesheet"
@@ -43,6 +70,7 @@ export class UserDetailsPageComponent implements OnInit {
         this.user = {} as UserAdmin;
       }
     })
+    console.log(this.user);
   }
 
   initializeForm() {
@@ -52,6 +80,10 @@ export class UserDetailsPageComponent implements OnInit {
       firstName: [this.user.firstName, [Validators.required]],
       lastName: [this.user.lastName, [Validators.required]],
       address: [this.user.address, [Validators.required]]
+    });
+    this.suspendUserForm = this.fb.group({
+      reason: [null, [Validators.required]],
+      suspendDays: [null, [Validators.required, Validators.minLength(1)]]
     })
   }
 
@@ -100,5 +132,28 @@ export class UserDetailsPageComponent implements OnInit {
     } else {
       this.errorMessages.push("Toate campuriile trebuie completate!");
     }
+  }
+
+  suspendUser() {
+    this.errorMessages = []
+    if(this.suspendUserForm.valid) {
+      this.suspendAccService.suspendAccount(this.user.id, this.suspendUserForm.value.reason, this.suspendUserForm.value.suspendDays).subscribe({
+        next: (value: any) => {
+          this.refreshUser();
+          this.closeModal.forEach(x => x.nativeElement.click());
+          this.toastService.show({title: "Cont suspendat", message: value.message, classname: "text-success"});
+        }, 
+        error: (response) => {
+          console.log(response);
+          this.errorMessages.push(response.error.message);
+        }
+      })
+    } else {
+      this.errorMessages.push("Toate campurile trebuie completate!")
+    }
+  }
+
+  unsuspendUser() {
+
   }
 }

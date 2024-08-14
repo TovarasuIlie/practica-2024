@@ -1,6 +1,7 @@
 export interface Category {
     id: number;
     name: string;
-    // searchLink: string;
-    // imageUrl: string;
+    searchLink: string;
+    iconUrl: string;
+    image: File;
 }

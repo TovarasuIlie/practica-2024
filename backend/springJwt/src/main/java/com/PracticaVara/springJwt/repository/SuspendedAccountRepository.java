@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SuspendedAccountRepository extends JpaRepository<SuspendedAccount, Integer> {
-    Optional<SuspendedAccount> findSuspendedAccountByUser(User user);
+    Optional<SuspendedAccount> findSuspendedAccountByUserSuspend(User user);
     Optional<SuspendedAccount> findSuspendedAccountByIpAddress(String ipAddress);
 }

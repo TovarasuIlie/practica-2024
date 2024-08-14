@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { DOCUMENT } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
@@ -6,6 +6,11 @@ import { Category } from '../../../models/category';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
+import { ActivatedRoute } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CategoryService } from '../../../services/category.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-category-page',
@@ -14,13 +19,24 @@ import { MatSort, Sort } from '@angular/material/sort';
 })
 export class CategoryPageComponent implements OnInit {
   loading: boolean = true;
-  displayedColumns: string[] = ['id', 'name', 'actions'];
-  dataSource = new MatTableDataSource<Category>(ELEMENT_DATA);
-
+  displayedColumns: string[] = ['id', 'image', 'name', 'actions'];
+  dataSource!: MatTableDataSource<Category>;
+  categoryForm: FormGroup = new FormGroup({})
+  imageArray!: File;
+  errorMessages: string[] = [];
+  pondOptions = {
+    class: 'my-filepond',
+    multiple: false,
+    labelIdle: '<u>Drag & Drop</u> or <u>Browse</u> images here!',
+    acceptedFileTypes: 'image/jpeg, image/png, image/jpg',
+  }
+  selectedCategory!: number | null;
+  @ViewChildren("closeModal") closeModal!: QueryList<ElementRef>;
   @ViewChild(MatPaginator) paginator!: MatPaginator
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, private _liveAnnouncer: LiveAnnouncer, public authService: AuthService) {
+  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, private _liveAnnouncer: LiveAnnouncer, public authService: AuthService,
+              private activatedRoute: ActivatedRoute, private fb: FormBuilder, private categoryService: CategoryService, private toastService: ToastService) {
     const link = this._renderer2.createElement('link');
     link.href = "/assets/dashboard/css/style.css";
     link.rel = "stylesheet"
@@ -28,43 +44,98 @@ export class CategoryPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+    this.initializeCategories();
+    this.initializeFrom();
   }
 
-  ngAfterViewInit() {   
+  initializeCategories() {
+    this.activatedRoute.data.subscribe((response: any) => {
+      if(!(response.categories instanceof HttpErrorResponse)) {
+        this.dataSource = new MatTableDataSource<Category>(response.categories);
+      } else {
+        this.dataSource = new MatTableDataSource<Category>([]);
+      }
+    })
+  }
+
+  initializeFrom() {
+    this. categoryForm = this.fb.group({
+      name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
+      image: [[]]
+    })
+  }
+
+  refreshCategory() {
+    this.categoryService.getAllCategories().subscribe(categories => this.dataSource = new MatTableDataSource<Category>(categories))
+  }
+
+  getImage(fileName: string) {
+    return "http://localhost:8080/category-imgs/" + fileName;
+  }
+
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
 
-    /** Announce the change in sort state for assistive technology. */
-    announceSortChange(sortState: Sort) {
-      // This example uses English messages. If your application supports
-      // multiple language, you would internationalize these strings.
-      // Furthermore, you can customize the message to add additional
-      // details about the values being sorted.
-      if (sortState.direction) {
-        this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-      } else {
-        this._liveAnnouncer.announce('Sorting cleared');
-      }
-    }
-}
+  onChange($event: any) {
+    this.categoryForm.patchValue({
+      image: $event.file.file
+    });
+  }
 
-const ELEMENT_DATA: Category[] = [
-    {id: 1, name: "Masini"},
-    {id: 2, name: "Masini"},
-    {id: 3, name: "Masini"},
-    {id: 4, name: "Masini"},
-    {id: 5, name: "Masini"},
-    {id: 6, name: "Masini"},
-    {id: 7, name: "Masini"},
-    {id: 8, name: "Masini"},
-    {id: 9, name: "Masini"},
-    {id: 10, name: "Masini"},
-    {id: 11, name: "Masini"},
-    {id: 12, name: "Masini"},
-    {id: 13, name: "Masini"},
-    {id: 14, name: "Masini"},
-    {id: 15, name: "Masini"},
-    {id: 16, name: "Masini"}
-]
+  onDelete($event: any) {
+    this.categoryForm.patchValue({
+      image: this.imageArray
+    });
+  }
+
+  addCategory() {
+    this.errorMessages = []
+    if(this.categoryForm.valid) {
+      this.categoryService.addCategory(this.categoryForm.value).subscribe({
+        next: (value) => {
+          this.refreshCategory();
+          this.toastService.show({title: "Categorie stearsa", message: "Categoria a fost stearsa cu succes!", classname: "text-success"});
+          this.closeModal.forEach(x => x.nativeElement.click());
+        },
+        error: (response) => {
+          console.log(response)
+        }
+      })
+    } else {
+      this.errorMessages.push("Toate campurile trebuie completate!")
+    }
+  }
+
+  selectCategory(id: number) {
+    this.selectedCategory = id;
+  }
+
+  deleteCategory() {
+    if(this.selectedCategory) {
+      this.categoryService.deleteCategory(this.selectedCategory).subscribe({
+        next: _ => {
+          this.refreshCategory();
+          this.toastService.show({title: "Categorie stearsa", message: "Categoria a fost stearsa cu succes!", classname: "text-success"});
+          this.closeModal.forEach(x => x.nativeElement.click());
+          this.selectedCategory = null;
+        }
+      })
+    }
+  }
+
+
+  /** Announce the change in sort state for assistive technology. */
+  announceSortChange(sortState: Sort) {
+    // This example uses English messages. If your application supports
+    // multiple language, you would internationalize these strings.
+    // Furthermore, you can customize the message to add additional
+    // details about the values being sorted.
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
+}

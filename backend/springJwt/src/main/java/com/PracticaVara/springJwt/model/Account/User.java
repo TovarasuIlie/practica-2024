@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.model.Account;
 
+import com.PracticaVara.springJwt.model.SuspendedAccount;
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -18,7 +19,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -69,6 +69,10 @@ public class User implements UserDetails {
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<IPLogs> ipLogs;
+
+    @OneToOne(mappedBy = "userSuspend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "userSuspendReference")
+    private SuspendedAccount suspendDetails;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

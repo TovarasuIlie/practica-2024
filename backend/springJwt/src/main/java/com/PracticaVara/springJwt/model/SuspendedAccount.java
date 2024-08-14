@@ -1,11 +1,9 @@
 package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Generated;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -21,11 +19,13 @@ public class SuspendedAccount {
     private Integer id;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference(value = "userSuspendReference")
+    private User userSuspend;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "admin_id", nullable = false)
+    @JoinColumn(name = "admin_id", nullable = false, referencedColumnName = "id")
+    @JsonBackReference(value = "adminReference")
     private User admin;
 
     @Column(name = "starting_date", nullable = false)
@@ -43,4 +43,7 @@ public class SuspendedAccount {
     @Column(name = "ip_address")
     private String ipAddress;
 
+    public String getAdminUsername() {
+        return  this.admin.getUsername();
+    }
 }

@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { AdsManagementComponent } from './ads-management-pages/ads-management/ads-management.component';
 import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/ad-details-page.component';
+import { FilePondModule } from 'ngx-filepond';
 
 
 @NgModule({
@@ -40,6 +41,7 @@ import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/a
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
+    FilePondModule
 ]
 })
 export class DashboardPagesModule { }

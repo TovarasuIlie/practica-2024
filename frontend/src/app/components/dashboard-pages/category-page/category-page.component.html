@@ -1,3 +1,64 @@
+<div class="modal fade" id="add-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Adauga categorie noua</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
+                <div class="modal-body">
+                    <mat-form-field class="w-100 mb-3">
+                        <mat-label>Adauga titlu</mat-label>
+                        <input formControlName="name" matInput #name placeholder="Ex. iPhone 11 aproape nou">
+                        <mat-hint align="start">Introdu cel puțin 3 caractere</mat-hint>
+                        <mat-hint align="end">{{name.value.length}} / 70</mat-hint>
+                        @if (categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul unui anunt este <strong>obligatoru</strong>.</mat-error>
+                        }
+                        @if (categoryForm.get('name')?.hasError('minlength') && !categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul trebuie sa contina minim <strong>16 caractere</strong>.</mat-error>
+                        }
+                        @if (categoryForm.get('name')?.hasError('maxlength') && !categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul trebuie sa contina maxim <strong>70 caractere</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <h5 class="mb-5">Imagini</h5>
+                    <file-pond [options]="pondOptions" (onaddfile)="onChange($event)" (onremovefile)="onDelete($event)"></file-pond>
+                    <mat-hint class="float-start">Incarca un icon</mat-hint>
+                    <mat-hint class="float-end">{{imageArray}} / 1</mat-hint>
+                    <div *ngIf="errorMessages.length > 0" class="alert alert-danger m-5 mb-2">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                    <button type="submit" class="btn btn-success">Adauga Categorie</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Sterge categorie</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Doresti sa stegi categoria?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="submit" class="btn btn-danger" (click)="deleteCategory()">Sterge Categorie</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="wrapper">
     <div class="sidebar" data-color="black" data-active-color="success">
         <app-side-menu></app-side-menu>
@@ -32,26 +93,30 @@
         <!-- End Navbar -->
         <div class="content">
             <div class="card card-body">
-                <div class="text-center">
-                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="text-center">
-
-                        <!-- Position Column -->
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
+                    Adauga categorie
+                </button>
+                <div>
+                    <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
+                        class="text-center">
                         <ng-container matColumnDef="id">
-                            <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-                            <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+                            <th class="text-center" mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.id}} </td>
                         </ng-container>
-
-                        <!-- Name Column -->
+                        <ng-container matColumnDef="image">
+                            <th class="text-center" mat-header-cell *matHeaderCellDef> Poza Categorie </th>
+                            <td class="text-center" style="max-width: 100px;" mat-cell *matCellDef="let element">
+                                <img [src]="getImage(element.iconUrl)" class="img-fluid text-center m-2">
+                            </td>
+                        </ng-container>
                         <ng-container matColumnDef="name">
-                            <th mat-header-cell *matHeaderCellDef> Nume Categorie </th>
-                            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+                            <th class="text-center" mat-header-cell *matHeaderCellDef> Nume Categorie </th>
+                            <td class="text-center" mat-cell *matCellDef="let element"> {{element.name}} </td>
                         </ng-container>
-
-                        <!-- Weight Column -->
                         <ng-container matColumnDef="actions">
-                            <th mat-header-cell *matHeaderCellDef> Actiuni </th>
-                            <td mat-cell *matCellDef="let element">
-                                <button class="btn btn-sm btn-danger">Sterge</button>
+                            <th class="text-center" mat-header-cell *matHeaderCellDef> Actiuni </th>
+                            <td class="text-center" mat-cell *matCellDef="let element">
+                                <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="selectCategory(element.id)">Sterge</button>
                                 <button class="btn btn-sm btn-info">Editeaza</button>
                             </td>
                         </ng-container>

@@ -1,3 +1,5 @@
+import { SuspendDetail } from "./suspend";
+
 export interface User {
     id: number;
     firstName: string;
@@ -40,6 +42,7 @@ export interface UserAdmin {
     address: string;
     ipAddress: string;
     ipLogs: IPLogs[];
+    suspendDetails: SuspendDetail;
 }
 
 export interface UserEdit {

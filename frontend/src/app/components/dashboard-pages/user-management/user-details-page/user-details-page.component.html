@@ -99,6 +99,66 @@
     </div>
 </div>
 
+<div *ngIf="user.suspendDetails.id === null" class="modal fade" id="suspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editeaza cont</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="suspendUserForm" (ngSubmit)="suspendUser()">
+                <div class="modal-body">
+                    <div class="badge bg-danger">Atentie!</div> 
+                    Esti pe cale sa suspendezi activitatea de pe acest cont
+                    <mat-form-field class="w-100 mb-2 mt-4">
+                        <mat-label><i class="fas fa-at"></i> Motiv</mat-label>
+                        <input formControlName="reason" matInput placeholder="Ex: Anunt inadecvat, etc"
+                            [errorStateMatcher]="matcher">
+                        @if (suspendUserForm.get('reason')?.hasError('required')) {
+                        <mat-error>Motivul este <strong>obligatoriu</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <mat-form-field class="w-100">
+                        <mat-label>Durata suspendari</mat-label>
+                        <mat-select formControlName="suspendDays" [errorStateMatcher]="matcher">
+                            @for (spec of suspendDays; track spec) {
+                            <mat-option [value]="spec.numberOfDays">{{ spec.text }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                    <div *ngIf="errorMessages.length > 0" class="alert alert-danger">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                    <button type="submit" class="btn btn-danger">Suspendeaza Cont</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="user.suspendDetails.id !== null" class="modal fade" id="unsuspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Retrage Suspend</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca doresti sa retrage suspendarea de pe acest cont?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-danger" (click)="unsuspendUser()">Retrage Suspendarea</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="wrapper">
     <div class="sidebar" data-color="black" data-active-color="success">
         <app-side-menu></app-side-menu>
@@ -203,6 +263,19 @@
                                     </tr>
                                 </tbody>
                             </table>
+                            <table class="table table-danger">
+                                <thead>
+                                    <tr>
+                                        <th colspan="2">Detalii suspend</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Cont Suspendat de:</td>
+                                        <td class="fw-semibold">{{ user.suspendDetails.adminUsername }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <div class="card">
@@ -236,6 +309,8 @@
                             <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#edit-modal">Editeaza Cont</button>
                             <button class="btn btn-outline-warning w-100" (click)="forceConfirmEmail()">Confirma Fortat
                                 Email-ul</button>
+                            <button *ngIf="user.suspendDetails.id === null" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#suspend-modal">Suspenda Cont</button>
+                            <button *ngIf="user.suspendDetails.id !== null" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#unsuspend-modal">Retrage suspend</button>
                             <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Cont</button>
                         </div>
                     </div>

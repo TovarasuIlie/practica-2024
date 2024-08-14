@@ -17,4 +17,16 @@ export class AnnouncementManageService {
   getAdById(id: string) {
     return this.http.get<Announcement>(environment.API_URL + "/api/Announcements-management/get-ad-by-id/" + id);
   }
+
+  markAsApproved(id: number) {
+    return this.http.get(environment.API_URL + "/api/Announcements-management/approve/" + id);
+  }
+
+  markAsRejected(id: number) {
+    return this.http.get(environment.API_URL + "/api/Announcements-management/reject/" + id);
+  }
+
+  deleteAd(id: number) {
+    return this.http.delete(environment.API_URL + "/api/Announcements-management/delete-ad/" + id);
+  }
 }
