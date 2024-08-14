@@ -78,7 +78,7 @@ public class AnnouncementManagementController {
     public ResponseEntity<?> approveAnnouncement(@PathVariable Integer id) {
         try {
             announcementManagementService.approveAnnouncement(id);
-            return ResponseEntity.ok("Announcement approved successfully");
+            return ResponseEntity.ok("Anuntul a fost aprobat.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
@@ -88,7 +88,7 @@ public class AnnouncementManagementController {
     public ResponseEntity<?> rejectAnnouncement(@PathVariable Integer id) {
         try {
             announcementManagementService.rejectAnnouncement(id);
-            return ResponseEntity.ok("Announcement rejected successfully");
+            return ResponseEntity.ok("Anuntul a fost rejectat.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

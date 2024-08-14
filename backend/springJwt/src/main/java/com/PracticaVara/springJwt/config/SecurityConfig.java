@@ -52,6 +52,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/Reports-management/**").hasRole("ADMIN");
                         req.requestMatchers("/api/Categories/get-all-categories").permitAll();
                         req.requestMatchers("/api/Categories/**").hasRole("ADMIN");
+                        req.requestMatchers("/api/Suspended-accounts/**").hasRole("ADMIN");
                         req.anyRequest().authenticated();
                     }
                 )
