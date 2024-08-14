@@ -34,24 +34,6 @@ public class AnnouncementManagementController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("get-ad-by-url/{url}")
-    public ResponseEntity<Announcement> getAnnouncementByUrl(@PathVariable String url){
-        Optional<Announcement> announcement = announcementManagementService.findByUrl(url);
-        return announcement.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PostMapping(value = "create-ad", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") Announcement announcement, @RequestPart("image") MultipartFile[] imageFile){
-        try {
-            return ResponseEntity.ok(announcementManagementService.save(announcement, imageFile));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.badRequest().body("A avut loc o eroare!");
-    }
-
-
     @PutMapping("edit-ad/{id}")
     public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image") MultipartFile[] imageFile) {
         announcement.setId(id);
@@ -63,35 +45,14 @@ public class AnnouncementManagementController {
         return ResponseEntity.badRequest().body("A avut loc o eroare!");
     }
 
-
-    @GetMapping("search")
-    public ResponseEntity<List<Announcement>> searchAnnouncements(@RequestParam String title){
-        List<Announcement> announcements = announcementManagementService.findByTitle(title);
-
-        if (announcements.isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(announcements);
-    }
-
-    @PostMapping("approve/{id}")
+    @GetMapping("approve/{id}")
     public ResponseEntity<?> approveAnnouncement(@PathVariable Integer id) {
-        try {
-            announcementManagementService.approveAnnouncement(id);
-            return ResponseEntity.ok("Announcement approved successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        return announcementManagementService.approveAnnouncement(id);
     }
 
-    @PostMapping("reject/{id}")
+    @GetMapping("reject/{id}")
     public ResponseEntity<?> rejectAnnouncement(@PathVariable Integer id) {
-        try {
-            announcementManagementService.rejectAnnouncement(id);
-            return ResponseEntity.ok("Announcement rejected successfully");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
+        return announcementManagementService.rejectAnnouncement(id);
     }
 
     @DeleteMapping("delete-ad/{id}")

@@ -1,10 +1,13 @@
 package com.PracticaVara.springJwt.service;
 
+import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import jakarta.servlet.ServletContext;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -39,22 +42,24 @@ public class AnnouncementManagementService {
         this.userRepository = userRepository;
     }
 
-    public void approveAnnouncement(Integer id) {
-        Announcement announcement = announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
-        announcement.setApproved(true);
-        announcementRepository.save(announcement);
+    public ResponseEntity<Object> approveAnnouncement(Integer id) {
+        Optional<Announcement> announcement = announcementRepository.findById(id);
+        if(announcement.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul cu ID " + id + " nu a fost gasit"));
+        }
+        announcement.get().setApproved(true);
+        announcementRepository.save(announcement.get());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new APIMessage(HttpStatus.ACCEPTED, "Anuntul a fost aprobat cu succes!"));
     }
 
-    public void rejectAnnouncement(Integer id) {
-        Announcement announcement = announcementRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Announcement " + id + " not found."));
-        announcement.setApproved(false);
-        announcementRepository.save(announcement);
-    }
-
-    public List<Announcement> findByTitle(String title) {
-        return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
+    public ResponseEntity<Object> rejectAnnouncement(Integer id) {
+        Optional<Announcement> announcement = announcementRepository.findById(id);
+        if(announcement.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul cu ID " + id + " nu a fost gasit"));
+        }
+        announcement.get().setApproved(false);
+        announcementRepository.save(announcement.get());
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body(new APIMessage(HttpStatus.ACCEPTED, "Anuntul a fost respins cu succes!"));
     }
 
     public List<Announcement> findAll(){
@@ -62,49 +67,6 @@ public class AnnouncementManagementService {
     }
     public Optional<Announcement> findById(Integer id){
         return announcementRepository.findById(id);
-    }
-
-    public Optional<Announcement> findByUrl(String url) {
-        return announcementRepository.findByUrl(url);
-    }
-
-    public Announcement save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> user = userRepository.findByUsername(username);
-        if (user.isPresent()) {
-            announcement.setUser(user.get());
-            LocalDateTime now = LocalDateTime.now();
-            announcement.setCreatedDate(now);
-            announcement.setExpirationDate(now.plusDays(60));
-            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[$&+,:;=?@#|'<>.-^*()%! ]", "-"));
-
-            if (imageFile != null && imageFile.length > 0) {
-                String folderUUID = UUID.randomUUID().toString();
-                Path userDir = rootLocation.resolve(folderUUID);
-                if (!Files.exists(userDir)) {
-                    Files.createDirectories(userDir);
-                }
-                int photoNumber = 0;
-                for(int i = 0; i < imageFile.length; i++){
-                    MultipartFile file = imageFile[i];
-                    if(!file.isEmpty()){
-                        String filename = folderUUID + "-" + i + "-" ;
-                        Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-                        Files.copy(file.getInputStream(), destinationFile);
-                        photoNumber++;
-                    }
-                }
-
-                announcement.setImageUrl(folderUUID);
-                announcement.setPhotoNumber(imageFile.length);
-            } else {
-                throw new RuntimeException("Please provide at least one image for the announcement.");
-            }
-            return announcementRepository.save(announcement);
-        } else {
-            throw new RuntimeException("User not found.");
-        }
     }
 
     public void deleteById(Integer id) {
@@ -195,32 +157,4 @@ public class AnnouncementManagementService {
             throw new RuntimeException("User not found");
         }
     }
-   /*private String saveImage(MultipartFile file, User user){
-        try {
-            String folderUUID = UUID.randomUUID().toString();
-            Path userDir = rootLocation.resolve(folderUUID);
-
-            if (!Files.exists(userDir)) {
-                Files.createDirectories(userDir);
-            }
-
-            List<Path> userImages = Files.list(userDir)
-                    .filter(Files::isRegularFile)
-                    .collect(Collectors.toList());
-
-            if (userImages.size() >= 5) {
-                throw new RuntimeException("You have reached the maximum number of 5 images.");
-            }
-
-            String filename = (userImages.size() + 1) + "-" + file.getOriginalFilename();
-            Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-            Files.copy(file.getInputStream(), destinationFile);
-
-            return destinationFile.toString();
-
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
-        }
-    }*/
-
 }

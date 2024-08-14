@@ -3,6 +3,7 @@ package com.PracticaVara.springJwt.controller;
 import com.PracticaVara.springJwt.model.Category;
 import com.PracticaVara.springJwt.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,13 +32,13 @@ public class CategoryController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("add-category")
-    public Category addCategory(@RequestPart("category") Category category, @RequestPart("file") MultipartFile file) throws IOException {
-        return categoryService.addCategory(category, file);
+    @PostMapping(value = "add-category", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+    public Category addCategory(@RequestPart("category") Category category, @RequestPart("image") MultipartFile image) throws IOException {
+        return categoryService.addCategory(category, image);
     }
 
     @PutMapping("edit-category/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestPart("category") Category categoryDetails, @RequestPart("file") MultipartFile file) throws IOException {
+    public Category updateCategory(@PathVariable Long id, @RequestPart("category") Category categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
         return categoryService.updateCategory(id, categoryDetails, file);
     }
 
