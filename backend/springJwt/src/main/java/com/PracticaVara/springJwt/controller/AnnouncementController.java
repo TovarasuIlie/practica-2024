@@ -27,6 +27,18 @@ public class AnnouncementController {
         return ResponseEntity.ok(announcementService.findAll());
     }
 
+    @GetMapping("get-my-ads")
+    public ResponseEntity<List<Announcement>> getMyAnnouncements(){
+        return announcementService.getMyAds();
+    }
+
+    @GetMapping("get-ad-by-id/{id}")
+    public ResponseEntity<Announcement> getAnnouncementByUrl(@PathVariable Integer id){
+        Optional<Announcement> announcement = announcementService.findById(id);
+        return announcement.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
     @GetMapping("get-ad-by-url/{url}")
     public ResponseEntity<Announcement> getAnnouncementByUrl(@PathVariable String url){
         Optional<Announcement> announcement = announcementService.findByUrl(url);

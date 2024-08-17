@@ -99,7 +99,7 @@
     </div>
 </div>
 
-<div *ngIf="user.suspendDetails.id === null" class="modal fade" id="suspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+<div *ngIf="!user.suspendDetails" class="modal fade" id="suspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -141,7 +141,7 @@
     </div>
 </div>
 
-<div *ngIf="user.suspendDetails.id !== null" class="modal fade" id="unsuspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+<div *ngIf="user.suspendDetails" class="modal fade" id="unsuspend-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -263,7 +263,7 @@
                                     </tr>
                                 </tbody>
                             </table>
-                            <table class="table table-danger">
+                            <table *ngIf="user.suspendDetails" class="table table-danger">
                                 <thead>
                                     <tr>
                                         <th colspan="2">Detalii suspend</th>
@@ -273,6 +273,27 @@
                                     <tr>
                                         <td>Cont Suspendat de:</td>
                                         <td class="fw-semibold">{{ user.suspendDetails.adminUsername }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>IP Suspendat:</td>
+                                        <td class="fw-semibold">{{ user.suspendDetails.ipAddress }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Motiv:</td>
+                                        <td class="fw-semibold">{{ user.suspendDetails.suspendReason }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Suspendat in data de:</td>
+                                        <td class="fw-semibold">{{ user.suspendDetails.startingDate | date:"dd.MM.YYYY HH:mm:ss" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pana in data de:</td>
+                                        <td *ngIf="!user.suspendDetails.permanentSuspend" class="fw-semibold">{{ user.suspendDetails.endingDate | date:"dd.MM.YYYY HH:mm:ss" }}</td>
+                                        <td *ngIf="user.suspendDetails.permanentSuspend" class="fw-semibold">
+                                            <div class="badge bg-danger">
+                                                Permanent
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -309,8 +330,8 @@
                             <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#edit-modal">Editeaza Cont</button>
                             <button class="btn btn-outline-warning w-100" (click)="forceConfirmEmail()">Confirma Fortat
                                 Email-ul</button>
-                            <button *ngIf="user.suspendDetails.id === null" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#suspend-modal">Suspenda Cont</button>
-                            <button *ngIf="user.suspendDetails.id !== null" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#unsuspend-modal">Retrage suspend</button>
+                            <button *ngIf="!user.suspendDetails" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#suspend-modal">Suspenda Cont</button>
+                            <button *ngIf="user.suspendDetails" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#unsuspend-modal">Retrage suspend</button>
                             <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Cont</button>
                         </div>
                     </div>

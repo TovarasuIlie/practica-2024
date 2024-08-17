@@ -1,0 +1,50 @@
+<app-header></app-header>
+<div class="container mt-5 pt-5">
+    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
+        aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="#">Acasa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Library</li>
+        </ol>
+    </nav>
+    <div class="card card-body mb-2 border-0" *ngFor="let ad of ads">
+        <div class="row">
+            <div class="col-3">
+                <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
+            </div>
+            <div class="col">
+                <div class="row h-100">
+                    <div class="col">
+                        <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none">{{ ad.title }}</a>
+                        <p class="text-muted">{{ ad.address }}</p>
+                        <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                    </div>
+                    <div class="col d-flex flex-column align-items-center">
+                        <div class="container">
+                            <button class="btn btn-outline-danger btn-borderless float-end"><i class="fa-regular fa-heart"></i></button>
+                        </div>
+                        <div class="container text-end">
+                            <p class="fw-semibold fs-4 mt-4">{{ ad.price + " " + ad.currency}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="...">
+        <ul class="pagination">
+          <li class="page-item disabled">
+            <a class="page-link">Previous</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item active" aria-current="page">
+            <a class="page-link" href="#">2</a>
+          </li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+          </li>
+        </ul>
+      </nav>
+</div>
+<app-footer></app-footer>

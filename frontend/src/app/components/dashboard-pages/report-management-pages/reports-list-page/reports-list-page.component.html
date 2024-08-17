@@ -1,0 +1,83 @@
+<div class="wrapper">
+    <div class="sidebar" data-color="black" data-active-color="success">
+        <app-side-menu></app-side-menu>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <h5 class="text-uppercase mx-4">Utilizatori</h5>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="card card-body">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Pentru anuntul</th>
+                            <th scope="col">Utilizator</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr [routerLink]="['detalii-raport', report.id]" *ngFor="let report of reports">
+                            <td>{{ report.id }}</td>
+                            <td>{{ report.announcement.title }}</td>
+                            <td>{{ report.message }}</td>
+                            <td>
+                                <div *ngIf="!report.solved" class="badge bg-info">
+                                    In curs de rezolvare
+                                </div>
+                                <div *ngIf="report.solved" class="badge bg-success">
+                                    Rezolvat
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <span class="page-link">Previous</span>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">1</a>
+                    </li>
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">2</span>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</div>

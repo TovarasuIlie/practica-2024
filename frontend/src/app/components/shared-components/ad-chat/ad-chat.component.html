@@ -1,0 +1,21 @@
+
+<div class="offcanvas offcanvas-end border-0" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="chat-offcanvas" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <div class="offcanvas-title" id="offcanvasRightLabel">
+            <h5>{{ ad.user.firstName + " " + ad.user.lastName }}</h5>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
+                </div>
+                <div class="col">
+                    <p>{{ ad.title | limitTo: 30 }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

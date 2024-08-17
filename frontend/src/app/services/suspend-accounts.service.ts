@@ -19,6 +19,6 @@ export class SuspendAccountsService {
   }
 
   unsuspendAccount(accountID: string) {
-    return this.http.get(environment.API_URL + "/api/Suspended-accounts/unsuspend-account/" + accountID);
+    return this.http.delete(environment.API_URL + "/api/Suspended-accounts/unsuspend-account/" + accountID);
   }
 }

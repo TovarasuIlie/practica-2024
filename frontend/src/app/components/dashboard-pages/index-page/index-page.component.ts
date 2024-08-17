@@ -13,6 +13,5 @@ export class IndexPageComponent {
     link.href = "/assets/dashboard/css/style.css";
     link.rel = "stylesheet"
     this._renderer2.appendChild(this._document.head, link);
-
   }
 }

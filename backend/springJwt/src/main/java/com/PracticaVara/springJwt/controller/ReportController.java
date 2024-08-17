@@ -1,10 +1,7 @@
 package com.PracticaVara.springJwt.controller;
 
-import com.PracticaVara.springJwt.model.APIMessage;
-import com.PracticaVara.springJwt.model.Report;
 import com.PracticaVara.springJwt.service.ReportService;
-import org.hibernate.persister.entity.SingleTableEntityPersister;
-import org.springframework.http.HttpStatus;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,13 +15,14 @@ public class ReportController {
         this.reportService = reportService;
     }
     @PostMapping("create-report")
-    public ResponseEntity<?> reportAnnouncement(@PathVariable Integer announcementId, @RequestParam String message){
-        return reportService.createReport(announcementId, message);
+    public ResponseEntity<?> reportAnnouncement(@RequestBody JsonNode request){
+        return reportService.createReport(request);
     }
     @GetMapping("my-reports")
     public ResponseEntity<?> getMyReports(){
         return reportService.findAllReportsByUserOrdered();
     }
+
     @DeleteMapping("remove-report")
     public ResponseEntity<?> deleteReport(@PathVariable Integer reportId){
         return reportService.deleteReport(reportId);

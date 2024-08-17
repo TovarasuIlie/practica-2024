@@ -15,7 +15,7 @@ export class AddAdvertismentPageComponent implements OnInit {
   currencies: string[] = ["LEI", "EURO"];
   imageArray: File[] = [];
   addAdForm: FormGroup = new FormGroup({});
-  
+
 
   pondOptions = {
     class: 'my-filepond',

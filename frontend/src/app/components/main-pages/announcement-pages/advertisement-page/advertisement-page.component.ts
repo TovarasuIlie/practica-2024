@@ -5,6 +5,9 @@ import { Announcement } from '../../../../models/announcement';
 import { AuthService } from '../../../../services/auth.service';
 import { AnnouncementService } from '../../../../services/announcement.service';
 import { ToastService } from '../../../../services/toast.service';
+import { ErrorStateMatcher } from '@angular/material/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReportService } from '../../../../services/report.service';
 
 @Component({
   selector: 'app-advertisement-page',
@@ -13,22 +16,34 @@ import { ToastService } from '../../../../services/toast.service';
 })
 export class AdvertisementPageComponent implements OnInit {
   currentAd: Announcement = {} as Announcement;
+  loadingAd: boolean = true;
+  loadingEditButton: boolean = false;
   @ViewChild("closeModal") closeModal!: ElementRef;
   callSeller: string = "Suna Vanzatorul";
+  errorMessages: string[] = [];
+  matcher = new ErrorStateMatcher();
+  reportForm: FormGroup = new FormGroup({});
 
-  constructor(private activatedRoute: ActivatedRoute, public authService: AuthService, private adService: AnnouncementService, private toastService: ToastService, private router: Router) {}
+  constructor(private activatedRoute: ActivatedRoute, public authService: AuthService, private adService: AnnouncementService, private toastService: ToastService, private router: Router,
+              private fb: FormBuilder, private reportService: ReportService
+  ) {}
 
   ngOnInit(): void {
-    this.initializeAd()
+    this.initializeAd();
+    this.initializeForm();
   }
 
   initializeAd() {
-    this.activatedRoute.data.subscribe((response: any) => {
-      if(!(response.ad instanceof HttpErrorResponse)) {
-        this.currentAd = response.ad;
-      } else {
-        this.currentAd = {} as Announcement;
-      }
+    this.adService.getAnnouncementByUrl(this.activatedRoute.snapshot.params['adTitle']).subscribe(ad => {
+      this.currentAd = ad;
+      this.loadingAd = false;
+    })
+  }
+
+  initializeForm() {
+    this.reportForm = this.fb.group({
+      announcementId: [this.currentAd.id],
+      message: [null, [Validators.required]],
     })
   }
 
@@ -47,10 +62,25 @@ export class AdvertisementPageComponent implements OnInit {
   }
 
   changeText() {
-    if(this.authService.getID()) {
+    if(this.authService) {
       this.callSeller = this.currentAd.phoneNumber;
     } else {
       this.toastService.show({title: "Eroare", message: "Nu poti sa vezi numarul de telefon, daca nu esti logat.", classname: "text-danger"})
+    }
+  }
+
+  reportAd() {
+    if(this.reportForm.valid) {
+      this.reportService.insertNewReport(this.reportForm.value).subscribe({
+        next: (value) => {
+          console.log(value);
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      })
+    } else {
+      this.errorMessages.push("Toate campurile trebuie completate!");
     }
   }
 }

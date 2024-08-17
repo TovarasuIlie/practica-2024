@@ -1,0 +1,18 @@
+.offcanvas {
+    height: 700px;
+    margin-top: calc(100vh - 700px);
+}
+
+@media screen and (max-height: 992px) {
+    .offcanvas {
+        margin-top: 30vh;
+        height: 70vh;
+    }
+}
+
+@media screen and (max-height: 768px) {
+    .offcanvas {
+        margin-top: 0;
+        height: 100vh;
+    }
+}

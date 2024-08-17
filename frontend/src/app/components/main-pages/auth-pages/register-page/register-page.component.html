@@ -73,13 +73,17 @@
                         <mat-error>Parola este <strong>obligatorie</strong>.</mat-error>
                         }
                     </mat-form-field>
-                    <mat-form-field class="w-100 mb-2">
+                    <mat-form-field class="w-100 mb-2 is-invalid">
                         <mat-label><i class="fas fa-key"></i> Confirma Parola</mat-label>
                         <input formControlName="confirmPassword" matInput type="password" placeholder="Confirma parola"
                             [errorStateMatcher]="matcher">
                         @if (registerForm.get('confirmPassword')?.hasError('minlength') &&
                         !registerForm.get('confirmPassword')?.hasError('required')) {
                         <mat-error>Parola trebuie sa contina minim <strong>8</strong> caractere.</mat-error>
+                        }
+                        @if (registerForm.get('confirmPassword')?.hasError('unmatched') &&
+                        !registerForm.get('confirmPassword')?.hasError('required')) {
+                        <mat-error>Cele 2 parole nu se potrivesc</mat-error>
                         }
                         @if (registerForm.get('confirmPassword')?.hasError('required')) {
                         <mat-error>Parola este <strong>obligatorie</strong>.</mat-error>

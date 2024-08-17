@@ -7,6 +7,7 @@ import com.PracticaVara.springJwt.model.Report;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.ReportRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -28,18 +29,18 @@ public class ReportService {
         this.announcementRepository = announcementRepository;
     }
 
-    public ResponseEntity<APIMessage> createReport(Integer announcementId, String message){
+    public ResponseEntity<APIMessage> createReport(JsonNode request){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> user = userRepository.findByUsername(username);
 
         if(user.isPresent()){
-            Optional<Announcement> announcement = announcementRepository.findById(announcementId);
+            Optional<Announcement> announcement = announcementRepository.findById(request.get("announcementId").asInt());
             if(announcement.isPresent()){
                 Report report = new Report();
                 report.setAnnouncement(announcement.get());
                 report.setUser(user.get());
-                report.setMessage(message);
+                report.setMessage(request.get("message").asText());
                 report.setSolved(false);
                 reportRepository.save(report);
                 return  ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Reportul a fost realizat cu succes!"));

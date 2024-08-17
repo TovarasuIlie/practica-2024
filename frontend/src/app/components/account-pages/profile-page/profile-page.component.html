@@ -14,13 +14,97 @@
                 <a [routerLink]="['/contul-meu/profil']" class="nav-link active" aria-current="page">Profil</a>
             </li>
             <li class="nav-item">
-                <a [routerLink]="['/contul-meu/setari']" class="nav-link">Setari</a>
+                <a [routerLink]="['/contul-meu/favorite']" class="nav-link">Favorite</a>
             </li>
         </ul>
     </div>
 </div>
-<div class="container-lg">
-
+<div class="container-lg mt-5">
+    <div class="container bg-white p-5 mb-5">
+        <h4>Profilul tau</h4>
+        <div class="row">
+            <div class="col-3">
+                <img src="assets/site-imgs/unknown-person-icon.png" alt="" class="img-fluid">
+            </div>
+            <div class="col">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Nume complet:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.firstName + " " + (authService.user$ | async)?.lastName }}</td>
+                        </tr>
+                        <tr>
+                            <td>Nume Utilizator:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.username }}</td>
+                        </tr>
+                        <tr>
+                            <td>Email:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.email }}</td>
+                        </tr>
+                        <tr>
+                            <td>Adresa:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Numar Telefon:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.address }}</td>
+                        </tr>
+                        <tr>
+                            <td>Cont creat in:</td>
+                            <td class="fw-semibold">{{ (authService.user$ | async)?.registeredDate | date:"dd.MM.YYYY HH:mm" }}</td>
+                        </tr>
+                        <tr>
+                            <td>Rol:</td>
+                            <td>
+                                @if ((authService.user$ | async)?.role == "ROLE_ADMIN") {
+                                    <div class="badge bg-danger">
+                                        Admin
+                                    </div>
+                                }
+                                @if ((authService.user$ | async)?.role == "ROLE_MODERATOR") {
+                                    <div class="badge bg-primary">
+                                        Moderator
+                                    </div>
+                                }
+                                @if ((authService.user$ | async)?.role == "ROLE_USER") {
+                                    <div class="badge bg-secondary">
+                                        Client
+                                    </div>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <button class="btn btn-dark w-100">Actualizeaza date personale</button>
+            </div>
+        </div>
+    </div>
+    <div class="container bg-white p-5 mt-5">
+        <h4>Raportarile Tale</h4>
+        <table class="table">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Pentru Anuntul</th>
+                    <th>Motiv</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let report of myReports">
+                    <td>{{ report.id }}</td>
+                    <td>
+                        <a [attr.href]="'/anunt/' + report.announcement.url" class="text-decoration-none">{{ report.announcement.title }}</a>
+                    </td>
+                    <td>{{ report.message }}</td>
+                    <td>
+                        <div *ngIf="!report.solved" class="badge bg-info">In curs</div>
+                        <div *ngIf="report.solved" class="badge bg-success">Rezolvat</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <app-footer></app-footer>

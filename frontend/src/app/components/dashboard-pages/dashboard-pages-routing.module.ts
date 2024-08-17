@@ -9,6 +9,8 @@ import { AdsManagementComponent } from './ads-management-pages/ads-management/ad
 import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/ad-details-page.component';
 import { announcementManagementResolver } from '../../resovers/announcement-management.resolver';
 import { cateogryResolver } from '../../resovers/cateogry.resolver';
+import { ReportsListPageComponent } from './report-management-pages/reports-list-page/reports-list-page.component';
+import { ReportDetailsPageComponent } from './report-management-pages/report-details-page/report-details-page.component';
 
 const routes: Routes = [
   {
@@ -53,6 +55,19 @@ const routes: Routes = [
     resolve: {
       categories: cateogryResolver
     }
+  },
+  {
+    path: "raportari-anunturi",
+    children: [
+      {
+        path: "",
+        component: ReportsListPageComponent
+      },
+      {
+        path: "detalii-raport/:id",
+        component: ReportDetailsPageComponent
+      }
+    ]
   }
 ];
 

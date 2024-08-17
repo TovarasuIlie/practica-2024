@@ -40,6 +40,4 @@ public class ReportManagementController {
         return reportManagementService.getReportsByUser(userId);
     }
 
-
-
 }

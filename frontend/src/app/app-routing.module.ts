@@ -6,11 +6,11 @@ import { AddAdvertismentPageComponent } from './components/main-pages/announceme
 import { RegisterPageComponent } from './components/main-pages/auth-pages/register-page/register-page.component';
 import { AuthGuard } from './route-guards/auth.guard';
 import { UnauthGuard } from './route-guards/unauth.guard';
-import { annoucementResolver } from './resovers/annoucement.resolver';
 import { AdminGuard } from './route-guards/admin.guard';
 import { EditAdvertisementPageComponent } from './components/main-pages/announcement-pages/edit-advertisement-page/edit-advertisement-page.component';
 import { editAnnouncementResolver } from './resovers/edit-announcement.resolver';
 import { AllAdsFromComponent } from './components/main-pages/announcement-pages/all-ads-from/all-ads-from.component';
+import { AdsListByCategoryComponent } from './components/main-pages/announcement-pages/ads-list-by-category/ads-list-by-category.component';
 
 const routes: Routes = [
   {
@@ -41,8 +41,11 @@ const routes: Routes = [
   },
   {
     path: 'anunt/:adTitle',
-    component: AdvertisementPageComponent,
-    resolve: {ad: annoucementResolver}
+    component: AdvertisementPageComponent
+  },
+  {
+    path: "anunturi-din-categoria/:categorySearchLink",
+    component: AdsListByCategoryComponent
   },
   {
     path: "oferte/:username",

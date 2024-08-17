@@ -1,6 +1,6 @@
 <app-header></app-header>
 <div class="container my-5 py-5">
-    <h4 class="fw-semibold">Publica un anunt</h4>
+    <h4 class="fw-semibold">Editeaza anuntul</h4>
     <form [formGroup]="editAdForm" (ngSubmit)="editCurrentAd()">
         <div class="container bg-white p-5 mb-3 shadow">
             <h5 class="mb-3">Dă cat mai multe detalii!</h5>
@@ -88,10 +88,10 @@
                 <input formControlName="phoneNumber" matInput placeholder="Ex. Beius">
             </mat-form-field>
         </div>
-        <div class="container bg-white p-5 shadow">
-            <div class="float-end">
-                <button type="submit" class="btn btn-success"><i class="fas fa-plus"></i> Salveaza modificarile!</button>
-                <button class="btn btn-secondary" [routerLink]="['/anunt', currentAd.url]">Anuleaza</button>
+        <div class="container bg-white py-4 shadow">
+            <div class="d-flex justify-content-end gap-3">
+                <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Salveaza modificarile!</button>
+                <button type="button" class="btn btn-secondary" [routerLink]="['/anunt', currentAd.url]">Anuleaza</button>
             </div>
         </div>
     </form>

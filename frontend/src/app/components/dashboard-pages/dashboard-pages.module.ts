@@ -18,6 +18,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { AdsManagementComponent } from './ads-management-pages/ads-management/ads-management.component';
 import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/ad-details-page.component';
 import { FilePondModule } from 'ngx-filepond';
+import { ReportsListPageComponent } from './report-management-pages/reports-list-page/reports-list-page.component';
+import { ReportDetailsPageComponent } from './report-management-pages/report-details-page/report-details-page.component';
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { FilePondModule } from 'ngx-filepond';
     CategoryPageComponent,
     UserDetailsPageComponent,
     AdsManagementComponent,
-    AdDetailsPageComponent
+    AdDetailsPageComponent,
+    ReportsListPageComponent,
+    ReportDetailsPageComponent
   ],
   imports: [
     CommonModule,

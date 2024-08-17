@@ -12,76 +12,26 @@
 <div class="container-fluid bg-white">
     <div class="container my-5 p-5">
         <h2 class="text-center fw-semibold mb-5">Categorii Principale</h2>
-        <div class="row row-cols-3 row-cols-lg-6 g-3 g-lg-3">
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
+        <div *ngIf="loadingCategory" class="row row-cols-1 row-cols-lg-6 g-3 g-lg-3 mb-5">
+            <div class="col" *ngFor="let column of [].constructor(12)">
+                <div class="card text-center shadow-sm p-3 mb-5 bg-body rounded" aria-hidden="true">
+                    <span class="placeholder" style="height: 100px;"></span>
                     <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
+                        <p class="card-text placeholder-glow">
+                            <span class="placeholder col-12"></span>
+                            <span class="placeholder col-8"></span>
+                        </p>
                     </div>
                 </div>
             </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
+        </div>
+        <div *ngIf="!loadingCategory" class="row row-cols-2 row-cols-lg-6 g-3 g-lg-3">
+            <div class="col d-flex align-items-stretch" *ngFor="let category of categories">
+                <div class="card text-center shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunturi-din-categoria', category.searchLink]">
+                    <img [src]="getImageCategory(category.iconUrl)" class="img-fluid card-img-top w-50 mx-auto d-block"
+                        alt="...">
                     <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="card text-center">
-                    <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png"
-                        class="img-fluid card-img-top w-50 mx-auto d-block" alt="...">
-                    <div class="card-body">
-                        <h6 class="card-title">Auto, moto si ambarcatiuni</h6>
+                        <h6 class="card-title">{{ category.name }}</h6>
                     </div>
                 </div>
             </div>
@@ -90,11 +40,30 @@
 </div>
 <div class="container-fluid bg-transparent p-5">
     <h2 class="text-center fw-semibold mb-5">Anunturi recente</h2>
-    <div class="row row-cols-3 row-cols-lg-4 g-3 g-lg-3 mb-5">
-        <div class="col" *ngFor="let ad of ads">
+    <div *ngIf="loadingAds" class="row row-cols-1 row-cols-lg-4 g-3 g-lg-3 mb-5">
+        <div class="col" *ngFor="let column of [].constructor(12)">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded" aria-hidden="true">
+                <span class="placeholder" style="height: 250px;"></span>
+                <div class="card-body">
+                    <h5 class="card-title placeholder-glow">
+                        <span class="placeholder col-6"></span>
+                    </h5>
+                    <p class="card-text placeholder-glow">
+                        <span class="placeholder col-7"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-4"></span>
+                        <span class="placeholder col-6"></span>
+                        <span class="placeholder col-8"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!loadingAds" class="row row-cols-1 row-cols-lg-4 g-3 g-lg-3 mb-5">
+        <div class="col d-flex align-items-stretch" *ngFor="let ad of ads">
             <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
-                <img src="assets/site-imgs/category-imgs/auto-masini-moto-ambarcatiuni-5-1x.png" class="card-img-top"
-                    alt="...">
+                <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top" alt="...">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
@@ -104,8 +73,8 @@
                             <i class="far fa-heart"></i>
                         </div>
                     </div>
-                    <p class="card-text fw-bold">74.601 lei</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">Cluj-Napoca</p>
+                    <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
+                    <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
                 </div>
             </div>
         </div>

@@ -70,7 +70,6 @@ export class UserDetailsPageComponent implements OnInit {
         this.user = {} as UserAdmin;
       }
     })
-    console.log(this.user);
   }
 
   initializeForm() {
@@ -154,6 +153,17 @@ export class UserDetailsPageComponent implements OnInit {
   }
 
   unsuspendUser() {
-
+    this.suspendAccService.unsuspendAccount(this.user.suspendDetails.id.toString()).subscribe({
+      next: (value: any) => {
+        this.refreshUser();
+        this.closeModal.forEach(x => x.nativeElement.click());
+        this.toastService.show({title: "Suspendare scoasa", message: value.message, classname: "text-success"});
+      },
+      error: (response) => {
+        console.log(response);
+        this.closeModal.forEach(x => x.nativeElement.click());
+        this.toastService.show({title: "Cont suspendat", message: response.error.message, classname: "text-danger"});
+      }
+    })
   }
 }

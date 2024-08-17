@@ -1,10 +1,13 @@
 package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Data
 @Entity
@@ -16,10 +19,10 @@ public class Report {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
     @Column(name = "message", nullable = false)

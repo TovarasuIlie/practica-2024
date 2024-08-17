@@ -55,6 +55,13 @@ public class AnnouncementService {
         return announcementRepository.findByUrl(url);
     }
 
+    public ResponseEntity<List<Announcement>> getMyAds() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> user = userRepository.findByUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(announcementRepository.findByUser(user.get()));
+    }
+
     public ResponseEntity<Object> save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -90,9 +97,8 @@ public class AnnouncementService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim o imagine"));
             }
             announcementRepository.save(announcement);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.OK, "Anuntul a fost creat."));
+            return ResponseEntity.status(HttpStatus.CREATED).body(announcement);
         } else {
-            //throw new RuntimeException("User not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }

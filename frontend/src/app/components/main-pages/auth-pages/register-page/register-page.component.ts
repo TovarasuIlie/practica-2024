@@ -5,6 +5,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { response } from 'express';
 import { Router } from '@angular/router';
 import { UserRegister } from '../../../../models/user';
+import { confirmPasswordValidator, CustomValidators } from '../../../../validators/confirm-password.validator';
 
 @Component({
   selector: 'app-register-page',
@@ -34,6 +35,9 @@ export class RegisterPageComponent {
       password:         [null, [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
       confirmPassword:  [null, [Validators.required, Validators.minLength(8)]],
       county:           [null, [Validators.required]]
+    }, 
+    {
+      validators: confirmPasswordValidator
     })
   }
   
@@ -56,6 +60,10 @@ export class RegisterPageComponent {
           this.errorMessages.push(response.error.message)
         }
       })
+    } else {
+      if(this.registerForm.errors?.['unmatched']) {
+        this.registerForm.controls['confirmPassword'].setErrors({'unmatched': true});
+      }
     }
   }
 }

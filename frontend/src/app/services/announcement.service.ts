@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { AddAnnouncement, Announcement, EditAnnouncement } from '../models/announcement';
 import { environment } from '../../environments/environment.development';
+import { delay } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,10 @@ export class AnnouncementService {
 
   getAnnouncements() {
     return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-all-ads");
+  }
+
+  getMyAnnouncements() {
+    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-my-ads")
   }
 
   getAnnouncementByUrl(url: string) {

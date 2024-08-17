@@ -1,0 +1,48 @@
+<app-header></app-header>
+
+<div class="container-fluid pt-5 mt-5 bg-white shadow rounded">
+    <div class="container-lg">
+        <h3 class="fw-semibold mb-5 mt-3">Profil</h3>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu']" class="nav-link">Anunturi</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/mesaje']" class="nav-link">Mesaje</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/profil']" class="nav-link">Profil</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/favorite']" class="nav-link active" aria-current="page">Favorite</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-lg mt-5">
+    <div class="container bg-white p-5 mb-5">
+        <h4>Anunturi favorite</h4>
+        <div class="row row-cols-3 row-cols-lg-3 g-3 g-lg-3 mb-5">
+            <div class="col d-flex align-items-stretch" *ngFor="let ad of ads">
+                <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top"
+                        alt="...">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col">
+                                <h6 class="card-title">{{ ad.title }}</h6>
+                            </div>
+                            <div class="col-2">
+                                <i class="far fa-heart"></i>
+                            </div>
+                        </div>
+                        <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
+                        <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

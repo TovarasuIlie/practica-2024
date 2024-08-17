@@ -18,12 +18,12 @@ public class SuspendedAccount {
     @Column(name = "id")
     private Integer id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference(value = "userSuspendReference")
     private User userSuspend;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "admin_id", nullable = false, referencedColumnName = "id")
     @JsonBackReference(value = "adminReference")
     private User admin;

@@ -3,13 +3,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { IndexPageComponent } from './index-page/index-page.component';
 import { MessagesPageComponent } from './messages-page/messages-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
-import { SettingsPageComponent } from './settings-page/settings-page.component';
 import { ConfirmEmailPageComponent } from './confirm-email-page/confirm-email-page.component';
+import { myReportsResolver } from '../../resovers/my-reports.resolver';
+import { myAnnouncementsResolver } from '../../resovers/my-announcements.resolver';
+import { FavoriteAdsPageComponent } from './favorite-ad-page/favorite-ad-page.component';
 
 const routes: Routes = [
   {
     path: "",
     component: IndexPageComponent,
+    resolve: {
+      myAds: myAnnouncementsResolver
+    }
   },
   {
     path: "mesaje",
@@ -17,11 +22,14 @@ const routes: Routes = [
   },
   {
     path: "profil",
-    component: ProfilePageComponent
+    component: ProfilePageComponent,
+    resolve: {
+      myReports: myReportsResolver
+    }
   },
   {
-    path: "setari",
-    component: SettingsPageComponent
+    path: "favorite",
+    component: FavoriteAdsPageComponent
   },
   {
     path: 'confirma-email',

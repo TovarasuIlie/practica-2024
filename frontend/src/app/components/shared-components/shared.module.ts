@@ -4,7 +4,6 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { SearchBarComponent } from './search-bar/search-bar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -15,7 +14,9 @@ import { RouterModule } from '@angular/router';
 import { LoginModalComponent } from './login-modal/login-modal.component';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { ToastComponent } from './toast/toast.component';
-import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
+import { AdChatComponent } from './ad-chat/ad-chat.component';
+import { SharedPipesModule } from '../../shared-pipes/shared-pipes.module';
 
 
 
@@ -25,7 +26,8 @@ import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
     FooterComponent,
     SearchBarComponent,
     LoginModalComponent,
-    ToastComponent
+    ToastComponent,
+    AdChatComponent
   ],
   imports: [
     CommonModule,
@@ -39,13 +41,15 @@ import { NgbToast, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
     MatCheckboxModule,
     AsyncPipe,
     RouterModule,
-    NgbToastModule
+    NgbToastModule,
+    SharedPipesModule
   ],
   exports: [
     HeaderComponent,
     FooterComponent,
     SearchBarComponent,
-    ToastComponent
+    ToastComponent,
+    AdChatComponent
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}

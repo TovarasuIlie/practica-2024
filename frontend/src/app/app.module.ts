@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -24,6 +24,8 @@ import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
 import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type';
 import { EditAdvertisementPageComponent } from './components/main-pages/announcement-pages/edit-advertisement-page/edit-advertisement-page.component';
 import { AllAdsFromComponent } from './components/main-pages/announcement-pages/all-ads-from/all-ads-from.component';
+import { AdsListByCategoryComponent } from './components/main-pages/announcement-pages/ads-list-by-category/ads-list-by-category.component';
+import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 
 registerPlugin(FilePondPluginImagePreview);
 registerPlugin(FilePondPluginFileValidateType);
@@ -36,7 +38,8 @@ registerPlugin(FilePondPluginFileValidateType);
     AddAdvertismentPageComponent,
     RegisterPageComponent,
     EditAdvertisementPageComponent,
-    AllAdsFromComponent
+    AllAdsFromComponent,
+    AdsListByCategoryComponent,
   ],
   imports: [
     CommonModule,
@@ -49,7 +52,8 @@ registerPlugin(FilePondPluginFileValidateType);
     MatInputModule,
     MatSelectModule,
     BrowserAnimationsModule,
-    FilePondModule
+    FilePondModule,
+    SharedPipesModule
   ],
   providers: [
     provideAnimationsAsync(),

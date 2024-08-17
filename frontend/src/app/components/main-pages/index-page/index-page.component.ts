@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Announcement } from '../../../models/announcement';
 import { AnnouncementService } from '../../../services/announcement.service';
+import { CategoryService } from '../../../services/category.service';
+import { Category } from '../../../models/category';
 
 @Component({
   selector: 'app-index-page',
@@ -9,16 +11,37 @@ import { AnnouncementService } from '../../../services/announcement.service';
 })
 export class IndexPageComponent implements OnInit {
   ads: Announcement[] = [];
+  categories: Category[] = [];
+  loadingAds: boolean = true;
+  loadingCategory: boolean = true;
 
-  constructor(private adService: AnnouncementService) {}
+  constructor(private adService: AnnouncementService, private categoryService: CategoryService) {}
   
   ngOnInit(): void {
     this.initializeAds();
+    this.initializeCategories();
   }
 
   initializeAds() {
-    this.adService.getAnnouncements().subscribe((ads: any) => {
+    this.adService.getAnnouncements().subscribe(ads => {
       this.ads = ads;
+      this.loadingAds = false;
     })
+  }
+
+  initializeCategories() {
+    this.categoryService.getAllCategories().subscribe(categories => {
+        this.categories = categories;
+        this.loadingCategory = false;
+      }
+    )
+  }
+
+  getImage(fileName: string, index: string) {
+    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+  }
+
+  getImageCategory(fileName: string) {
+    return "http://localhost:8080/category-imgs/" + fileName;
   }
 }

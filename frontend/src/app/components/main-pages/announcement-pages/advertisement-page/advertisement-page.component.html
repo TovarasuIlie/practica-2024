@@ -1,6 +1,55 @@
 <app-header></app-header>
-<div *ngIf="currentAd.id">
-    <div class="container-lg p-5 mt-5">
+<div *ngIf="loadingAd">
+    <div class="container bg-transparent">
+        <div class="d-flex justify-content-center vh-100 align-items-center">
+            <div class="card bg-transparent border-0">
+                <div class="card-body p-4">
+                    <div class="d-flex flex-column">
+                        <div class="spinner-border ms-2" style="width: 4rem; height: 4rem;" role="status"></div>
+                        <strong class="mt-2">Se incarca...</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="currentAd.id && !loadingAd">
+    <app-ad-chat [chat-for-ad]="currentAd"></app-ad-chat>
+    <div class="modal fade" id="report-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        data-bs-backdrop="static" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header bg-danger">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Raporteaza Anunt</h1>
+                    <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <form [formGroup]="reportForm" (ngSubmit)="reportAd()">
+                    <div class="modal-body">
+                        <p>Te rugam sa ne spui un motiv pentru care merita raportat acest anunt.</p>
+                        <mat-form-field class="w-100 mb-2">
+                            <mat-label><i class="fas fa-at"></i> Motiv</mat-label>
+                            <input formControlName="message" matInput placeholder="Ex: Anunt inadecvat, etc"
+                                [errorStateMatcher]="matcher">
+                            @if (reportForm.get('message')?.hasError('required')) {
+                            <mat-error>Motivul este <strong>obligatoriu</strong>.</mat-error>
+                            }
+                        </mat-form-field>
+                        <div *ngIf="errorMessages.length > 0" class="alert alert-danger">
+                            <ul>
+                                <li *ngFor="let error of errorMessages">{{ error }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                        <button type="submit" class="btn btn-danger">Raporteaza</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="container-lg p-5 mt-5 bg-transparent">
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
             aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -9,7 +58,8 @@
             </ol>
         </nav>
         <div *ngIf="!currentAd.approved" class="alert alert-danger">
-            Anuntul momentan nu este publicat, trebuie sa astepti aprobarea unui <strong>Morderator</strong> sau <strong>Administrator</strong>
+            Anuntul momentan nu este publicat, trebuie sa astepti aprobarea unui <strong>Morderator</strong> sau
+            <strong>Administrator</strong>
         </div>
         <div class="row">
             <div class="col-md">
@@ -17,12 +67,16 @@
                     <div id="carouselExampleIndicators" class="carousel slide carousel-fade carousel-dark"
                         data-bs-ride="true">
                         <div class="carousel-indicators">
-                            <button *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index" type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i"
+                            <button *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index"
+                                type="button" data-bs-target="#carouselExampleIndicators" [attr.data-bs-slide-to]="i"
                                 [class.active]="i === 0" aria-current="true" [attr.aria-label]="'Slide' + i"></button>
                         </div>
                         <div class="carousel-inner">
-                            <div class="carousel-item" *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index" [class.active]="i == 0">
-                                <img [src]="getImage(currentAd.imageUrl, i.toString())" class="img-fluid object-fit" alt="...">
+                            <div class="carousel-item"
+                                *ngFor="let photo of [].constructor(currentAd.photoNumber); let i = index"
+                                [class.active]="i == 0">
+                                <img [src]="getImage(currentAd.imageUrl, i.toString())" class="img-fluid object-fit"
+                                    alt="...">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
@@ -54,8 +108,9 @@
                     <h3 class="mb-5 fw-semibold text-uppercase">Descriere</h3>
                     <p>{{ currentAd.content }}</p>
                     <hr>
-                    <a href="#" class="text-danger fw-semibold float-end text-decoration-none"><i
-                            class="far fa-flag"></i> Raporteaza</a>
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#report-modal"
+                        class="text-danger fw-semibold float-end text-decoration-none"><i class="far fa-flag"></i>
+                        Raporteaza</a>
                 </div>
             </div>
             <div class="col-md-4">
@@ -72,10 +127,12 @@
                         </div>
                     </div>
                     <div class="d-flex flex-column gap-3">
-                        <button class="btn btn-success btn-lg w-100"><i class="fas fa-paper-plane"></i> Trimite
+                        <button class="btn btn-success btn-lg w-100" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-offcanvas" aria-controls="offcanvasRight"><i class="fas fa-paper-plane"></i> Trimite
                             mesaj</button>
-                        <button class="btn btn-outline-success btn-lg w-100" (click)="changeText()"><i class="fas fa-phone-alt"></i> {{ callSeller }}</button>
-                        <a [routerLink]="['/oferte', currentAd.user.username]" class="text-decoration-none text-muted text-center">Mai multe anunturi ale acestui
+                        <button class="btn btn-outline-success btn-lg w-100" (click)="changeText()"><i
+                                class="fas fa-phone-alt"></i> {{ callSeller }}</button>
+                        <a [routerLink]="['/oferte', currentAd.user.username]"
+                            class="text-decoration-none text-muted text-center">Mai multe anunturi ale acestui
                             vanzator <i class="fas fa-chevron-circle-right"></i></a>
                     </div>
                 </div>
@@ -88,21 +145,28 @@
                     class="container bg-white p-4 shadow p-3 mb-5 bg-body rounded gap-3">
                     <h6 class="text-uppercase fw-semibold  mb-4">Actiuni</h6>
                     <div class="d-flex flex-column gap-3">
-                        <button [routerLink]="['/adauga-anunt/editeaza', currentAd.id]" class="btn btn-warning btn-lg w-100"><i class="fas fa-paper-plane"></i> Editeaza
+                        <button [routerLink]="['/adauga-anunt/editeaza', currentAd.id]"
+                            (click)="loadingEditButton = true" class="btn btn-warning btn-lg w-100"
+                            [disabled]="loadingEditButton"><span *ngIf="loadingEditButton"
+                                class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span><i
+                                class="fas fa-paper-plane"></i> Editeaza
                             Anunt</button>
-                        <button type="button" class="btn btn-danger btn-lg w-100" data-bs-toggle="modal" data-bs-target="#delete-modal"><i class="fas fa-phone-alt"></i> Sterge
+                        <button type="button" class="btn btn-danger btn-lg w-100" data-bs-toggle="modal"
+                            data-bs-target="#delete-modal"><i class="fas fa-phone-alt"></i> Sterge
                             Anunt</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="modal fade" id="delete-modal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="delete-modal" data-bs-backdrop="static" tabindex="-1"
+        aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-danger">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">Sterge anuntul</h1>
-                    <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" #closeModal class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     Esti sigur ca doresti sa stergi acest anunt?
@@ -115,7 +179,7 @@
         </div>
     </div>
 </div>
-<div *ngIf="!currentAd.id">
+<div *ngIf="!currentAd.id && !loadingAd">
     <div class="container">
         <div class="d-flex justify-content-center vh-100 align-items-center">
             <div class="card shadow p-3 mb-5 bg-body rounded">

@@ -60,9 +60,9 @@ public class AuthenticationService {
     //@Async("asyncTaskExecutor")     // Vede ilie daca are nevoie de linia asta :)
     public ResponseEntity<APIMessage> register(User request, HttpServletRequest servletRequest) {
         Optional<SuspendedAccount> currentSuspendedAccount = suspendedAccountRepository.findSuspendedAccountByIpAddress(servletRequest.getRemoteAddr());
-        if(currentSuspendedAccount.isPresent()) {
+        if(!currentSuspendedAccount.isEmpty()) {
             SuspendedAccount suspendedAccount = currentSuspendedAccount.get();
-            if(suspendedAccount.isPermanentSuspend()){
+            if(suspendedAccount.isPermanentSuspend()) {
                 if(repository.findByUsername(request.getUsername()).isEmpty()) {
                     if(repository.findByEmail(request.getEmail()).isEmpty()) {
                         User user = new User();
@@ -81,6 +81,7 @@ public class AuthenticationService {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
+                        return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Contul a fost creat. Vei primi un email pentru ati confirma confirma contul!"));
                     } else {
                         return ResponseEntity
                                 .status(HttpStatus.CONFLICT)
@@ -97,10 +98,37 @@ public class AuthenticationService {
                         .body(new APIMessage(HttpStatus.UNAUTHORIZED, "Acest ip are deja un cont suspendat pana pe data de " + suspendedAccount.getEndingDate()));
             }
 
+        } else {
+            if(repository.findByUsername(request.getUsername()).isEmpty()) {
+                if(repository.findByEmail(request.getEmail()).isEmpty()) {
+                    User user = new User();
+                    user.setFirstName(request.getFirstName());
+                    user.setLastName(request.getLastName());
+                    user.setUsername(request.getUsername());
+                    user.setEmail(request.getEmail());
+                    user.setPassword(passwordEncoder.encode(request.getPassword()));
+                    user.setRole(Role.ROLE_USER);
+                    user.setRegisteredDate(LocalDateTime.now());
+                    user.setIpAddress(servletRequest.getRemoteAddr());
+
+                    repository.save(user);
+                    try {
+                        emailService.sendHtmlVerificationEmail(user);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Contul a fost creat. Vei primi un email pentru ati confirma confirma contul!"));
+                } else {
+                    return ResponseEntity
+                            .status(HttpStatus.CONFLICT)
+                            .body(new APIMessage(HttpStatus.CONFLICT, "Acesta adresa de email este deja folosita!"));
+                }
+            } else {
+                return ResponseEntity
+                        .status(HttpStatus.CONFLICT)
+                        .body(new APIMessage(HttpStatus.CONFLICT, "Acest nume de utilizator este deja folosit!"));
+            }
         }
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Contul a fost creat. Vei primi un email pentru ati confirma confirma contul!"));
     }
 
     @Async("asyncTaskExecutor")

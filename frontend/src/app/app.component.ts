@@ -14,6 +14,10 @@ export class AppComponent implements OnInit {
     this.refreshUser();
   }
 
+  scrollTop() {
+    window.scroll({top: 0});
+  }
+
   private refreshUser() {
     const jwt = this.authService.getJWT();
     if(jwt) {
