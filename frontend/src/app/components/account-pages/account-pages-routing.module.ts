@@ -30,12 +30,7 @@ const routes: Routes = [
   {
     path: "favorite",
     component: FavoriteAdsPageComponent
-  },
-  {
-    path: 'confirma-email',
-    component: ConfirmEmailPageComponent
   }
-
 ];
 
 @NgModule({

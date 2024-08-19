@@ -35,6 +35,10 @@ export class AnnouncementService {
     return this.http.get<Announcement>(environment.API_URL + "/api/Announcements/get-ad-by-url/" + url);
   }
 
+  getAnnouncementsByTitle(title: string) {
+    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/search-for-ads?title=" + title).pipe(delay(500));
+  }
+
   getAnnouncementById(id: string) {
     return this.http.get<Announcement>(environment.API_URL + "/api/Announcements/get-ad-by-id/" + id);
   }

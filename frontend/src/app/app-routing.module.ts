@@ -11,6 +11,8 @@ import { EditAdvertisementPageComponent } from './components/main-pages/announce
 import { editAnnouncementResolver } from './resovers/edit-announcement.resolver';
 import { AllAdsFromComponent } from './components/main-pages/announcement-pages/all-ads-from/all-ads-from.component';
 import { AdsListByCategoryComponent } from './components/main-pages/announcement-pages/ads-list-by-category/ads-list-by-category.component';
+import { SearchForAdsPageComponent } from './components/main-pages/announcement-pages/search-for-ads-page/search-for-ads-page.component';
+import { ConfirmEmailPageComponent } from './components/account-pages/confirm-email-page/confirm-email-page.component';
 
 const routes: Routes = [
   {
@@ -48,6 +50,10 @@ const routes: Routes = [
     component: AdsListByCategoryComponent
   },
   {
+    path: "cauta-anunturi",
+    component: SearchForAdsPageComponent
+  },
+  {
     path: "oferte/:username",
     component: AllAdsFromComponent
   },
@@ -60,6 +66,11 @@ const routes: Routes = [
     path: "reseteaza-parola",
     canActivate: [UnauthGuard],
     loadChildren: () => import("./components/main-pages/auth-pages/auth-pages.module").then(module => module.AuthPagesModule),
+  },
+  {
+    path: 'contul-meu/confirma-email',
+    component: ConfirmEmailPageComponent,
+    canActivate: [UnauthGuard],
   },
   {
     path: "dashboard",

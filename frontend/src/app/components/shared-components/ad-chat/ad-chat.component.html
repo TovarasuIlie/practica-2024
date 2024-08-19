@@ -7,15 +7,114 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-        <div class="container-fluid">
-            <div class="row">
+        <div class="container-fluid shadow-sm mx-0">
+            <div class="row" style="font-size: 14px;">
                 <div class="col-3">
-                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid m-0">
                 </div>
-                <div class="col">
-                    <p>{{ ad.title | limitTo: 30 }}</p>
+                <div class="col d-flex flex-column align-items-stretch">
+                    <p class="mb-0">{{ ad.title | limitTo: 35 }}</p>
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold">{{ ad.price + " " + ad.currency }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="text-muted float-end">ID: {{ ad.id }}</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div class="container-fluid chat-container">
+            <div class="container seller float-start rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">{{ ad.user.firstName + " " + ad.user.lastName }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">{{ text }}</p>
+                </div>
+            </div>
+
+            <div class="container you float-end rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">Tu</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">Da</p>
+                </div>
+            </div>
+
+            <div class="container you float-end rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">Tu</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">{{ text }}</p>
+                </div>
+            </div>
+
+            <div class="container seller float-start rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">{{ ad.user.firstName + " " + ad.user.lastName }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">{{ text }}</p>
+                </div>
+            </div>
+
+            <div class="container seller float-start rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">{{ ad.user.firstName + " " + ad.user.lastName }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">{{ text }}</p>
+                </div>
+            </div>
+
+            <div class="container seller float-start rounded mb-2" style="max-width: 300px;">
+                <div class="container-fluid mt-1">
+                    <div class="row">
+                        <div class="col">
+                            <p class="fw-semibold mb-1" style="font-size: 12px;">{{ ad.user.firstName + " " + ad.user.lastName }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="float-end mb-1" style="font-size: 12px;">20.02.2002 12:33</p>
+                        </div>
+                    </div>
+                    <p style="font-size: 12px;">{{ text }}</p>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid">
+            <mat-form-field class="w-100 mt-3 mb-0">
+                <mat-label>Mesajul tau</mat-label>
+                <input matInput placeholder="Scrie....">
+            </mat-form-field>
         </div>
     </div>
 </div>

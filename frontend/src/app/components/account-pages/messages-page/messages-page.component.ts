@@ -16,7 +16,7 @@ export class MessagesPageComponent implements OnInit {
   constructor(private adService: AnnouncementService) {}
 
   ngOnInit(): void {
-    this.adService.getAnnouncementById("25").subscribe(x => this.ad = x);
+    this.adService.getAnnouncementById("1").subscribe(x => this.ad = x);
   }
 
   selectChat(index: number) {

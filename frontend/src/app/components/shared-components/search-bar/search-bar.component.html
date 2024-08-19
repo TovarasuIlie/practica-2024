@@ -1,18 +1,10 @@
-<div class="container">
+<form [formGroup]="searchForm" (ngSubmit)="searchFor()" class="container">
     <div class="row">
         <div class="col-7">
-            <form class="example-form w-100">
-                <mat-form-field class="example-full-width">
-                    <mat-label>Ce anume cauti?</mat-label>
-                    <input type="text" placeholder="Pick one" aria-label="Number" matInput [formControl]="myControl"
-                        [matAutocomplete]="auto">
-                    <mat-autocomplete #auto="matAutocomplete">
-                        @for (option of options; track option) {
-                        <mat-option [value]="option">{{option}}</mat-option>
-                        }
-                    </mat-autocomplete>
-                </mat-form-field>
-            </form>
+            <mat-form-field class="w-100 mb-3">
+                <mat-label>Cauta anunt</mat-label>
+                <input formControlName="keyword" matInput placeholder="Ex. iPhone 11 aproape nou">
+            </mat-form-field>
         </div>
         <div class="col">
             <mat-form-field class="example-full-width">
@@ -26,7 +18,7 @@
             </mat-form-field>
         </div>
         <div class="col">
-            <button class="btn btn-lg btn-danger" style="height: 55px;"><i class="fas fa-search"></i> Cauta</button>
+            <button type="submit" class="btn btn-lg btn-danger" style="height: 55px;"><i class="fas fa-search"></i> Cauta</button>
         </div>
     </div>
-</div>
+</form>

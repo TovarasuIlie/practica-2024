@@ -12,9 +12,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 		FileStorageProperties.class
 })
 public class SpringJwtApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(SpringJwtApplication.class, args);
 	}
-
 }

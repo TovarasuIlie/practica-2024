@@ -65,7 +65,7 @@
     </div>
     <div class="main-panel">
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+        <nav class="navbar pt-3 navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
             <div class="container-fluid">
                 <div class="navbar-wrapper">
                     <div class="navbar-toggle">
@@ -96,7 +96,7 @@
                 <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#add-modal">
                     Adauga categorie
                 </button>
-                <div>
+                <div class="table-responsive">
                     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)"
                         class="text-center">
                         <ng-container matColumnDef="id">

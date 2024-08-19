@@ -21,8 +21,8 @@
 </div>
 <div class="container-xxl mt-5">
     <div class="row">
-        <div class="col-4">
-            <div class="container bg-white chatters">
+        <div class="col-lg-4">
+            <div class="container-lg bg-white chatters mb-3">
                 <div class="card card-body mb-3 border-0" *ngFor="let chat of [].constructor(19); let i = index" [class.active]="i == chatSelected">
                     <div class="row" (click)="selectChat(i)">
                         <div class="col-3">
@@ -45,7 +45,7 @@
                 </div>
             </div>
         </div>
-        <div class="col">
+        <div class="col-lg">
             <div class="container bg-white">
                 <div class="card card-body border-0">
                     <div class="container">

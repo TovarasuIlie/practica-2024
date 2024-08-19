@@ -37,7 +37,7 @@
     <div class="tab-content" id="adsTabContent">
         <div class="tab-pane fade show active" id="active-ads-tab-pane" role="tabpanel" aria-labelledby="active-ads-tab"
             tabindex="0">
-            <div *ngIf="!activeAds.length" class="container">
+            <div *ngIf="!activeAds.length" class="container-lg">
                 <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
                     <div class="d-flex flex-column align-items-center my-5">
                         <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
@@ -47,21 +47,21 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="activeAds.length" class="container">
+            <div *ngIf="activeAds.length" class="container-lg">
                 <h4 class="my-3">Anunturi active</h4>
                 <div class="card card-body mb-5" *ngFor="let ad of activeAds">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
                         </div>
-                        <div class="col">
+                        <div class="col-md">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md">
                                     <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none">{{ ad.title }}</a>
                                     <p class="text-muted">{{ ad.address }}</p>
                                     <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
                                 </div>
-                                <div class="col">
+                                <div class="col-md">
                                     <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
                                 </div>
                             </div>
@@ -69,10 +69,10 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md">
                             <p class="text-muted m-0" style="font-size: 13px;">ID: {{ad.id}}</p>
                         </div>
-                        <div class="col d-flex flex-row justify-content-end gap-2">
+                        <div class="col-md d-flex flex-row justify-content-end gap-2">
                             <button *ngIf="ad.isDeactivated" class="btn btn-sm btn-outline-success fw-semibold">Activeaza</button>
                             <button *ngIf="!ad.isDeactivated" class="btn btn-sm btn-outline-warning fw-semibold">Dezactiveaza</button>
                             <button class="btn btn-sm btn-outline-primary fw-semibold" [routerLink]="['/adauga-anunt/editeaza', ad.id]">Editeaza</button>
@@ -96,17 +96,17 @@
                 <h4 class="my-3">Anunturi in asteptare</h4>
                 <div class="card card-body mb-5" *ngFor="let ad of waitingAds">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-md-3">
                             <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
                         </div>
-                        <div class="col">
+                        <div class="col-md">
                             <div class="row">
-                                <div class="col">
+                                <div class="col-md">
                                     <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none">{{ ad.title }}</a>
                                     <p class="text-muted">{{ ad.address }}</p>
                                     <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
                                 </div>
-                                <div class="col">
+                                <div class="col-md">
                                     <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
                                 </div>
                             </div>
@@ -114,10 +114,10 @@
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-md">
                             <p class="text-muted m-0" style="font-size: 13px;">ID: {{ad.id}}</p>
                         </div>
-                        <div class="col d-flex flex-row justify-content-end gap-2">
+                        <div class="col-md d-flex flex-row justify-content-end gap-2">
                             <button *ngIf="ad.isDeactivated" class="btn btn-sm btn-outline-success fw-semibold">Activeaza</button>
                             <button *ngIf="!ad.isDeactivated" class="btn btn-sm btn-outline-warning fw-semibold">Dezactiveaza</button>
                             <button class="btn btn-sm btn-outline-primary fw-semibold">Editeaza</button>

@@ -49,7 +49,7 @@
             </div>
         </div>
     </div>
-    <div class="container-lg p-5 mt-5 bg-transparent">
+    <div class="container-lg pt-5 mt-5 bg-transparent">
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
             aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -62,8 +62,8 @@
             <strong>Administrator</strong>
         </div>
         <div class="row">
-            <div class="col-md">
-                <div class="container bg-white p-5 mb-5 shadow p-3 mb-5 bg-body rounded">
+            <div class="col-lg">
+                <div class="container-lg bg-white p-5 mb-5 shadow p-3 mb-5 bg-body rounded">
                     <div id="carouselExampleIndicators" class="carousel slide carousel-fade carousel-dark"
                         data-bs-ride="true">
                         <div class="carousel-indicators">
@@ -91,13 +91,13 @@
                         </button>
                     </div>
                 </div>
-                <div class="container bg-white p-5 shadow p-3 mb-5 bg-body rounded">
+                <div class="container-lg bg-white p-5 shadow p-3 mb-5 bg-body rounded">
                     <div class="row d-flex align-items-top mb-5">
-                        <div class="col">
+                        <div class="col-lg">
                             <p class="text-muted" style="font-size: 12px;">Adaugata la {{ currentAd.createdDate | date:
                                 "dd-MM-yyyy HH:mm" }}</p>
                         </div>
-                        <div class="col">
+                        <div class="col-lg">
                             <button class="btn btn-sm btn-outline-danger float-end"><i class="far fa-heart"></i> Adauga
                                 la favorite</button>
                         </div>
@@ -106,21 +106,23 @@
                     <h3 class="mb-2 fw-semibold">{{ currentAd.price }} {{currentAd.currency}}</h3>
                     <hr>
                     <h3 class="mb-5 fw-semibold text-uppercase">Descriere</h3>
-                    <p>{{ currentAd.content }}</p>
+                    <div class="container">
+                        <p class="text-break">{{ currentAd.content }}</p>
+                    </div>
                     <hr>
                     <a href="#" data-bs-toggle="modal" data-bs-target="#report-modal"
                         class="text-danger fw-semibold float-end text-decoration-none"><i class="far fa-flag"></i>
                         Raporteaza</a>
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="container bg-white p-4 mb-5 shadow p-3 mb-5 bg-body rounded">
+            <div class="col-lg-4">
+                <div class="container-lg bg-white p-4 mb-5 shadow p-3 mb-5 bg-body rounded">
                     <h6 class="text-uppercase fw-semibold mb-4">Vanzator</h6>
                     <div class="row px-3 mb-3">
-                        <div class="col-4 d-flex justify-content-center">
+                        <div class="col-lg-4 d-flex justify-content-center">
                             <img src="assets/site-imgs/unknown-person-icon.png" alt="" class="object-fit-avatar">
                         </div>
-                        <div class="col p-3">
+                        <div class="col-lg p-3">
                             <p class="fw-semibold lh-5">{{ currentAd.contactPersonName }}</p>
                             <p class="text-muted" style="font-size: 13px;">Pe [nume] din {{
                                 currentAd.user.registeredDate | date: "dd-MM-yyyy HH:mm"}}</p>
@@ -136,13 +138,13 @@
                             vanzator <i class="fas fa-chevron-circle-right"></i></a>
                     </div>
                 </div>
-                <div class="container bg-white p-4 shadow p-3 mb-5 bg-body rounded">
+                <div class="container-lg bg-white p-4 shadow p-3 mb-5 bg-body rounded">
                     <h6 class="text-uppercase fw-semibold  mb-4">Localitate</h6>
                     <p class="lh-5 text-muted mx-3" style="font-size: 14px;"><i class="fas fa-map-marked-alt"></i> {{
                         currentAd.address }}</p>
                 </div>
                 <div *ngIf="(authService.user$ | async)?.id == currentAd.user.id"
-                    class="container bg-white p-4 shadow p-3 mb-5 bg-body rounded gap-3">
+                    class="container-lg bg-white p-4 shadow p-3 mb-5 bg-body rounded gap-3">
                     <h6 class="text-uppercase fw-semibold  mb-4">Actiuni</h6>
                     <div class="d-flex flex-column gap-3">
                         <button [routerLink]="['/adauga-anunt/editeaza', currentAd.id]"

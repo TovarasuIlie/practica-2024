@@ -1,5 +1,5 @@
 <app-header></app-header>
-<div class="container my-5 py-5">
+<div class="container-lg my-5 py-5">
     <h4 class="fw-semibold">Editeaza anuntul</h4>
     <form [formGroup]="editAdForm" (ngSubmit)="editCurrentAd()">
         <div class="container bg-white p-5 mb-3 shadow">
@@ -29,7 +29,7 @@
                 </mat-select>
             </mat-form-field> -->
         </div>
-        <div class="container bg-white p-5 mb-3 shadow">
+        <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-5">
                 <mat-label>Descriere</mat-label>
                 <textarea formControlName="content" matInput #description placeholder="Incearca sa scrii ce ai vrea tu sa afli daca te-ai uita la acest anunt..." style="height: 300px;"></textarea>
@@ -46,13 +46,13 @@
                 }
             </mat-form-field>
             <div class="row mb-4">
-                <div class="col">
+                <div class="col-lg">
                     <mat-form-field class="w-100">
                         <mat-label>Pret</mat-label>
                         <input formControlName="price" matInput placeholder="123 lei">
                     </mat-form-field>
                 </div>
-                <div class="col-3">
+                <div class="col-lg-3">
                     <mat-form-field class="w-100">
                         <mat-label>Moneda</mat-label>
                         <mat-select formControlName="currency">
@@ -74,7 +74,7 @@
             <mat-hint class="float-start">Incarca minim 2 poze cu produsul</mat-hint>
             <mat-hint class="float-end">{{imageArray.length}} / 8</mat-hint>
         </div> -->
-        <div class="container bg-white p-5 mb-3 shadow">
+        <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Persoana de contact</mat-label>
                 <input formControlName="contactPersonName" matInput placeholder="Ex. Popescu Ionel" [value]="(authService.user$ | async)?.firstName + ' ' + (authService.user$ | async)?.lastName">
@@ -88,7 +88,7 @@
                 <input formControlName="phoneNumber" matInput placeholder="Ex. Beius">
             </mat-form-field>
         </div>
-        <div class="container bg-white py-4 shadow">
+        <div class="container-lg bg-white py-4 shadow">
             <div class="d-flex justify-content-end gap-3">
                 <button type="submit" class="btn btn-success"><i class="fa-solid fa-floppy-disk"></i> Salveaza modificarile!</button>
                 <button type="button" class="btn btn-secondary" [routerLink]="['/anunt', currentAd.url]">Anuleaza</button>

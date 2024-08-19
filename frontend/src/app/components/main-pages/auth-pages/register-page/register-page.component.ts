@@ -53,6 +53,7 @@ export class RegisterPageComponent {
       }
       this.authService.registerUser(newUser).subscribe({
         next: (response: any) => {
+          
           this.router.navigateByUrl('/');
         },
         error: (response) => {
@@ -60,10 +61,6 @@ export class RegisterPageComponent {
           this.errorMessages.push(response.error.message)
         }
       })
-    } else {
-      if(this.registerForm.errors?.['unmatched']) {
-        this.registerForm.controls['confirmPassword'].setErrors({'unmatched': true});
-      }
     }
   }
 }

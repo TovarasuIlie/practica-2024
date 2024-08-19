@@ -68,7 +68,7 @@ public class AnnouncementController {
         return ResponseEntity.badRequest().body("A avut loc o eroare!");
     }
 
-    @GetMapping("search")
+    @GetMapping("search-for-ads")
     public ResponseEntity<List<Announcement>> searchAnnouncements(@RequestParam String title){
         List<Announcement> announcements = announcementService.findByTitle(title);
 

@@ -8,6 +8,7 @@ import { Announcement } from '../../../models/announcement';
 })
 export class AdChatComponent {
   @Input("chat-for-ad") ad!: Announcement;
+  text: string = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut rutrum, est sed congue placerat, sapien tortor porttitor quam';
 
   getImage(fileName: string, index: string) {
     return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";

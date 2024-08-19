@@ -11,15 +11,21 @@ spring:
     password: 7fGDbFNKgYZzcRMW
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
+  flyway:
+    user: root
+    password:
+    schemas: spring_jwt
+    url: jdbc:mysql://localhost:3306/spring_jwt
 file:
   upload-dir: uploads
+
 
 
 

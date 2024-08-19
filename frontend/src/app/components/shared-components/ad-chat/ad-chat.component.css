@@ -1,6 +1,12 @@
 .offcanvas {
     height: 700px;
     margin-top: calc(100vh - 700px);
+    overflow: hidden;
+}
+
+.offcanvas-body {
+    overflow: hidden;
+    padding: 0;
 }
 
 @media screen and (max-height: 992px) {
@@ -15,4 +21,17 @@
         margin-top: 0;
         height: 100vh;
     }
+}
+
+.chat-container {
+    max-height: calc(100% - 145px);
+    overflow-y: auto;
+}
+
+.chat-container .seller {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.chat-container .you {
+    background-color: rgba(25, 135, 84, 0.7);
 }
