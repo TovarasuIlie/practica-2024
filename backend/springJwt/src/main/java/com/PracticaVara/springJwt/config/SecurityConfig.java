@@ -3,7 +3,6 @@ package com.PracticaVara.springJwt.config;
 import com.PracticaVara.springJwt.filter.JwtAuthenticationFilter;
 import com.PracticaVara.springJwt.interceptors.BearerTokenInterceptor;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
-import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -54,7 +53,9 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/Categories/get-all-categories").permitAll();
                         req.requestMatchers("/api/Categories/**").hasRole("ADMIN");
                         req.requestMatchers("/api/Suspended-accounts/**").hasRole("ADMIN");
-                        req.anyRequest().authenticated();
+                        req.requestMatchers("/message", "/app", "/ws/**").permitAll();
+                        req.requestMatchers("/api/Chatrooms/**").authenticated();
+                        req.anyRequest().denyAll();
                     }
                 )
                 .userDetailsService(userDetailsServiceImp)

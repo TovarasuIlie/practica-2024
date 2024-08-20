@@ -1,0 +1,110 @@
+<app-header></app-header>
+
+<div class="container-fluid pt-5 mt-5 bg-white shadow rounded">
+    <div class="container-lg">
+        <h3 class="fw-semibold mb-5 mt-3">Mesaje</h3>
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu']" class="nav-link">Anunturi</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/mesaje/de-vandut']" class="nav-link active" aria-current="page">Mesaje</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/profil']" class="nav-link">Profil</a>
+            </li>
+            <li class="nav-item">
+                <a [routerLink]="['/contul-meu/favorite']" class="nav-link">Favorite</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-xxl mt-5">
+    <div class="row">
+        <div class="col-lg-4">
+            <div class="container-lg bg-white chatters mb-3">
+                <div class="d-flex flex-row gap-3">
+                    <button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="btn btn-sm btn-danger">De vandut</button>
+                    <button [routerLink]="['/contul-meu/mesaje/de-cumparat']" class="btn btn-sm btn-success">De cumparat</button>
+                </div>
+                <div class="card card-body mb-3 border-0" *ngFor="let chat of chatrooms; let i = index" [class.active]="i == chatSelected">
+                    <div class="row" (click)="selectChat(chat.id)">
+                        <div class="col-3">
+                            <img src="assets/site-imgs/unknown-person-icon.png" alt="" class="object-fit-avatar img-fluid">
+                        </div>
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <p class="fw-semibold">{{ chat.seller.firstName + " " + chat.seller.lastName}}</p>
+                                </div>
+                                <div class="col">
+                                    <p class="text-muted float-end" style="font-size: 12px;">{{ chat.createdAt }}</p>
+                                </div>
+                            </div>
+                            <div>
+                                <!-- <p>{{ text | limitTo: textLimit }}</p> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg">
+            <div *ngIf="chatroom.announcement" class="container bg-white">
+                <div class="card card-body border-0">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-2">
+                                <img [attr.src]="getImage(chatroom.announcement.imageUrl, '0')" alt="" class="img-fluid">
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <p class="fw-semibold mb-1">{{ chatroom.announcement.title }}</p>
+                                        <p class="text-muted" style="font-size: 13px;">Anuntul tau</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="fw-semibold float-end">{{ chatroom.announcement.price + " " + chatroom.announcement.currency }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container chat-container mt-2">
+                    <div class="container-fluid mx-0" *ngFor="let message of chatroomMessages.reverse()">
+                        <div class="container float-start rounded mb-2" style="max-width: 700px;" [class.seller]="message.sender != (authService.user$ | async)?.id" [ngClass]="{'you float-end': message.sender == (authService.user$ | async)?.id}">
+                            <div class="container-fluid mt-1">
+                                <div class="row">
+                                    <div class="col">
+                                        <p *ngIf="message.sender == (authService.user$ | async)?.id" class="fw-semibold mb-1" style="font-size: 12px;">Tu</p>
+                                        <p *ngIf="message.sender != (authService.user$ | async)?.id" class="fw-semibold mb-1" style="font-size: 12px;">{{ chatroom.seller.firstName + " " + chatroom.seller.lastName }}</p>
+                                    </div>
+                                    <div class="col">
+                                        <p class="float-end mb-1" style="font-size: 12px;">{{ message.sendAt | date:"dd.MM.YYYY HH:mm" }}</p>
+                                    </div>
+                                </div>
+                                <p style="font-size: 12px;">{{ message.message }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <form [formGroup]="sendMessageForm" (ngSubmit)="sendMessage()" class="row">
+                        <div class="col">
+                            <mat-form-field class="w-100 mt-3 mb-0">
+                                <mat-label>Mesajul tau</mat-label>
+                                <input formControlName="message" matInput placeholder="Scrie....">
+                            </mat-form-field>
+                        </div>
+                        <div class="col-2" style="padding: 16px 0 22px 0;">
+                            <button type="submit" class="btn btn-outline-success w-100" style="height: 100%;"><i class="fa-regular fa-paper-plane"></i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<app-footer></app-footer>

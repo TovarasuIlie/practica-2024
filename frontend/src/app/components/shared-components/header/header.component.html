@@ -26,7 +26,7 @@
                             <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
                             <li><hr class="dropdown-divider"></li>
                             <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
-                            <li><button [routerLink]="['/contul-meu/mesaje']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                            <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
                             <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
                             <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN'">
                                 <li><hr class="dropdown-divider"></li>

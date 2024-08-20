@@ -24,8 +24,11 @@
 }
 
 .chat-container {
-    max-height: calc(100% - 145px);
+    height: calc(100% - 150px);
     overflow-y: auto;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .chat-container .seller {

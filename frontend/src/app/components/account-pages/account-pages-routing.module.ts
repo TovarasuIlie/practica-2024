@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { IndexPageComponent } from './index-page/index-page.component';
-import { MessagesPageComponent } from './messages-page/messages-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import { ConfirmEmailPageComponent } from './confirm-email-page/confirm-email-page.component';
 import { myReportsResolver } from '../../resovers/my-reports.resolver';
 import { myAnnouncementsResolver } from '../../resovers/my-announcements.resolver';
 import { FavoriteAdsPageComponent } from './favorite-ad-page/favorite-ad-page.component';
+import { MessagesSellPageComponent } from './messages-sell-page/messages-sell-page.component';
+import { MessagesBuyPageComponent } from './messages-buy-page/messages-buy-page.component';
 
 const routes: Routes = [
   {
@@ -18,7 +19,16 @@ const routes: Routes = [
   },
   {
     path: "mesaje",
-    component: MessagesPageComponent
+    children: [
+      {
+        path: "de-vandut",
+        component: MessagesSellPageComponent
+      },
+      {
+        path: "de-cumparat",
+        component: MessagesBuyPageComponent
+      }
+    ]
   },
   {
     path: "profil",
