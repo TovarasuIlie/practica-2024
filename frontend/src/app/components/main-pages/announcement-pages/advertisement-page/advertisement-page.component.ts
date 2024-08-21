@@ -8,6 +8,8 @@ import { ToastService } from '../../../../services/toast.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReportService } from '../../../../services/report.service';
+import { ChatroomService } from '../../../../services/chatroom.service';
+import { Chatroom } from '../../../../models/chatroom';
 
 @Component({
   selector: 'app-advertisement-page',
@@ -23,10 +25,21 @@ export class AdvertisementPageComponent implements OnInit {
   errorMessages: string[] = [];
   matcher = new ErrorStateMatcher();
   reportForm: FormGroup = new FormGroup({});
+  adChatroom!: Chatroom;
+  yourID!: number;
+  chatClicked: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute, public authService: AuthService, private adService: AnnouncementService, private toastService: ToastService, private router: Router,
-              private fb: FormBuilder, private reportService: ReportService
-  ) {}
+              private fb: FormBuilder, private reportService: ReportService, private chatroomService: ChatroomService
+  ) {
+    this.authService.user$.subscribe({
+      next: (value) => {
+        if(value) {
+          this.yourID = value?.id;
+        }
+      }
+    });
+  }
 
   ngOnInit(): void {
     this.initializeAd();
@@ -82,5 +95,11 @@ export class AdvertisementPageComponent implements OnInit {
     } else {
       this.errorMessages.push("Toate campurile trebuie completate!");
     }
+  }
+
+  openChat() {
+    this.chatroomService.getChatroomID(this.currentAd.id, this.currentAd.user.id, this.yourID).subscribe(chatroom => {
+      this.adChatroom = chatroom;
+    })
   }
 }

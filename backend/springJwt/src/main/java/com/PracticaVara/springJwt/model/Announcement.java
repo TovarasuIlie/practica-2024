@@ -1,12 +1,11 @@
 package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -36,6 +35,8 @@ public class Announcement {
     private int photoNumber;
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    @JsonIgnoreProperties(allowSetters = true, value = {"password", "emailVerifed", "role", "registeredDate", "ipAddress", "jwt", "ipLogs", "suspendDetails", "enabled", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
     private User user;
     @Column(name = "is_deactivated", nullable = false)
     private boolean isDeactivated = false;

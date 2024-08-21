@@ -41,7 +41,7 @@ registerPlugin(FilePondPluginFileValidateType);
     EditAdvertisementPageComponent,
     AllAdsFromComponent,
     AdsListByCategoryComponent,
-    SearchForAdsPageComponent,
+    SearchForAdsPageComponent
   ],
   imports: [
     CommonModule,
