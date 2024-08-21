@@ -1,8 +1,8 @@
 package com.PracticaVara.springJwt.filter;
 
 import com.PracticaVara.springJwt.model.Account.User;
-import com.PracticaVara.springJwt.service.JwtService;
-import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
+import com.PracticaVara.springJwt.service.AccountServices.JwtService;
+import com.PracticaVara.springJwt.service.AccountServices.UserDetailsServiceImp;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -13,6 +13,4 @@ public class APIMessage {
         this.httpStatus = httpStatus;
         this.message = message;
     }
-
-    
 }

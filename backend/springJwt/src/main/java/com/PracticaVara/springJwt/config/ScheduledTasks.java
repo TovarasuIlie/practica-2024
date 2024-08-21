@@ -1,6 +1,6 @@
 package com.PracticaVara.springJwt.config;
 
-import com.PracticaVara.springJwt.service.AnnouncementManagementService;
+import com.PracticaVara.springJwt.service.AnnouncementServices.AnnouncementManagementService;
 import org.springframework.scheduling.annotation.Scheduled;
 
 public class ScheduledTasks {

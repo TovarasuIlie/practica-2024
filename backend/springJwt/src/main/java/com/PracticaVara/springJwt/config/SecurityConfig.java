@@ -3,7 +3,7 @@ package com.PracticaVara.springJwt.config;
 import com.PracticaVara.springJwt.filter.JwtAuthenticationFilter;
 import com.PracticaVara.springJwt.interceptors.BearerTokenInterceptor;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
-import com.PracticaVara.springJwt.service.UserDetailsServiceImp;
+import com.PracticaVara.springJwt.service.AccountServices.UserDetailsServiceImp;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
