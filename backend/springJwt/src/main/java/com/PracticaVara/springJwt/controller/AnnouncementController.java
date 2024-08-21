@@ -3,6 +3,7 @@ package com.PracticaVara.springJwt.controller;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementService;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,8 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/Announcements")
 public class AnnouncementController {
+
+    @Autowired
     private final AnnouncementService announcementService;
 
     public AnnouncementController(AnnouncementService announcementService) {
@@ -50,6 +53,7 @@ public class AnnouncementController {
     public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") Announcement announcement, @RequestPart("image") MultipartFile[] imageFile){
         try {
             return announcementService.save(announcement, imageFile);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

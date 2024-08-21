@@ -30,7 +30,7 @@ public class Announcement {
     private LocalDateTime createdDate;
     @Column(name = "expirationDate", nullable = false)
     private LocalDateTime expirationDate;
-    @Column(name = "imageUrl", nullable = false)
+    @Column(name = "imageUrl")
     private String imageUrl;
     @Column(name = "photo_number", nullable = false)
     private int photoNumber;

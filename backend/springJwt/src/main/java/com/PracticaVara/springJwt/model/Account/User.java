@@ -17,8 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -66,12 +65,12 @@ public class User implements UserDetails {
     @Transient
     private String jwt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
-    private Set<IPLogs> ipLogs = new HashSet<IPLogs>();
+    private List<IPLogs> ipLogs;
 
-    @OneToOne(mappedBy = "userSuspend", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "userSuspend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonManagedReference(value = "userSuspendReference")
     private SuspendedAccount suspendDetails;
 

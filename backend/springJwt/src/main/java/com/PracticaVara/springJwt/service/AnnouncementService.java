@@ -55,13 +55,6 @@ public class AnnouncementService {
         return announcementRepository.findByUrl(url);
     }
 
-    public ResponseEntity<List<Announcement>> getMyAds() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String username = authentication.getName();
-        Optional<User> user = userRepository.findByUsername(username);
-        return ResponseEntity.status(HttpStatus.OK).body(announcementRepository.findByUser(user.get()));
-    }
-
     public ResponseEntity<Object> save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -99,6 +92,7 @@ public class AnnouncementService {
             announcementRepository.save(announcement);
             return ResponseEntity.status(HttpStatus.CREATED).body(announcement);
         } else {
+            //throw new RuntimeException("User not found.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }
@@ -115,7 +109,7 @@ public class AnnouncementService {
                     throw new RuntimeException("Eroare! Poti sterge doar anunturile tale!");
                 }
                 String folderPath = announcement.get().getImageUrl();
-                Path userDir = Paths.get(folderPath);
+                Path userDir = rootLocation.resolve(folderPath);
 
                 if (Files.exists(userDir)) {
                     try {
@@ -223,7 +217,12 @@ public class AnnouncementService {
             throw new RuntimeException("Failed to store file " + file.getOriginalFilename(), e);
         }
     }*/
-
+    public ResponseEntity<List<Announcement>> getMyAds() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> user = userRepository.findByUsername(username);
+        return ResponseEntity.status(HttpStatus.OK).body(announcementRepository.findByUser(user.get()));
+    }
     public List<Announcement> findByTitle(String title) {
         return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
     }

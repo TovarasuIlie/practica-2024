@@ -77,7 +77,7 @@ public class AnnouncementManagementService {
             Optional<Announcement> announcement = announcementRepository.findById(id);
             if (announcement.isPresent()) {
                 String folderPath = announcement.get().getImageUrl();
-                Path userDir = Paths.get(folderPath);
+                Path userDir = rootLocation.resolve(folderPath);
 
                 if (Files.exists(userDir)) {
                     try {
@@ -129,6 +129,7 @@ public class AnnouncementManagementService {
                     Path userDir = rootLocation.resolve(folderUUID);
                     if (!Files.exists(userDir)) {
                         Files.createDirectories(userDir);
+
                     }
 
                     int photoNumber = 0;
