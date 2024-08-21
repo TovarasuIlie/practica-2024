@@ -89,17 +89,35 @@
                         <mat-error>Parola este <strong>obligatorie</strong>.</mat-error>
                         }
                     </mat-form-field>
-                    <mat-form-field class="w-100 mb-2">
-                        <mat-label><i class="fas fa-flag"></i> Judet</mat-label>
-                        <mat-select formControlName="county">
-                            @for (county of counties; track county) {
-                            <mat-option [value]="county">{{ county }}</mat-option>
-                            }
-                        </mat-select>
-                        @if (registerForm.get('county')?.hasError('required')) {
-                        <mat-error>Judetul este <strong>obligatoriu</strong>.</mat-error>
-                        }
-                    </mat-form-field>
+                    <div class="row">
+                        <div class="col-lg">
+                            <mat-form-field class="w-100 mb-2">
+                                <mat-label><i class="fas fa-flag"></i> Judet</mat-label>
+                                <mat-select formControlName="country">
+                                    @for (county of countries; track county) {
+                                    <mat-option [value]="county">{{ county }}</mat-option>
+                                    }
+                                </mat-select>
+                                @if (registerForm.get('county')?.hasError('required')) {
+                                <mat-error>Judetul este <strong>obligatoriu</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col-lg">
+                            <mat-form-field class="w-100 mb-2 is-invalid">
+                                <mat-label><i class="fa-solid fa-location-dot"></i> Localitate</mat-label>
+                                <input formControlName="address" matInput type="text" placeholder="Localitate"
+                                    [errorStateMatcher]="matcher">
+                                @if (registerForm.get('address')?.hasError('minlength') &&
+                                !registerForm.get('address')?.hasError('required')) {
+                                <mat-error>Localitatea trebuie sa contina minim <strong>2</strong> caractere.</mat-error>
+                                }
+                                @if (registerForm.get('address')?.hasError('required')) {
+                                <mat-error>Localitatea este <strong>obligatorie</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                    </div>
                     <hr>
                     <div *ngIf="errorMessages.length > 0" class="alert alert-danger">
                         <ul>

@@ -14,7 +14,7 @@
     </div>
 </div>
 <div *ngIf="currentAd.id && !loadingAd">
-    <app-ad-chat [chatroom]="adChatroom" [current-ad]="currentAd"></app-ad-chat>
+    <app-ad-chat *ngIf="(authService.user$ | async)?.id != currentAd.user.id" [chatroom]="adChatroom" [current-ad]="currentAd"></app-ad-chat>
     <div class="modal fade" id="report-modal" tabindex="-1" aria-labelledby="exampleModalLabel"
         data-bs-backdrop="static" aria-hidden="true">
         <div class="modal-dialog">
@@ -53,8 +53,8 @@
         <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
             aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="#">Home</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Library</li>
+                <li class="breadcrumb-item"><a class="text-decoration-none" [routerLink]="['/']">Acasa</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ currentAd.title }}</li>
             </ol>
         </nav>
         <div *ngIf="!currentAd.approved" class="alert alert-danger">
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-column gap-3">
-                        <button class="btn btn-success btn-lg w-100" (click)="openChat()" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-offcanvas" aria-controls="offcanvasRight"><i class="fas fa-paper-plane"></i> Trimite
+                        <button *ngIf="(authService.user$ | async)?.id != currentAd.user.id" class="btn btn-success btn-lg w-100" (click)="openChat()" type="button" data-bs-toggle="offcanvas" data-bs-target="#chat-offcanvas" aria-controls="offcanvasRight"><i class="fas fa-paper-plane"></i> Trimite
                             mesaj</button>
                         <button class="btn btn-outline-success btn-lg w-100" (click)="changeText()"><i
                                 class="fas fa-phone-alt"></i> {{ callSeller }}</button>

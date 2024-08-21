@@ -6,7 +6,7 @@ export interface Chatroom {
     announcement: Announcement,
     seller: User,
     buyer: User,
-    createdAt: string
+    createDate: string
 }
 
 export interface ChatroomMessage {

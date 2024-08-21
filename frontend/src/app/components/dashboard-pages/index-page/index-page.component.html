@@ -32,8 +32,8 @@
         <!-- End Navbar -->
         <div class="content">
             <div class="row mb-3">
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats border-0 shadow">
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex align-items-stretch">
+                    <div class="card card-stats w-100 border-0 shadow">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-5 col-md-4">
@@ -44,8 +44,8 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Utilizatori</p>
-                                        <p class="card-title">83472<p>
-                                        <p class="text-success" style="font-size: 12px;">Azi: +231</p>
+                                        <p class="card-title">{{ dashboardDetails.numberOfUsers }}<p>
+                                        <p class="text-success" style="font-size: 12px;">Azi: +{{ dashboardDetails.numberOfUsersToday }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -59,8 +59,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats border-0 shadow">
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex align-items-stretch">
+                    <div class="card card-stats w-100 border-0 shadow">
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-5 col-md-4">
@@ -71,8 +71,8 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Anunturi</p>
-                                        <p class="card-title">1,345<p>
-                                        <p class="text-success" style="font-size: 12px;">Azi: +231</p>
+                                        <p class="card-title">{{ dashboardDetails.numberOfAnnouncements }}<p>
+                                        <p class="text-success" style="font-size: 12px;">Azi: +{{ dashboardDetails.numberOfAnnouncementsToday }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -86,8 +86,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats border-0 shadow">
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex align-items-stretch">
+                    <div class="card card-stats w-100 border-0 shadow">
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-5 col-md-4">
@@ -97,8 +97,8 @@
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
-                                        <p class="card-category">Categorii</p>
-                                        <p class="card-title">23
+                                        <p class="card-category">Conturi Suspendate</p>
+                                        <p class="card-title">{{ dashboardDetails.numberOfSuspendedAccount }}
                                         <p>
                                     </div>
                                 </div>
@@ -113,8 +113,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6 col-sm-6">
-                    <div class="card card-stats border-0 shadow">
+                <div class="col-lg-3 col-md-6 col-sm-6 d-flex align-items-stretch">
+                    <div class="card card-stats w-100 border-0 shadow">
                         <div class="card-body ">
                             <div class="row">
                                 <div class="col-5 col-md-4">
@@ -125,7 +125,7 @@
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
                                         <p class="card-category">Raportari</p>
-                                        <p class="card-title">+45K
+                                        <p class="card-title">{{ dashboardDetails.numberOfUnsolvedReports }}
                                         <p>
                                     </div>
                                 </div>

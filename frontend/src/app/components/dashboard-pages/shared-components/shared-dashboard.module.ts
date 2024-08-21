@@ -16,10 +16,10 @@ import { SharedModule } from "../../shared-components/shared.module";
     CommonModule,
     RouterModule,
     SharedModule
-],
+  ],
   exports: [
     SideMenuComponent,
-    FooterComponent,
+    FooterComponent
   ]
 })
 export class SharedDashboardModule { }

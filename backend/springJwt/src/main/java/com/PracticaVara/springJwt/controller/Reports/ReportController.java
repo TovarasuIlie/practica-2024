@@ -2,6 +2,8 @@ package com.PracticaVara.springJwt.controller.Reports;
 
 import com.PracticaVara.springJwt.DTOs.ReportDTO;
 import com.PracticaVara.springJwt.service.AnnouncementServices.ReportService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

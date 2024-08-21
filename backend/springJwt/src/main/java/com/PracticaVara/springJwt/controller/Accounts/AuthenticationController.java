@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.DTOs.UserRegisterDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.AccountServices.AuthenticationService;
@@ -24,7 +25,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("register")
-    public ResponseEntity<APIMessage> register(@RequestBody User request, HttpServletRequest servletRequest) {
+    public ResponseEntity<APIMessage> register(@RequestBody UserRegisterDTO request, HttpServletRequest servletRequest) {
             return authenticationService.register(request, servletRequest);
     }
 

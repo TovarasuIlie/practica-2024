@@ -11,6 +11,7 @@ export class ReportService {
   constructor(private http: HttpClient) { }
 
   insertNewReport(newReport: ReportInsert) {
+    console.log(newReport);
     return this.http.post(environment.API_URL + "/api/Reports/create-report", newReport)
   }
 

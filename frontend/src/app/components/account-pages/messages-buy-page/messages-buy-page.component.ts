@@ -15,7 +15,7 @@ import { environment } from '../../../../environments/environment.development';
   styleUrl: './messages-buy-page.component.css'
 })
 export class MessagesBuyPageComponent {
-  textLimit: number = 33;
+  textLimit: number = 20;
   ad!: Announcement;
   chatSelected!: number;
   chatrooms: Chatroom[] = [];
@@ -23,12 +23,16 @@ export class MessagesBuyPageComponent {
   chatroom: Chatroom = <Chatroom>{}
   sendMessageForm: FormGroup = new FormGroup({});
   stompClient: any;
+  chatSelectedID!: string;
+  loadingMessages: boolean = true;
+  loadingChatrooms: boolean = true;
 
   constructor(private adService: AnnouncementService, private chatroomService: ChatroomService, public authService: AuthService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.chatroomService.getMyBuyChatrooms().subscribe(chatrooms => {
       this.chatrooms = chatrooms;
+      this.loadingChatrooms = false;
     });
     this.initilizeForm();
     this.initializeWebSocketConnection();
@@ -44,20 +48,18 @@ export class MessagesBuyPageComponent {
         if (message.body) {
           that.chatroomMessages.push(JSON.parse(message.body));
         }
-        console.log(that.chatroomMessages);
       });
     });
   }
 
   selectChat(id: string) {
+    this.chatSelectedID = id;
     this.chatroomMessages = [];
     this.chatroom = this.chatrooms.filter((x) => {return x.id === id})[0];
     this.chatroomService.getMessageFromChatroom(id).subscribe(messages => {
       this.chatroomMessages = messages;
-      console.log(messages);
+      this.loadingMessages = false;
     });
-    console.log(this.chatroom);
-    console.log(this.chatrooms);
   }
 
   getImage(fileName: string, index: string) {

@@ -23,6 +23,8 @@ export interface UserRegister {
     lastName: string;
     email: string;
     password: string;
+    address: string;
+    country: string;
 }
 
 export interface ConfirmEmail {

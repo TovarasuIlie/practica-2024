@@ -85,9 +85,8 @@ public class AnnouncementManagementService {
                                 .forEach(p -> {
                                     try {
                                         Files.delete(p);
-                                        ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anuntul a fost sters cu succes."));
                                     } catch (IOException e) {
-                                        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Eroare la stergerea fisierului: "+ p.getFileName()));
+                                        ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Eroare la stergerea fisierului: " + p.getFileName()));
                                     }
                                 });
                     } catch (IOException e) {
@@ -95,13 +94,13 @@ public class AnnouncementManagementService {
                     }
                 }
                 announcementRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anuntul a fost sters cu succes."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul nu a fost gasit." ));
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Eroare interna"));
     }
     public void deleteExpiredAnnouncements() {
         LocalDateTime now = LocalDateTime.now();

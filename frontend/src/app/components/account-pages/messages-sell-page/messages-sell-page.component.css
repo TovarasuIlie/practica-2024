@@ -4,7 +4,7 @@
 }
 
 .chatters {
-    max-height: 706px;
+    height: 706px;
     overflow-y: auto;
 }
 
@@ -19,7 +19,7 @@
 }
 
 .chat-container {
-    height: 500px;
+    height: 508px;
     overflow-y: auto;
     display: flex;
     flex-direction: column-reverse;
@@ -31,4 +31,8 @@
 
 .chat-container .you {
     background-color: rgba(25, 135, 84, 0.7);
+}
+
+.not-selected-chat-container {
+    height: 706px;
 }

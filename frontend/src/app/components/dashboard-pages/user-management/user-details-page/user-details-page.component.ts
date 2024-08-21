@@ -107,7 +107,9 @@ export class UserDetailsPageComponent implements OnInit {
     if(this.user.id != this.authService.getID()) {
       this.userManageService.deleteUser(this.user.id).subscribe({
         next: _ => {
+          this.closeModal.forEach(x => x.nativeElement.click());
           this.toastService.show({title: "Cont Sters", message: "Contul a fost sters cu succes!", classname: "text-success"});
+          this.router.navigateByUrl("/dashboard/utilizatori");
         }
       })
     } else {
@@ -122,6 +124,7 @@ export class UserDetailsPageComponent implements OnInit {
       this.userManageService.editUser(this.user.id, this.editUserForm.value).subscribe({
         next: _ => {
           this.refreshUser();
+          this.closeModal.forEach(x => x.nativeElement.click());
           this.toastService.show({title: "Cont Sters", message: "Contul a fost sters cu succes!", classname: "text-success"});
         },
         error: (response) => {

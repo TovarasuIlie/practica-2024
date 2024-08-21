@@ -22,7 +22,8 @@ export interface Announcement {
 export interface AddAnnouncement {
     title: string;
     content: string;
-    image: File[]
+    image: File[];
+    country: string;
     address: string;
     contactPersonName: string;
     phoneNumber: string;

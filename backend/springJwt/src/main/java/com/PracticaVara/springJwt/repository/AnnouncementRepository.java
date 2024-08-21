@@ -13,8 +13,8 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Inte
     List<Announcement> findByIsDeactivatedFalse();
     List<Announcement> findByIsApprovedTrue();
     List<Announcement> findByIsApprovedFalse();
-
     List<Announcement> findByTitleContainingIgnoreCaseAndIsApprovedTrue(String title);
     List<Announcement> findByIsApprovedTrueAndIsDeactivatedFalse();
     Optional<Announcement> findByUrl(String url);
+    Long countByIsApprovedFalseAndIsDeactivatedFalse();
 }

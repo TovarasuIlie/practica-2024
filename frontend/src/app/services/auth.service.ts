@@ -55,6 +55,7 @@ export class AuthService {
   }
 
   registerUser(user: UserRegister) {
+    user.address = user.country + ", " + user.address;
     return this.http.post(environment.API_URL + "/api/Authentification/register", user);
   }
 

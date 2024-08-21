@@ -7,7 +7,7 @@ import { UsersListPageComponent } from './user-management/users-list-page/users-
 import { CategoryPageComponent } from './category-page/category-page.component';
 
 import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule} from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { UserDetailsPageComponent } from './user-management/user-details-page/user-details-page.component';
 import { SharedDashboardModule } from './shared-components/shared-dashboard.module';
@@ -20,6 +20,7 @@ import { AdDetailsPageComponent } from './ads-management-pages/ad-details-page/a
 import { FilePondModule } from 'ngx-filepond';
 import { ReportsListPageComponent } from './report-management-pages/reports-list-page/reports-list-page.component';
 import { ReportDetailsPageComponent } from './report-management-pages/report-details-page/report-details-page.component';
+import { CustomMatPaginatorIntl } from './shared-components/paginator/custom-mat-paginator-intl';
 
 
 @NgModule({
@@ -46,6 +47,9 @@ import { ReportDetailsPageComponent } from './report-management-pages/report-det
     MatInputModule,
     MatSelectModule,
     FilePondModule
-]
+  ],
+  providers: [
+    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
+  ]
 })
 export class DashboardPagesModule { }

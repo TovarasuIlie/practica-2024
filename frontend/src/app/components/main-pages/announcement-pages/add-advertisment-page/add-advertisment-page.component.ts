@@ -15,7 +15,8 @@ export class AddAdvertismentPageComponent implements OnInit {
   currencies: string[] = ["LEI", "EURO"];
   imageArray: File[] = [];
   addAdForm: FormGroup = new FormGroup({});
-
+  defaultContactName: string = "";
+  countries: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
 
   pondOptions = {
     class: 'my-filepond',
@@ -27,6 +28,10 @@ export class AddAdvertismentPageComponent implements OnInit {
   constructor(private fb: FormBuilder, private adService: AnnouncementService, public authService: AuthService, private toastService: ToastService, private router: Router) {}
 
   ngOnInit(): void {
+    this.authService.user$.forEach(currentUser => {
+      this.defaultContactName = currentUser?.firstName + " " + currentUser?.lastName;
+
+    })
     this.initializeFrom();
   }
 
@@ -35,7 +40,8 @@ export class AddAdvertismentPageComponent implements OnInit {
       title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70)]],
       content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000)]],
       address: [null, [Validators.required]],
-      contactPersonName: [null, [Validators.required]],
+      country: [null, [Validators.required]],
+      contactPersonName: [this.defaultContactName, [Validators.required]],
       phoneNumber: [null, [Validators.required]],
       price: [null, [Validators.required, Validators.pattern(/[0-9]/)]],
       currency: [null, [Validators.required]],

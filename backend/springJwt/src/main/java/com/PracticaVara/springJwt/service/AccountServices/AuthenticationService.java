@@ -1,6 +1,7 @@
 package com.PracticaVara.springJwt.service.AccountServices;
 
 import com.PracticaVara.springJwt.DTOs.UserDTO;
+import com.PracticaVara.springJwt.DTOs.UserRegisterDTO;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.model.Account.IPLogs;
 import com.PracticaVara.springJwt.model.Account.User;
@@ -55,7 +56,7 @@ public class AuthenticationService {
     }
 
     //@Async("asyncTaskExecutor")     // Vede ilie daca are nevoie de linia asta :)
-    public ResponseEntity<APIMessage> register(User request, HttpServletRequest servletRequest) {
+    public ResponseEntity<APIMessage> register(UserRegisterDTO request, HttpServletRequest servletRequest) {
         Optional<SuspendedAccount> currentSuspendedAccount = suspendedAccountRepository.findSuspendedAccountByIpAddress(servletRequest.getRemoteAddr());
         if(!currentSuspendedAccount.isEmpty()) {
             SuspendedAccount suspendedAccount = currentSuspendedAccount.get();
@@ -67,6 +68,7 @@ public class AuthenticationService {
                         user.setLastName(request.getLastName());
                         user.setUsername(request.getUsername());
                         user.setEmail(request.getEmail());
+                        user.setAddress(request.getAddress());
                         user.setPassword(passwordEncoder.encode(request.getPassword()));
                         user.setRole(Role.ROLE_USER);
                         user.setRegisteredDate(LocalDateTime.now());
@@ -103,6 +105,7 @@ public class AuthenticationService {
                     user.setLastName(request.getLastName());
                     user.setUsername(request.getUsername());
                     user.setEmail(request.getEmail());
+                    user.setAddress(request.getAddress());
                     user.setPassword(passwordEncoder.encode(request.getPassword()));
                     user.setRole(Role.ROLE_USER);
                     user.setRegisteredDate(LocalDateTime.now());

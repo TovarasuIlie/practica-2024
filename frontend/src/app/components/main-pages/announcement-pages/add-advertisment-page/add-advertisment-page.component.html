@@ -63,10 +63,24 @@
                     </mat-form-field>
                 </div>
             </div>
-            <mat-form-field class="w-100">
-                <mat-label>Localitate</mat-label>
-                <input formControlName="address" matInput placeholder="Ex. Beius">
-            </mat-form-field>
+            <div class="row">
+                <div class="col-md">
+                    <mat-form-field class="w-100">
+                        <mat-label>Judet</mat-label>
+                        <mat-select formControlName="country">
+                            @for (country of countries; track country) {
+                            <mat-option [value]="country">{{ country }}</mat-option>
+                            }
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-md">
+                    <mat-form-field class="w-100">
+                        <mat-label>Localitate</mat-label>
+                        <input formControlName="address" matInput placeholder="Ex. Beius">
+                    </mat-form-field>
+                </div>
+            </div>
         </div>
         <div class="container bg-white p-5 mb-3 shadow">
             <h5 class="mb-3">Imagini</h5>

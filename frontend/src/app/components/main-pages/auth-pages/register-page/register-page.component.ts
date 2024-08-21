@@ -14,7 +14,7 @@ import { confirmPasswordValidator, CustomValidators } from '../../../../validato
 })
 export class RegisterPageComponent {
   registerForm: FormGroup = new FormGroup({});
-  counties: string[] = ['Alba', 'Arad', 'Arges', 'Bacau', 'Bihor', 'Bistrita-Nasaud'];
+  countries: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
   matcher = new ErrorStateMatcher();
   errorMessages: string[] = [];
 
@@ -34,7 +34,8 @@ export class RegisterPageComponent {
       email:            [null, [Validators.required, Validators.email, Validators.pattern(/\.[A-Za-z0-9]{2,4}$/i)]],
       password:         [null, [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
       confirmPassword:  [null, [Validators.required, Validators.minLength(8)]],
-      county:           [null, [Validators.required]]
+      country:          [null, [Validators.required]],
+      address:          [null, [Validators.required, Validators.minLength(2)]],
     }, 
     {
       validators: confirmPasswordValidator
@@ -44,14 +45,7 @@ export class RegisterPageComponent {
   register() {
     this.errorMessages = [];
     if(this.registerForm.valid) {
-      const newUser: UserRegister = {
-        username: this.registerForm.get('username')?.value,
-        firstName: this.registerForm.get('firstName')?.value,
-        lastName: this.registerForm.get('lastName')?.value,
-        email: this.registerForm.get('email')?.value,
-        password: this.registerForm.get('password')?.value
-      }
-      this.authService.registerUser(newUser).subscribe({
+      this.authService.registerUser(this.registerForm.value).subscribe({
         next: (response: any) => {
           
           this.router.navigateByUrl('/');

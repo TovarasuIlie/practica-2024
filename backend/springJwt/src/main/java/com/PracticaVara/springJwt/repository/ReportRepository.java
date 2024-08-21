@@ -13,5 +13,5 @@ public interface ReportRepository extends JpaRepository<Report, Integer> {
     Optional<Report> findById(Integer id);
     List<Report> findAll();
     List<Report> findAllByAnnouncementOrderBySolvedAscIdDesc(Announcement announcement);
-
+    Long countBySolvedTrue();
 }

@@ -13,6 +13,7 @@ export class AnnouncementService {
 
   addNewAd(ad: AddAnnouncement) {
     const headers = new HttpHeaders().append("Content-Disposition", 'multipart/form-data')
+    ad.address = ad.country + ", " + ad.address;
     let adData = new FormData();
     adData.append("announcement", new Blob([JSON.stringify(ad)], {type: "application/json"}));
     if(ad.image.length > 0) {

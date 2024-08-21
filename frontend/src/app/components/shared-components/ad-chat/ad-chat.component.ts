@@ -21,6 +21,7 @@ export class AdChatComponent implements OnChanges {
   chatroomMessages: ChatroomMessage[] = [];
   sendMessageForm: FormGroup = new FormGroup({});
   stompClient: any;
+  loadingMessages: boolean = true;
 
   constructor(public authService: AuthService, private chatroomService: ChatroomService, private fb: FormBuilder) {
 
@@ -30,15 +31,13 @@ export class AdChatComponent implements OnChanges {
     this.chatroom = <Chatroom>{};
     this.chatroom.announcement = this.currentAd;
     this.initilizeForm();
-    this.initializeWebSocketConnection() 
-
+    this.initializeWebSocketConnection();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if(changes['chatroom'].currentValue) {
+    if(changes['chatroom'].currentValue && this.chatroomMessages.length == 0) {
       this.chatroom = changes['chatroom'].currentValue;
       this.initializeMessages();
-      console.log(this.chatroom)
     }
   }
 
@@ -46,6 +45,7 @@ export class AdChatComponent implements OnChanges {
     this.chatroomMessages = [];
     this.chatroomService.getMessageFromChatroom(this.chatroom.id).subscribe(messages => {
       this.chatroomMessages = messages;
+      this.loadingMessages = false;
     });
   }
 

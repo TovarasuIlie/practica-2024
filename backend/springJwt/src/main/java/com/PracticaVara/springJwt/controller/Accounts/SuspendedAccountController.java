@@ -24,12 +24,12 @@ public class SuspendedAccountController {
         return suspendedAccountService.getSuspendedAccountById(id);
     }
 
-    @PutMapping("suspend-account/{id}")
+    @GetMapping("suspend-account/{id}")
     public ResponseEntity<?> suspendAccount(@PathVariable Integer id,  @RequestParam int numberOfDaysSuspended, @RequestParam String reason) {
         return suspendedAccountService.createSuspendedAccount(id, numberOfDaysSuspended, reason);
     }
 
-    @DeleteMapping("unsuspend/{id}")
+    @DeleteMapping("unsuspend-account/{id}")
     public ResponseEntity<?> unsuspendAccount(@PathVariable Integer id) {
         return suspendedAccountService.removeSuspendedAccountById(id);
     }

@@ -64,7 +64,7 @@ public class AnnouncementService {
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
-            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[$&+,:;=?@#|'<>.-^*()%! ]", "-"));
+            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
 
             if (imageFile != null && imageFile.length > 0) {
                 String folderUUID = UUID.randomUUID().toString();

@@ -1,5 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Announcement } from '../../../../models/announcement';
 import { AuthService } from '../../../../services/auth.service';
@@ -20,7 +19,7 @@ export class AdvertisementPageComponent implements OnInit {
   currentAd: Announcement = {} as Announcement;
   loadingAd: boolean = true;
   loadingEditButton: boolean = false;
-  @ViewChild("closeModal") closeModal!: ElementRef;
+  @ViewChildren("closeModal") closeModal!:  QueryList<ElementRef>;
   callSeller: string = "Suna Vanzatorul";
   errorMessages: string[] = [];
   matcher = new ErrorStateMatcher();
@@ -43,13 +42,13 @@ export class AdvertisementPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.initializeAd();
-    this.initializeForm();
   }
 
   initializeAd() {
     this.adService.getAnnouncementByUrl(this.activatedRoute.snapshot.params['adTitle']).subscribe(ad => {
       this.currentAd = ad;
       this.loadingAd = false;
+      this.initializeForm();
     })
   }
 
@@ -63,7 +62,9 @@ export class AdvertisementPageComponent implements OnInit {
   deleteAd() {
     this.adService.deleteAnnouncement(this.currentAd.id).subscribe({
       next: _ => {
-        this.closeModal.nativeElement.click();
+        this.closeModal.forEach(element => {
+          element.nativeElement.click();
+        });
         this.toastService.show({title: "Anunt sters", message: "Anuntul a fost sters cu succes!", classname: "text-success"});
         this.router.navigateByUrl("/");
       }
@@ -85,8 +86,11 @@ export class AdvertisementPageComponent implements OnInit {
   reportAd() {
     if(this.reportForm.valid) {
       this.reportService.insertNewReport(this.reportForm.value).subscribe({
-        next: (value) => {
-          console.log(value);
+        next: (value: any) => {
+          this.closeModal.forEach(element => {
+            element.nativeElement.click();
+          });
+          this.toastService.show({title: "Raportat cu succes", message: value.message, classname: "text-success"})
         },
         error: (response) => {
           console.log(response);

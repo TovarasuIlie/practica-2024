@@ -74,7 +74,7 @@ public class SuspendedAccountService {
         Optional<SuspendedAccount> suspendedAccount = suspendedAccountRepository.findById(id);
         if (suspendedAccount.isPresent()) {
             suspendedAccountRepository.delete(suspendedAccount.get());
-            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUserSuspend().getUsername()+ "nu mai este suspendat." ));
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUserSuspend().getUsername()+ " nu mai este suspendat." ));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));
         }

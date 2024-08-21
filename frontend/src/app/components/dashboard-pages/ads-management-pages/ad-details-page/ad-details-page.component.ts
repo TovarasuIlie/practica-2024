@@ -30,7 +30,7 @@ export class AdDetailsPageComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-
+    console.log(this.closeModal)
   }
 
   initializeAd() {

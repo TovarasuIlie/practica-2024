@@ -31,7 +31,7 @@
         </nav>
         <!-- End Navbar -->
         <div class="content">
-            <div class="card card-body">
+            <div class="card card-body border-0 shadow">
                 <table class="table table-hover">
                     <thead class="table-dark">
                         <tr>
@@ -57,26 +57,19 @@
                         </tr>
                     </tbody>
                 </table>
+                <mat-paginator #paginator
+                    class="paginator"
+                    (page)="handlePageEvent($event)"
+                    [length]="100"
+                    [pageSize]="pageSize"
+                    [disabled]="disabled"
+                    [showFirstLastButtons]="showFirstLastButtons"
+                    [pageSizeOptions]="showPageSizeOptions ? pageSizeOptions : []"
+                    [hidePageSize]="hidePageSize"
+                    [pageIndex]="pageIndex"
+                    aria-label="Select page">
+                </mat-paginator>
             </div>
-            <nav>
-                <ul class="pagination">
-                    <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">1</a>
-                    </li>
-                    <li class="page-item active" aria-current="page">
-                        <span class="page-link">2</span>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="#">Next</a>
-                    </li>
-                </ul>
-            </nav>
         </div>
         <app-footer></app-footer>
     </div>

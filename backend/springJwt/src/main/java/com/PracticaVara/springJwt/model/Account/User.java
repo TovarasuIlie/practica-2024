@@ -71,7 +71,7 @@ public class User implements UserDetails {
     @JsonManagedReference
     private List<IPLogs> ipLogs;
 
-    @OneToOne(mappedBy = "userSuspend", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "userSuspend", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonManagedReference(value = "userSuspendReference")
     private SuspendedAccount suspendDetails;
 

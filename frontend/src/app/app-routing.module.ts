@@ -13,6 +13,7 @@ import { AllAdsFromComponent } from './components/main-pages/announcement-pages/
 import { AdsListByCategoryComponent } from './components/main-pages/announcement-pages/ads-list-by-category/ads-list-by-category.component';
 import { SearchForAdsPageComponent } from './components/main-pages/announcement-pages/search-for-ads-page/search-for-ads-page.component';
 import { ConfirmEmailPageComponent } from './components/account-pages/confirm-email-page/confirm-email-page.component';
+import { searchAdsResolver } from './resovers/search-ads.resolver';
 
 const routes: Routes = [
   {
@@ -51,7 +52,10 @@ const routes: Routes = [
   },
   {
     path: "cauta-anunturi",
-    component: SearchForAdsPageComponent
+    component: SearchForAdsPageComponent,
+    resolve: {
+      ads: searchAdsResolver
+    }
   },
   {
     path: "oferte/:username",

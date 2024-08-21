@@ -61,9 +61,9 @@
     </div>
 
     <div *ngIf="!loadingAds" class="row row-cols-1 row-cols-lg-4 g-3 g-lg-3 mb-5">
-        <div class="col d-flex align-items-stretch" *ngFor="let ad of ads">
-            <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
-                <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top" alt="...">
+        <div class="col d-flex" *ngFor="let ad of ads">
+            <div class="card shadow-sm p-3 mb-5 bg-body rounded w-100" [routerLink]="['anunt', ad.url]" id="ad-card">
+                <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">

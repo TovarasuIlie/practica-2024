@@ -15,20 +15,23 @@ import { environment } from '../../../../environments/environment.development';
   styleUrl: './messages-sell-page.component.css'
 })
 export class MessagesSellPageComponent implements OnInit {
-  textLimit: number = 33;
+  textLimit: number = 20;
   ad!: Announcement;
-  chatSelected!: number;
   chatrooms: Chatroom[] = [];
   chatroomMessages: ChatroomMessage[] = []
   chatroom: Chatroom = <Chatroom>{}
   sendMessageForm: FormGroup = new FormGroup({});
   stompClient: any;
+  chatSelectedID!: string;
+  loadingMessages: boolean = true;
+  loadingChatrooms: boolean = true;
 
   constructor(private adService: AnnouncementService, private chatroomService: ChatroomService, public authService: AuthService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.chatroomService.getMySellChatrooms().subscribe(chatrooms => {
       this.chatrooms = chatrooms;
+      this.loadingChatrooms = false;
     });
     this.initilizeForm();
     this.initializeWebSocketConnection();
@@ -49,10 +52,12 @@ export class MessagesSellPageComponent implements OnInit {
   }
 
   selectChat(id: string) {
+    this.chatSelectedID = id;
     this.chatroomMessages = [];
     this.chatroom = this.chatrooms.filter((x) => {return x.id === id})[0];
     this.chatroomService.getMessageFromChatroom(id).subscribe(messages => {
       this.chatroomMessages = messages;
+      this.loadingMessages = false;
     });
   }
 
