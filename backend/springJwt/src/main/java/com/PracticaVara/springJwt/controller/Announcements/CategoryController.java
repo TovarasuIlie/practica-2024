@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Announcements;
 
+import com.PracticaVara.springJwt.DTOs.CategoryDTO;
 import com.PracticaVara.springJwt.model.Category;
 import com.PracticaVara.springJwt.service.AnnouncementServices.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +33,17 @@ public class CategoryController {
     }
 
     @PostMapping(value = "add-category", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public Category addCategory(@RequestPart("category") Category category, @RequestPart("image") MultipartFile image) throws IOException {
+    public ResponseEntity<?> addCategory(@RequestPart("category") CategoryDTO category, @RequestPart("image") MultipartFile image) throws IOException {
         return categoryService.addCategory(category, image);
     }
 
     @PutMapping("edit-category/{id}")
-    public Category updateCategory(@PathVariable Long id, @RequestPart("category") Category categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
-        return categoryService.updateCategory(id, categoryDetails, file);
+    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestPart("category") CategoryDTO categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
+       return categoryService.updateCategory(id, categoryDetails, file);
     }
 
     @DeleteMapping("delete-category/{id}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
+        return categoryService.deleteCategory(id);
     }
 }
