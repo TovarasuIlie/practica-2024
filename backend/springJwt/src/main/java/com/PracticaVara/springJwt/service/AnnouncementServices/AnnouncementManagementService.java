@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.service.AnnouncementServices;
 
+import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
@@ -110,7 +111,7 @@ public class AnnouncementManagementService {
         }
     }
 
-    public Announcement updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
+    public Announcement updateAnnouncement(Integer id, AnnouncementDTO updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
@@ -122,7 +123,14 @@ public class AnnouncementManagementService {
                 Announcement announcement = existingAnnouncement.get();
                 announcement.setTitle(updatedAnnouncement.getTitle());
                 announcement.setContent(updatedAnnouncement.getContent());
-                announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
+
+                announcement.setPrice(updatedAnnouncement.getPrice());
+                announcement.setCurrency(updatedAnnouncement.getCurrency());
+                announcement.setAddress(updatedAnnouncement.getAddress());
+                announcement.setContactPersonName(updatedAnnouncement.getContactPerson());
+                announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
+
+                announcement.setExpirationDate(LocalDateTime.now().plusDays(60));
 
                 announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
 

@@ -1,5 +1,7 @@
 package com.PracticaVara.springJwt.service.AccountServices;
 
+import com.PracticaVara.springJwt.DTOs.UserConfirmEmailDTO;
+import com.PracticaVara.springJwt.DTOs.UserResetPasswordDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.ResetPasswordCode;
 import com.PracticaVara.springJwt.model.Account.User;
@@ -45,9 +47,9 @@ public class AccountService {
         }
     }
 
-    public ResponseEntity<APIMessage> resetPassword(JsonNode requestBody) {
-        String code = requestBody.get("code").asText();
-        String password = requestBody.get("password").asText();
+    public ResponseEntity<APIMessage> resetPassword(UserResetPasswordDTO requestBody) {
+        String code = requestBody.getCode();
+        String password = requestBody.getPassword();
         if(!code.isEmpty() && !password.isEmpty()) {
             if(!resetPasswordCodeRepository.findByCode(code).isEmpty()) {
                 password = passwordEncoder.encode(password);
@@ -65,9 +67,9 @@ public class AccountService {
         }
     }
 
-    public ResponseEntity<APIMessage> confirmEmail(JsonNode requestBody) {
-        String email = requestBody.get("email").asText();
-        String token = requestBody.get("token").asText();
+    public ResponseEntity<APIMessage> confirmEmail(UserConfirmEmailDTO requestBody) {
+        String email = requestBody.getEmail();
+        String token = requestBody.getToken();
         if(!email.isEmpty() && !token.isEmpty()) {
             Optional<User> user = userRepository.findByEmail(email);
             if(!user.isEmpty()) {

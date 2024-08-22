@@ -1,5 +1,7 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.DTOs.UserConfirmEmailDTO;
+import com.PracticaVara.springJwt.DTOs.UserResetPasswordDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.service.AccountServices.AccountService;
 import com.PracticaVara.springJwt.service.AccountServices.EmailService;
@@ -22,12 +24,12 @@ public class AccountController {
     }
 
     @PostMapping("reset-password")
-    public ResponseEntity<APIMessage> resetPassword(@RequestBody JsonNode requestBody) {
+    public ResponseEntity<APIMessage> resetPassword(@RequestBody UserResetPasswordDTO requestBody) {
         return accountService.resetPassword(requestBody);
     }
 
     @PutMapping("confirm-email")
-    public ResponseEntity<APIMessage> confirmEmail(@RequestBody JsonNode requestBody) {
+    public ResponseEntity<APIMessage> confirmEmail(@RequestBody UserConfirmEmailDTO requestBody) {
         return accountService.confirmEmail(requestBody);
     }
 }

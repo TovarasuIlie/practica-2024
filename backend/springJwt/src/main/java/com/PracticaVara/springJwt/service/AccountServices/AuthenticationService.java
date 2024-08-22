@@ -1,6 +1,7 @@
 package com.PracticaVara.springJwt.service.AccountServices;
 
 import com.PracticaVara.springJwt.DTOs.UserDTO;
+import com.PracticaVara.springJwt.DTOs.UserLoginDTO;
 import com.PracticaVara.springJwt.DTOs.UserRegisterDTO;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.model.Account.IPLogs;
@@ -132,7 +133,7 @@ public class AuthenticationService {
     }
 
     @Async("asyncTaskExecutor")
-    public CompletableFuture<ResponseEntity<Object>> authenticate(User request, HttpServletRequest servletRequest) {
+    public CompletableFuture<ResponseEntity<Object>> authenticate(UserLoginDTO request, HttpServletRequest servletRequest) {
         Optional<User> optionalUser = repository.findByUsername(request.getUsername());
         if(optionalUser.isEmpty()) {
             return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.BAD_REQUEST)

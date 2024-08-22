@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.DTOs.UserLoginDTO;
 import com.PracticaVara.springJwt.DTOs.UserRegisterDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
@@ -30,7 +31,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("login")
-    public CompletableFuture<ResponseEntity<Object>> login(@RequestBody User request, HttpServletRequest servletRequest){
+    public CompletableFuture<ResponseEntity<Object>> login(@RequestBody UserLoginDTO request, HttpServletRequest servletRequest){
         return authenticationService.authenticate(request, servletRequest);
     }
 

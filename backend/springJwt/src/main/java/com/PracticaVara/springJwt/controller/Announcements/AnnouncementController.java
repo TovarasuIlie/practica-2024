@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Announcements;
 
+import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementServices.AnnouncementService;
 
@@ -50,7 +51,7 @@ public class AnnouncementController {
     }
 
     @PostMapping(value = "create-ad", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") Announcement announcement, @RequestPart("image") MultipartFile[] imageFile){
+    public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") AnnouncementDTO announcement, @RequestPart("image") MultipartFile[] imageFile){
         try {
             return announcementService.save(announcement, imageFile);
 
@@ -62,8 +63,8 @@ public class AnnouncementController {
 
 
     @PutMapping("edit-ad/{id}")
-    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image") MultipartFile[] imageFile) {
-        announcement.setId(id);
+    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDTO announcement, @RequestParam("image") MultipartFile[] imageFile) {
+        //announcement.setId(id);
         try {
             return announcementService.updateAnnouncement(id, announcement, imageFile);
         } catch (Exception e) {

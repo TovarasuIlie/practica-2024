@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Announcements;
 
+import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementServices.AnnouncementManagementService;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +33,8 @@ public class AnnouncementManagementController {
     }
 
     @PutMapping("edit-ad/{id}")
-    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody Announcement announcement, @RequestParam("image") MultipartFile[] imageFile) {
-        announcement.setId(id);
+    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDTO announcement, @RequestParam("image") MultipartFile[] imageFile) {
+        //announcement.setId(id);
         try {
             return ResponseEntity.ok(announcementManagementService.updateAnnouncement(id, announcement, imageFile));
         } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.service.AnnouncementServices;
 
+import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
@@ -55,18 +56,28 @@ public class AnnouncementService {
         return announcementRepository.findByUrl(url);
     }
 
-    public ResponseEntity<Object> save(Announcement announcement, MultipartFile[] imageFile) throws IOException {
+    public ResponseEntity<Object> save(AnnouncementDTO announcementDTO, MultipartFile[] imageFile) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> user = userRepository.findByUsername(username);
+        Announcement announcement = new Announcement();
+
         if (user.isPresent()) {
             announcement.setUser(user.get());
+
+            announcement.setContent(announcementDTO.getContent());
+            announcement.setPrice(announcementDTO.getPrice());
+            announcement.setCurrency(announcementDTO.getCurrency());
+            announcement.setAddress(announcementDTO.getAddress());
+            announcement.setContactPersonName(announcementDTO.getContactPerson());
+            announcement.setPhoneNumber(announcementDTO.getPhoneNumber());
+
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
-            announcement.setUrl(announcement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
+            announcement.setUrl(announcementDTO.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
 
-            if (imageFile != null && imageFile.length > 0) {
+            if (imageFile != null && imageFile.length > 1) {
                 String folderUUID = UUID.randomUUID().toString();
                 Path userDir = rootLocation.resolve(folderUUID);
                 if (!Files.exists(userDir)) {
@@ -87,7 +98,7 @@ public class AnnouncementService {
                 announcement.setPhotoNumber(imageFile.length);
             } else {
                 //throw new RuntimeException("Please provide at least one image for the announcement.");
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim o imagine"));
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim 2 poze."));
             }
             announcementRepository.save(announcement);
             return ResponseEntity.status(HttpStatus.CREATED).body(announcement);
@@ -137,7 +148,7 @@ public class AnnouncementService {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Eroare interna"));
     }
 
-    public ResponseEntity<Object> updateAnnouncement(Integer id, Announcement updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
+    public ResponseEntity<Object> updateAnnouncement(Integer id, AnnouncementDTO updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
@@ -153,11 +164,18 @@ public class AnnouncementService {
                 Announcement announcement = existingAnnouncement.get();
                 announcement.setTitle(updatedAnnouncement.getTitle());
                 announcement.setContent(updatedAnnouncement.getContent());
-                announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
+                announcement.setPrice(updatedAnnouncement.getPrice());
+                announcement.setCurrency(updatedAnnouncement.getCurrency());
+                announcement.setAddress(updatedAnnouncement.getAddress());
+                announcement.setContactPersonName(updatedAnnouncement.getContactPerson());
+                announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
+
+                announcement.setExpirationDate(LocalDateTime.now().plusDays(60));
+                //announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
 
                 announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
 
-                if (imageFiles != null && imageFiles.length > 0) {
+                if (imageFiles != null && imageFiles.length > 1) {
                     String folderUUID = UUID.randomUUID().toString();
                     Path userDir = rootLocation.resolve(folderUUID);
                     if (!Files.exists(userDir)) {
@@ -178,8 +196,7 @@ public class AnnouncementService {
                     announcement.setImageUrl(userDir.toString());
                     announcement.setPhotoNumber(photoNumber);
                 } else {
-                    //throw new RuntimeException("Please provide at least one image for the announcement update.");
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim o poza"));
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim 2 poze."));
                 }
 
                 announcementRepository.save(announcement);
