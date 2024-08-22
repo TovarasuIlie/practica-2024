@@ -127,7 +127,7 @@ public class AnnouncementManagementService {
                 announcement.setPrice(updatedAnnouncement.getPrice());
                 announcement.setCurrency(updatedAnnouncement.getCurrency());
                 announcement.setAddress(updatedAnnouncement.getAddress());
-                announcement.setContactPersonName(updatedAnnouncement.getContactPerson());
+                announcement.setContactPersonName(updatedAnnouncement.getContactPersonName());
                 announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
 
                 announcement.setExpirationDate(LocalDateTime.now().plusDays(60));

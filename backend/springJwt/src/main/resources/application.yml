@@ -23,6 +23,7 @@ spring:
     password:
     schemas: spring_jwt
     url: jdbc:mysql://localhost:3306/spring_jwt
+  originUrl: http://localhost:4200
 file:
   upload-dir: uploads
 

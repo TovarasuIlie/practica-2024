@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, Renderer2, ViewChild, ViewChildren } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { DOCUMENT } from '@angular/common';
 import { MatTableDataSource } from '@angular/material/table';
@@ -17,7 +17,7 @@ import { ToastService } from '../../../services/toast.service';
   templateUrl: './category-page.component.html',
   styleUrl: './category-page.component.css'
 })
-export class CategoryPageComponent implements OnInit {
+export class CategoryPageComponent implements OnInit, AfterViewInit {
   loading: boolean = true;
   displayedColumns: string[] = ['id', 'image', 'name', 'actions'];
   dataSource!: MatTableDataSource<Category>;
@@ -36,12 +36,7 @@ export class CategoryPageComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, private _liveAnnouncer: LiveAnnouncer, public authService: AuthService,
-              private activatedRoute: ActivatedRoute, private fb: FormBuilder, private categoryService: CategoryService, private toastService: ToastService) {
-    const link = this._renderer2.createElement('link');
-    link.href = "/assets/dashboard/css/style.css";
-    link.rel = "stylesheet"
-    this._renderer2.appendChild(this._document.head, link);
-  }
+              private activatedRoute: ActivatedRoute, private fb: FormBuilder, private categoryService: CategoryService, private toastService: ToastService) {}
 
   ngOnInit(): void {
     this.initializeCategories();

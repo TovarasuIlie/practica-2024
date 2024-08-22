@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.originUrl}")
 @RequestMapping("api/Reports")
 public class ReportController {
     private final ReportService reportService;

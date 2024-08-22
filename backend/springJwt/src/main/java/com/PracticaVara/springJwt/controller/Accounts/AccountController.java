@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.originUrl}")
 @RequestMapping("api/Account")
 @AllArgsConstructor
 @RestController

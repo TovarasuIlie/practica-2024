@@ -4,6 +4,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { AccountService } from '../../../../../services/account.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../../../services/toast.service';
+import { confirmPasswordValidator } from '../../../../../validators/confirm-password.validator';
 
 @Component({
   selector: 'app-reset-password-page',
@@ -26,6 +27,9 @@ export class ResetPasswordPageComponent {
       password:         [null, [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
       confirmPassword:  [null, [Validators.required, Validators.minLength(8)]],
       code:             [null, [Validators.required, Validators.minLength(6), Validators.maxLength(6)]]
+    }, 
+    {
+      validators: confirmPasswordValidator
     })
   }
 

@@ -3,9 +3,12 @@ package com.PracticaVara.springJwt.service.AccountServices;
 import java.util.Optional;
 
 import com.PracticaVara.springJwt.model.APIMessage;
+import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.model.Account.User;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.PracticaVara.springJwt.repository.UserRepository;
@@ -23,15 +26,13 @@ public class UserService {
     }
 
     public ResponseEntity<?> findUserById(Integer id){
-
         return ResponseEntity.status(HttpStatus.OK).body(userRepository.findById(id));
     }
+
     public ResponseEntity<?> updateUser(Integer id, User updatedUserDetails) {
         Optional<User> existingUser = userRepository.findById(id);
         if(existingUser.isPresent()){
             User existingUserDetails = existingUser.get();
-            //Aici eu am pus toate la rand, te rog scoate daca ceva nu are sens sa fie pus aici
-            //s-a modificat putin 14.08.2024
             existingUserDetails.setFirstName(updatedUserDetails.getFirstName());
             existingUserDetails.setLastName(updatedUserDetails.getLastName());
             existingUserDetails.setUsername(updatedUserDetails.getUsername());
@@ -42,7 +43,24 @@ public class UserService {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista."));
         }
+    }
 
+    public ResponseEntity<?> updateRole(Integer id, Role role) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        User currentUser = userRepository.findByUsername(username).get();
+        if(!currentUser.getId().equals(id)) {
+            Optional<User> existingUser = userRepository.findById(id);
+            if (existingUser.isPresent()) {
+                existingUser.get().setRole(role);
+                userRepository.save(existingUser.get());
+                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizator editat cu succes."));
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista."));
+            }
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Nu iti poti schimba rolul singur!"));
+        }
     }
 
     public ResponseEntity<?> deleteUser(Integer id){

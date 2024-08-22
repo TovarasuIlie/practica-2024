@@ -18,19 +18,10 @@ export class AdDetailsPageComponent implements OnInit {
   @ViewChildren('closeModal') closeModal!: QueryList<ElementRef>
 
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private adManageService: AnnouncementManageService,
-              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder) {
-    const link = this._renderer2.createElement('link');
-    link.href = "/assets/dashboard/css/style.css";
-    link.rel = "stylesheet"
-    this._renderer2.appendChild(this._document.head, link);
-  }
+              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initializeAd()
-  }
-
-  ngAfterViewInit() {
-    console.log(this.closeModal)
   }
 
   initializeAd() {

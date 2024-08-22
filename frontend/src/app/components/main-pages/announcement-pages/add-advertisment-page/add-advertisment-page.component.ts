@@ -4,6 +4,8 @@ import { AnnouncementService } from '../../../../services/announcement.service';
 import { AuthService } from '../../../../services/auth.service';
 import { ToastService } from '../../../../services/toast.service';
 import { Router } from '@angular/router';
+import { Category } from '../../../../models/category';
+import { CategoryService } from '../../../../services/category.service';
 
 @Component({
   selector: 'app-add-advertisment-page',
@@ -11,11 +13,12 @@ import { Router } from '@angular/router';
   styleUrl: './add-advertisment-page.component.css'
 })
 export class AddAdvertismentPageComponent implements OnInit {
-  foods: string[] = ['Steak', 'Pizza', 'Tacos'];
+  categories: Category[] = [];
   currencies: string[] = ["LEI", "EURO"];
   imageArray: File[] = [];
   addAdForm: FormGroup = new FormGroup({});
   defaultContactName: string = "";
+  errorMessages: string[] = [];
   countries: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
 
   pondOptions = {
@@ -25,13 +28,13 @@ export class AddAdvertismentPageComponent implements OnInit {
     acceptedFileTypes: 'image/jpeg, image/png, image/jpg',
   }
 
-  constructor(private fb: FormBuilder, private adService: AnnouncementService, public authService: AuthService, private toastService: ToastService, private router: Router) {}
+  constructor(private fb: FormBuilder, private adService: AnnouncementService, public authService: AuthService, private toastService: ToastService, private router: Router, private categoryService: CategoryService) {}
 
   ngOnInit(): void {
     this.authService.user$.forEach(currentUser => {
       this.defaultContactName = currentUser?.firstName + " " + currentUser?.lastName;
-
     })
+    this.initializeCategories()
     this.initializeFrom();
   }
 
@@ -39,6 +42,7 @@ export class AddAdvertismentPageComponent implements OnInit {
     this. addAdForm = this.fb.group({
       title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70)]],
       content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000)]],
+      category: [null, [Validators.required]],
       address: [null, [Validators.required]],
       country: [null, [Validators.required]],
       contactPersonName: [this.defaultContactName, [Validators.required]],
@@ -47,6 +51,12 @@ export class AddAdvertismentPageComponent implements OnInit {
       currency: [null, [Validators.required]],
       image: [[]]
     })
+  }
+
+  initializeCategories() {
+    this.categoryService.getAllCategories().subscribe(
+      categories => this.categories = categories
+    )
   }
 
   onChange($event: any) {
@@ -65,6 +75,7 @@ export class AddAdvertismentPageComponent implements OnInit {
   }
 
   addNewAd() {
+    console.log(this.addAdForm.value);
     if(this.addAdForm.valid) {
       this.adService.addNewAd(this.addAdForm.value).subscribe({
         next: (response: any) => {
@@ -72,9 +83,13 @@ export class AddAdvertismentPageComponent implements OnInit {
           this.router.navigateByUrl("anunt/" + response.url)
         },
         error: (response) => {
-          console.log(response);
+          this.errorMessages.push(response.error.message);
         }
       })
     }
+  }
+
+  getImage(fileName: string) {
+    return "http://localhost:8080/category-imgs/" + fileName;
   }
 }

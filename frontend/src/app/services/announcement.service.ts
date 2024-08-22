@@ -25,7 +25,7 @@ export class AnnouncementService {
   }
 
   getAnnouncements() {
-    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-all-ads");
+    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-all-ads").pipe(delay(5000));
   }
 
   getMyAnnouncements() {

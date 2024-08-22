@@ -14,6 +14,7 @@ import { AdsListByCategoryComponent } from './components/main-pages/announcement
 import { SearchForAdsPageComponent } from './components/main-pages/announcement-pages/search-for-ads-page/search-for-ads-page.component';
 import { ConfirmEmailPageComponent } from './components/account-pages/confirm-email-page/confirm-email-page.component';
 import { searchAdsResolver } from './resovers/search-ads.resolver';
+import { ShowMoreAdsComponent } from './components/main-pages/show-more-ads/show-more-ads.component';
 
 const routes: Routes = [
   {
@@ -49,6 +50,10 @@ const routes: Routes = [
   {
     path: "anunturi-din-categoria/:categorySearchLink",
     component: AdsListByCategoryComponent
+  },
+  {
+    path: "anunturi",
+    component: ShowMoreAdsComponent
   },
   {
     path: "cauta-anunturi",

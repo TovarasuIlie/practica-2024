@@ -1,22 +1,22 @@
 <form [formGroup]="searchForm" (ngSubmit)="searchFor()" class="container">
     <div class="row">
-        <div class="col-7">
-            <mat-form-field class="w-100 mb-3">
+        <div class="col-md-7">
+            <mat-form-field class="w-100">
                 <mat-label>Cauta anunt</mat-label>
                 <input formControlName="keyword" matInput placeholder="Ex. iPhone 11 aproape nou">
             </mat-form-field>
         </div>
-        <div class="col">
-            <mat-form-field class="example-full-width">
+        <div class="col-md">
+            <mat-form-field class="w-100">
                 <mat-label>Judet</mat-label>
                 <mat-select [(value)]="selected">
-                    <mat-option>Toata tara</mat-option>
+                    <mat-option value="">Toata tara</mat-option>
                     <mat-option *ngFor="let country of countries" [value]="country">{{ country }}</mat-option>
                 </mat-select>
             </mat-form-field>
         </div>
-        <div class="col">
-            <button type="submit" class="btn btn-lg btn-danger" style="height: 55px;"><i class="fas fa-search"></i> Cauta</button>
+        <div class="col-md">
+            <button type="submit" class="btn btn-lg btn-outline-danger w-100" style="height: 55px;"><i class="fas fa-search"></i> Cauta</button>
         </div>
     </div>
 </form>

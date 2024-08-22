@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryDTO {
-    @NotEmpty(message = "Numele este obligatoriu.")
     @Size(min = 3, max = 20, message = "Numele trebuie sa contina intre {min} si {max} caractere.")
+    @NotEmpty(message = "Numele este obligatoriu.")
     private String name;
 }

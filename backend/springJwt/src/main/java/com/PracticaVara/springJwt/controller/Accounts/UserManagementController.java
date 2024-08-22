@@ -1,11 +1,13 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.AccountServices.UserService;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.originUrl}")
 @RestController
 @RequestMapping("api/UserManagement")
 public class UserManagementController {
@@ -28,7 +30,11 @@ public class UserManagementController {
     @PutMapping("/update-user/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @RequestBody User updatedUserDetails) {
         return userService.updateUser(id, updatedUserDetails);
+    }
 
+    @PutMapping("/update-role/{id}")
+    public ResponseEntity<?> updateRole(@PathVariable Integer id, @RequestBody JsonNode role) {
+        return userService.updateRole(id, Role.valueOf(role.get("role").asText()));
     }
 
     @DeleteMapping("/delete-user/{id}")

@@ -1,9 +1,11 @@
+import { Category } from "./category";
 import { User } from "./user";
 
 export interface Announcement {
     id: number;
     title: string;
     content: string;
+    category: Category;
     createdDate: string;
     expirationDate: string;
     imageUrl: string;
@@ -22,6 +24,7 @@ export interface Announcement {
 export interface AddAnnouncement {
     title: string;
     content: string;
+    category: Category;
     image: File[];
     country: string;
     address: string;

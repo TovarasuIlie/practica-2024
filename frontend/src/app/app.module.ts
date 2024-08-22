@@ -27,6 +27,7 @@ import { AllAdsFromComponent } from './components/main-pages/announcement-pages/
 import { AdsListByCategoryComponent } from './components/main-pages/announcement-pages/ads-list-by-category/ads-list-by-category.component';
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 import { SearchForAdsPageComponent } from './components/main-pages/announcement-pages/search-for-ads-page/search-for-ads-page.component';
+import { ShowMoreAdsComponent } from './components/main-pages/show-more-ads/show-more-ads.component';
 
 registerPlugin(FilePondPluginImagePreview);
 registerPlugin(FilePondPluginFileValidateType);
@@ -41,7 +42,8 @@ registerPlugin(FilePondPluginFileValidateType);
     EditAdvertisementPageComponent,
     AllAdsFromComponent,
     AdsListByCategoryComponent,
-    SearchForAdsPageComponent
+    SearchForAdsPageComponent,
+    ShowMoreAdsComponent
   ],
   imports: [
     CommonModule,

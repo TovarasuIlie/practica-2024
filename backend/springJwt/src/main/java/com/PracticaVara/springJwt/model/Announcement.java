@@ -25,6 +25,10 @@ public class Announcement {
     private String title;
     @Column(name = "content", nullable = false, columnDefinition = "TEXT")
     private String content;
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
+    private Category category;
     @Column(name = "createdDate", nullable = false)
     private LocalDateTime createdDate;
     @Column(name = "expirationDate", nullable = false)

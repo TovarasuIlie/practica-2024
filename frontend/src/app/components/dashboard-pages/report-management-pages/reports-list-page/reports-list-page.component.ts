@@ -24,12 +24,7 @@ export class ReportsListPageComponent implements OnInit {
 
   pageEvent!: PageEvent;
 
-  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private reportService: ReportService) {
-    const link = this._renderer2.createElement('link');
-    link.href = "/assets/dashboard/css/style.css";
-    link.rel = "stylesheet"
-    this._renderer2.appendChild(this._document.head, link);
-  }
+  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private reportService: ReportService) {}
 
   ngOnInit(): void {
     this.initiliazeReports();
@@ -45,5 +40,4 @@ export class ReportsListPageComponent implements OnInit {
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
   }
-  
 }

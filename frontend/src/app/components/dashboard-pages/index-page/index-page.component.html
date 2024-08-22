@@ -1,6 +1,44 @@
 <div class="wrapper">
     <div class="sidebar" data-color="black" data-active-color="success">
-        <app-side-menu></app-side-menu>
+        <div class="logo">
+            <a [routerLink]="['/']" class="simple-text logo-normal text-center">
+                LaTzanc.ro
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+                    <a [routerLink]="['/dashboard']">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'utilizatori']">
+                        <i class="fa-solid fa-users"></i>
+                        <p>Utilizatori</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'management-anunturi']">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <p>Anunturi</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'categorii']">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <p>Categorii</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'raportari-anunturi']">
+                        <i class="fa-regular fa-flag"></i>
+                        <p>Raportari Anunturi</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="main-panel">
         <!-- Navbar -->
@@ -45,7 +83,6 @@
                                     <div class="numbers">
                                         <p class="card-category">Utilizatori</p>
                                         <p class="card-title">{{ dashboardDetails.numberOfUsers }}<p>
-                                        <p class="text-success" style="font-size: 12px;">Azi: +{{ dashboardDetails.numberOfUsersToday }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -53,8 +90,7 @@
                         <div class="card-footer">
                             <hr>
                             <div class="stats">
-                                <i class="fa fa-refresh"></i>
-                                Update Now
+                                <p class="text-success">Azi: +{{ dashboardDetails.numberOfUsersToday }} utilizatori</p>
                             </div>
                         </div>
                     </div>
@@ -80,8 +116,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats">
-                                <i class="fa fa-calendar-o"></i>
-                                Last day
+                                <p class="text-success">Azi: +{{ dashboardDetails.numberOfAnnouncementsToday }} anunturi</p>
                             </div>
                         </div>
                     </div>
@@ -107,8 +142,7 @@
                         <div class="card-footer ">
                             <hr>
                             <div class="stats">
-                                <i class="fa fa-clock-o"></i>
-                                In the last hour
+                                <p class="text-success">Azi: +{{ dashboardDetails.numberOfSuspendedAccountToday }} conturi</p>
                             </div>
                         </div>
                     </div>
@@ -133,10 +167,7 @@
                         </div>
                         <div class="card-footer ">
                             <hr>
-                            <div class="stats">
-                                <i class="fa fa-refresh"></i>
-                                Update now
-                            </div>
+                            <p class="text-success">Azi: +{{ dashboardDetails.numberOfUnsolvedReportsToday }} reporturi</p>
                         </div>
                     </div>
                 </div>

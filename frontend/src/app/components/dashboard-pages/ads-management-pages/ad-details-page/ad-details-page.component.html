@@ -49,10 +49,64 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="description-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Descriere anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ ad.content }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="wrapper">
     <div class="sidebar" data-color="black" data-active-color="success">
-        <app-side-menu></app-side-menu>
+        <div class="logo">
+            <a [routerLink]="['/']" class="simple-text logo-normal text-center">
+                LaTzanc.ro
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+                    <a [routerLink]="['/dashboard']">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'utilizatori']">
+                        <i class="fa-solid fa-users"></i>
+                        <p>Utilizatori</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'management-anunturi']">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <p>Anunturi</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'categorii']">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <p>Categorii</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'raportari-anunturi']">
+                        <i class="fa-regular fa-flag"></i>
+                        <p>Raportari Anunturi</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="main-panel">
         <!-- Navbar -->
@@ -99,6 +153,16 @@
                                     <tr>
                                         <td>Titlu:</td>
                                         <td class="fw-semibold">{{ ad.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Descriere:</td>
+                                        <td class="fw-semibold">
+                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#description-modal">Vezi Descrierea</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Categorie:</td>
+                                        <td class="fw-semibold">{{ ad.category.name }}</td>
                                     </tr>
                                     <tr>
                                         <td>Creat la:</td>

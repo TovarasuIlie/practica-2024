@@ -28,6 +28,7 @@ seq = 0, delays = 80, durations = 500;
 seq2 = 0, delays2 = 80, durations2 = 500;
 
 $(document).on('click', '.navbar-toggle', function() {
+  paperDashboard.misc.navbar_menu_visible = 0;
   $toggle = $(this);
   if (paperDashboard.misc.navbar_menu_visible == 1) {
     $('.wrapper').removeClass('nav-open');

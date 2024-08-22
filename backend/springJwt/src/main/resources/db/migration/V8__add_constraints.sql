@@ -19,3 +19,6 @@ ALTER TABLE reports
 ALTER TABLE reset_password_codes
   ADD UNIQUE KEY UK_Reset_password_codes_user_id (user_id),
   ADD CONSTRAINT FK_Reset_password_codes_user_id FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE;
+
+ALTER TABLE announcements
+    ADD FOREIGN KEY FK_Announcement_category_id (category_id) REFERENCES Categories(id) ON DELETE CASCADE;

@@ -6,6 +6,7 @@ import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.AccountServices.AuthenticationService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.concurrent.CompletableFuture;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.originUrl}")
 @RequestMapping("api/Authentification")
 @RestController
 public class AuthenticationController {
@@ -31,7 +32,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("login")
-    public CompletableFuture<ResponseEntity<Object>> login(@RequestBody UserLoginDTO request, HttpServletRequest servletRequest){
+    public CompletableFuture<ResponseEntity<Object>> login(@Valid @RequestBody UserLoginDTO request, HttpServletRequest servletRequest){
         return authenticationService.authenticate(request, servletRequest);
     }
 

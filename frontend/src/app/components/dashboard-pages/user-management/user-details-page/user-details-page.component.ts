@@ -21,6 +21,7 @@ import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 export class UserDetailsPageComponent implements OnInit {
   user: UserAdmin = <UserAdmin>{};
   editUserForm: FormGroup = new FormGroup({});
+  editUserRoleForm: FormGroup = new FormGroup({});
   suspendUserForm: FormGroup = new FormGroup({});
   errorMessages: string[] = [];
   matcher = new ErrorStateMatcher();
@@ -50,12 +51,7 @@ export class UserDetailsPageComponent implements OnInit {
   ]
 
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private userManageService: UserManagementService, 
-              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder, private suspendAccService: SuspendAccountsService) {
-    const link = this._renderer2.createElement('link');
-    link.href = "/assets/dashboard/css/style.css";
-    link.rel = "stylesheet"
-    this._renderer2.appendChild(this._document.head, link);
-  }
+              private activatedRoute: ActivatedRoute, private toastService: ToastService, private router: Router, private fb: FormBuilder, private suspendAccService: SuspendAccountsService) {}
 
   ngOnInit(): void {
     this.initializeUser();
@@ -83,6 +79,9 @@ export class UserDetailsPageComponent implements OnInit {
     this.suspendUserForm = this.fb.group({
       reason: [null, [Validators.required]],
       suspendDays: [null, [Validators.required, Validators.minLength(1)]]
+    });
+    this.editUserRoleForm = this.fb.group({
+      role: [this.user.role, [Validators.required]]
     })
   }
 
@@ -125,10 +124,28 @@ export class UserDetailsPageComponent implements OnInit {
         next: _ => {
           this.refreshUser();
           this.closeModal.forEach(x => x.nativeElement.click());
-          this.toastService.show({title: "Cont Sters", message: "Contul a fost sters cu succes!", classname: "text-success"});
+          this.toastService.show({title: "Cont Editat", message: "Contul a fost editat cu succes!", classname: "text-success"});
         },
         error: (response) => {
-          console.log(response);
+          this.errorMessages.push(response.error.message);
+        }
+      })
+    } else {
+      this.errorMessages.push("Toate campuriile trebuie completate!");
+    }
+  }
+
+  changeUserRole() {
+    this.errorMessages = [];
+    if(this.editUserRoleForm.valid) {
+      this.userManageService.editUserRole(this.user.id, this.editUserRoleForm.value).subscribe({
+        next: _ => {
+          this.refreshUser();
+          this.closeModal.forEach(x => x.nativeElement.click());
+          this.toastService.show({title: "Rol actualizat!", message: "Rolul contului a fost actualizat cu succes!", classname: "text-success"});
+        },
+        error: (response) => {
+          this.errorMessages.push(response.error.message);
         }
       })
     } else {
@@ -146,7 +163,6 @@ export class UserDetailsPageComponent implements OnInit {
           this.toastService.show({title: "Cont suspendat", message: value.message, classname: "text-success"});
         }, 
         error: (response) => {
-          console.log(response);
           this.errorMessages.push(response.error.message);
         }
       })

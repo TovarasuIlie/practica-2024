@@ -2,3 +2,10 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif;}
+.btn {
+    border-radius: 5px;
+}
+
+.btn-outline-danger {
+    border: 2px solid;
+}

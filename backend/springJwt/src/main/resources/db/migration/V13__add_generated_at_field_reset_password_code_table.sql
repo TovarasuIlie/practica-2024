@@ -1,0 +1,2 @@
+ALTER TABLE reset_password_codes
+    ADD COLUMN generated_at DATETIME DEFAULT CURRENT_TIMESTAMP

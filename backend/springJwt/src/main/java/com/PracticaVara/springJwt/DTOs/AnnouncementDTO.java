@@ -15,19 +15,19 @@ import jakarta.validation.constraints.Pattern;
 @NoArgsConstructor
 public class AnnouncementDTO {
 
-    @NotEmpty(message = "Titlul este obligatoriu.")
     @Size(min = 16, max = 70, message = "Titlul trebuie sa aiba intre {min} si {max} caractere.")
+    @NotEmpty(message = "Titlul este obligatoriu.")
     private String title;
 
     @NotEmpty(message = "Categoria este obligatorie.")
     private Category category;
 
-    @NotEmpty(message = "Descrierea este obligatorie.")
     @Size(min = 40, max = 9000, message = "Descrierea trebuie sa contina intre {min} si {max} caractere.")
+    @NotEmpty(message = "Descrierea este obligatorie.")
     private String content;
 
-    @NotEmpty(message = "Pretul este obligatoriu.")
     @Size(min = 1, message = "Pretul trebuie sa fie de minim {minim} RON / EURO")
+    @NotEmpty(message = "Pretul este obligatoriu.")
     private double price;
 
     @NotEmpty
@@ -40,10 +40,10 @@ public class AnnouncementDTO {
 //    private MultipartFile[] imageFiles;
 
     @NotEmpty
-    private String contactPerson;
+    private String contactPersonName;
 
-    @NotEmpty(message = "Numarul de telefon este obligatoriu.")
     @Pattern(regexp = "\\d{10}", message = "Numarul de telefon trebuie sa contina exact 10 cifre.")
+    @NotEmpty(message = "Numarul de telefon este obligatoriu.")
     private String phoneNumber;
 
 }

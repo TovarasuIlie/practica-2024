@@ -11,6 +11,7 @@ import { announcementManagementResolver } from '../../resovers/announcement-mana
 import { cateogryResolver } from '../../resovers/cateogry.resolver';
 import { ReportsListPageComponent } from './report-management-pages/reports-list-page/reports-list-page.component';
 import { ReportDetailsPageComponent } from './report-management-pages/report-details-page/report-details-page.component';
+import { reportManagementResolver } from '../../resovers/report-management.resolver';
 
 const routes: Routes = [
   {
@@ -65,7 +66,10 @@ const routes: Routes = [
       },
       {
         path: "detalii-raport/:id",
-        component: ReportDetailsPageComponent
+        component: ReportDetailsPageComponent,
+        resolve: {
+          report: reportManagementResolver
+        }
       }
     ]
   }

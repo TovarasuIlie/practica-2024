@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "${spring.originUrl}")
 @RequestMapping("api/Suspended-accounts")
 public class SuspendedAccountController {
     private final SuspendedAccountService suspendedAccountService;

@@ -9,6 +9,9 @@
     </div>
 </div>
 <div class="container my-5 pt-5">
+    <div class="container">
+        <app-search-bar></app-search-bar>
+    </div>
     <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
         aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -16,20 +19,36 @@
             <li class="breadcrumb-item active" aria-current="page">{{ keyword }}</li>
         </ol>
     </nav>
-    <div class="card card-body shadow border-0 mb-4" *ngFor="let ad of ads">
-        <div class="row">
-            <div class="col-md-3">
-                <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid">
-            </div>
-            <div class="col-md">
-                <div class="row">
-                    <div class="col-md">
-                        <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none">{{ ad.title }}</a>
-                        <p class="text-muted">{{ ad.address }}</p>
-                        <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+    <div *ngIf="!loadingAds">
+        <div class="card card-body shadow border-0 mb-4" *ngFor="let ad of ads">
+            <div class="row">
+                <div class="col-md-4" id="ad-card">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid object-fit">
+                </div>
+                <div class="col-md">
+                    <div class="row">
+                        <div class="col-md">
+                            <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                            <p class="text-muted">{{ ad.address }}</p>
+                            <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                        </div>
+                        <div class="col-md">
+                            <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
+                        </div>
                     </div>
-                    <div class="col-md">
-                        <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadingAds">
+        <div class="container bg-transparent">
+            <div class="d-flex justify-content-center vh-100 align-items-center">
+                <div class="card bg-transparent border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column">
+                            <div class="spinner-border ms-2" style="width: 4rem; height: 4rem;" role="status"></div>
+                            <strong class="mt-2">Se incarca...</strong>
+                        </div>
                     </div>
                 </div>
             </div>

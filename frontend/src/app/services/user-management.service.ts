@@ -26,6 +26,10 @@ export class UserManagementService {
     return this.http.put(environment.API_URL + "/api/UserManagement/update-user/" + id, editedUser)
   }
 
+  editUserRole(id: string, role: any) {
+    return this.http.put(environment.API_URL + "/api/UserManagement/update-role/" + id, role)
+  }
+
   deleteUser(id: string) {
     return this.http.delete(environment.API_URL + "/api/UserManagement/delete-user/" + id);
   }

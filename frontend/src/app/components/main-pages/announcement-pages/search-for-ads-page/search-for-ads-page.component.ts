@@ -13,6 +13,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class SearchForAdsPageComponent implements OnInit {
   ads: Announcement[] = [];
   keyword!: string;
+  loadingAds: boolean = true;
 
   constructor(private adService: AnnouncementService, private activatedRoute: ActivatedRoute) {
     this.keyword = this.activatedRoute.snapshot.queryParams['keyword'];
@@ -29,6 +30,7 @@ export class SearchForAdsPageComponent implements OnInit {
       } else {
         this.ads = {} as Announcement[];
       }
+      this.loadingAds = false;
     })
     console.log(this.ads)
   }

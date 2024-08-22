@@ -23,8 +23,8 @@ public class UserRegisterDTO {
     @Size(min = 8, message = "Numele de utilizator trebuie sa aiba minim {min} caractere")
     private String username;
 
-    @NotEmpty(message = "Parola este obligatorie.")
     @Size(min = 8, max = 100, message = "Parola trebuie sa contina minim {min} caractere si maxim {max} caractere.")
+    @NotEmpty(message = "Parola este obligatorie.")
     private String password;
 
     @NotEmpty(message = "Judetul este obligatoriu.")

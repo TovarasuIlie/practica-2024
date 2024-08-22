@@ -1,2 +1,277 @@
-<app-side-menu></app-side-menu>
-<app-footer></app-footer>
+<!-- <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Stergere anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Doriti sa stergeti acest anunt?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-danger" (click)="deleteAd()">Sterge cont!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="!report.announcement.approved" class="modal fade" id="approve-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Aproba anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca vrei sa marchezi ca si aprobat?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-success" (click)="approveAd()">Aproba anunt!</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="report.announcement.approved" class="modal fade" id="reject-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Respinge anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca vrei sa marchezi ca si respins?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-warning" (click)="rejectAd()">Respinge anunt!</button>
+            </div>
+        </div>
+    </div>
+</div> -->
+<div class="modal fade" id="description-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Descriere anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                {{ report.announcement.content }}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="wrapper">
+    <div class="sidebar" data-color="black" data-active-color="success">
+        <div class="logo">
+            <a [routerLink]="['/']" class="simple-text logo-normal text-center">
+                LaTzanc.ro
+            </a>
+        </div>
+        <div class="sidebar-wrapper">
+            <ul class="nav">
+                <li [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact: true}">
+                    <a [routerLink]="['/dashboard']">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'utilizatori']">
+                        <i class="fa-solid fa-users"></i>
+                        <p>Utilizatori</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'management-anunturi']">
+                        <i class="fa-solid fa-bullhorn"></i>
+                        <p>Anunturi</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'categorii']">
+                        <i class="fa-solid fa-layer-group"></i>
+                        <p>Categorii</p>
+                    </a>
+                </li>
+                <li [routerLinkActive]="['active']">
+                    <a [routerLink]="['/dashboard', 'raportari-anunturi']">
+                        <i class="fa-regular fa-flag"></i>
+                        <p>Raportari Anunturi</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar pt-3 navbar-expand-lg navbar-absolute fixed-top navbar-transparent">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <h5 class="text-uppercase mx-4">Anunturi</h5>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="#">Another action</a></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+        <div class="content">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            Admin Tools
+                        </div>
+                        <div class="card-body mx-5">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>SQL ID</td>
+                                        <td class="fw-semibold">{{ report.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Motiv raport</td>
+                                        <td class="fw-semibold">{{ report.message }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status</td>
+                                        <td class="fw-semibold">
+                                            <div *ngIf="!report.solved" class="badge bg-info">
+                                                In curs de rezolvare
+                                            </div>
+                                            <div *ngIf="report.solved" class="badge bg-success">
+                                                Nerezolvat
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            Admin Tools
+                        </div>
+                        <div class="card-body">
+                            <button *ngIf="!report.solved" class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#solved-modal">Rezolvat</button>
+                            <button *ngIf="report.announcement.approved" class="btn btn-outline-warning w-100" data-bs-toggle="modal" data-bs-target="#reject-modal">Respinge Anunt</button>
+                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Anunt</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-lg">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            Detalii anunt
+                        </div>
+                        <div class="card-body mx-5">
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <td>SQL ID:</td>
+                                        <td class="fw-semibold">{{ report.announcement.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Titlu:</td>
+                                        <td class="fw-semibold">{{ report.announcement.title }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Descriere:</td>
+                                        <td class="fw-semibold">
+                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#description-modal">Vezi Descrierea</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Creat la:</td>
+                                        <td class="fw-semibold">{{ report.announcement.createdDate | date:"dd.MM.YYYY HH:mm:ss" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Expira la:</td>
+                                        <td class="fw-semibold">{{ report.announcement.expirationDate | date:"dd.MM.YYYY HH:mm:ss" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pret:</td>
+                                        <td class="fw-semibold">{{ report.announcement.price + " " + report.announcement.currency }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Publicat de:</td>
+                                        <td class="fw-semibold">{{ report.announcement.user.firstName + " " + report.announcement.user.lastName }} <a class="text-decoration-none" [routerLink]="['/dashboard/utilizatori/detalii-utilizator', report.announcement.user.id]">{{ "(" + report.announcement.user.username + ")" }}</a></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numele persoanei de contact:</td>
+                                        <td class="fw-semibold">{{ report.announcement.contactPersonName }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numar de telefon:</td>
+                                        <td class="fw-semibold">{{ report.announcement.phoneNumber }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Adresa:</td>
+                                        <td class="fw-semibold">{{ report.announcement.address }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Status:</td>
+                                        <td class="fw-semibold">
+                                            <div *ngIf="!report.announcement.approved" class="badge bg-danger me-1">
+                                                Neaprobat
+                                            </div>
+                                            <div *ngIf="report.announcement.approved" class="badge bg-success me-1">
+                                                Aprobat
+                                            </div>
+                                            <div *ngIf="report.announcement.isDeactivated" class="badge bg-danger mx-1">
+                                                Inactiv
+                                            </div>
+                                            <div *ngIf="!report.announcement.isDeactivated" class="badge bg-success mx-1">
+                                                Activ
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg">
+                    <div class="card">
+                        <div class="card-header bg-dark text-white text-center text-uppercase fw-semibold fs-5">
+                            Poze Anunt
+                        </div>
+                        <div class="card-body mx-5">
+                            <div class="row row-cols-2 row-cols-lg-2 g-2 g-lg-3">
+                                <div class="col" *ngFor="let photo of [].constructor(report.announcement.photoNumber); let i = index">
+                                    <img [src]="getImage(report.announcement.imageUrl, i.toString())" class="img-fluid w-100">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <app-footer></app-footer>
+    </div>
+</div>

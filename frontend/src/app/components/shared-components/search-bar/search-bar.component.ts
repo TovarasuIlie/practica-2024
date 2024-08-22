@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   styleUrl: './search-bar.component.css'
 })
 export class SearchBarComponent implements OnInit {
-  selected!: string;
+  selected: string = "";
   countries: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
 
   searchForm: FormGroup = new FormGroup({})
@@ -20,12 +20,12 @@ export class SearchBarComponent implements OnInit {
 
   initilizeForm() {
     this.searchForm = this.fb.group({
-      keyword: [null, [Validators.required]]
+      keyword: [null]
     })
   }
 
   searchFor() {
-    if(this.searchForm.valid) {
+    if(this.searchForm.value.keyword) {
       this.router.navigate(['/cauta-anunturi'], { queryParams: { keyword: this.searchForm.value.keyword }})
     }
   }

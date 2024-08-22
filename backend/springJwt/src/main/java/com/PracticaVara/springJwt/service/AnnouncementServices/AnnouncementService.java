@@ -64,14 +64,14 @@ public class AnnouncementService {
 
         if (user.isPresent()) {
             announcement.setUser(user.get());
-
+            announcement.setTitle(announcementDTO.getTitle());
             announcement.setContent(announcementDTO.getContent());
+            announcement.setCategory(announcementDTO.getCategory());
             announcement.setPrice(announcementDTO.getPrice());
             announcement.setCurrency(announcementDTO.getCurrency());
             announcement.setAddress(announcementDTO.getAddress());
-            announcement.setContactPersonName(announcementDTO.getContactPerson());
+            announcement.setContactPersonName(announcementDTO.getContactPersonName());
             announcement.setPhoneNumber(announcementDTO.getPhoneNumber());
-
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
@@ -83,14 +83,13 @@ public class AnnouncementService {
                 if (!Files.exists(userDir)) {
                     Files.createDirectories(userDir);
                 }
-                //int photoNumber = 0;
+
                 for(int i = 0; i < imageFile.length; i++){
                     MultipartFile file = imageFile[i];
                     if(!file.isEmpty()){
                         String filename = folderUUID + "-" + i + ".jpeg" ;
                         Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                         Files.copy(file.getInputStream(), destinationFile);
-                        //photoNumber++;
                     }
                 }
 
@@ -167,12 +166,11 @@ public class AnnouncementService {
                 announcement.setPrice(updatedAnnouncement.getPrice());
                 announcement.setCurrency(updatedAnnouncement.getCurrency());
                 announcement.setAddress(updatedAnnouncement.getAddress());
-                announcement.setContactPersonName(updatedAnnouncement.getContactPerson());
+                announcement.setContactPersonName(updatedAnnouncement.getContactPersonName());
                 announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
-
+                announcement.setUrl(updatedAnnouncement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
                 announcement.setExpirationDate(LocalDateTime.now().plusDays(60));
                 //announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
-
                 announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
 
                 if (imageFiles != null && imageFiles.length > 1) {
@@ -182,19 +180,17 @@ public class AnnouncementService {
                         Files.createDirectories(userDir);
                     }
 
-                    int photoNumber = 0;
                     for (int i = 0; i < imageFiles.length; i++) {
                         MultipartFile file = imageFiles[i];
                         if (!file.isEmpty()) {
                             String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
                             Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
                             Files.copy(file.getInputStream(), destinationFile);
-                            photoNumber++;
                         }
                     }
 
                     announcement.setImageUrl(userDir.toString());
-                    announcement.setPhotoNumber(photoNumber);
+                    announcement.setPhotoNumber(imageFiles.length);
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim 2 poze."));
                 }

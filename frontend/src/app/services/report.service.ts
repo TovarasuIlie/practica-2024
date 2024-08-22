@@ -11,7 +11,6 @@ export class ReportService {
   constructor(private http: HttpClient) { }
 
   insertNewReport(newReport: ReportInsert) {
-    console.log(newReport);
     return this.http.post(environment.API_URL + "/api/Reports/create-report", newReport)
   }
 
@@ -21,5 +20,9 @@ export class ReportService {
 
   getAllReports() {
     return this.http.get<Report[]>(environment.API_URL + "/api/Reports-management/get-reports");
+  }
+
+  getReportById(id: number) {
+    return this.http.get<Report>(environment.API_URL + "/api/Reports-management/get-report/" + id);
   }
 }

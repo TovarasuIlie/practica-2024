@@ -41,10 +41,20 @@ export class LoginModalComponent implements OnInit {
           this.router.navigateByUrl("/");
         },
         error: (response) => {
-          this.errorMessages.push(response.error.message);
+          this.errorMessages = this.convertJSON(response.error.message);
         }
       })
     }
+  }
+
+  private convertJSON(string: string) {
+    let convertedString: string[] = [];
+    try {
+        convertedString = JSON.parse(string);
+    } catch (e) {
+        convertedString.push(string);
+    }
+    return convertedString;
   }
 
   resetForm() {

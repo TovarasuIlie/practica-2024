@@ -1,10 +1,13 @@
 <app-header></app-header>
-<div class="container mt-5 pt-5">
+<div class="container my-5 pt-5">
+    <div class="container">
+        <app-search-bar></app-search-bar>
+    </div>
     <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);"
         aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="#">Acasa</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Library</li>
+            <li class="breadcrumb-item"><a class="text-decoration-none" [routerLink]="['/']">Acasa</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Toate anunturile</li>
         </ol>
     </nav>
     <div *ngIf="!loadingAds">
@@ -18,16 +21,10 @@
                         <div class="col-md">
                             <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                             <p class="text-muted">{{ ad.address }}</p>
-                            <p class="text-muted">{{ ad.category.name }}</p>
                             <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
                         </div>
-                        <div class="col d-flex flex-column align-items-center">
-                            <div class="container">
-                                <button class="btn btn-outline-danger btn-borderless float-end"><i class="fa-regular fa-heart"></i></button>
-                            </div>
-                            <div class="container text-end">
-                                <p class="fw-semibold fs-4 mt-4">{{ ad.price + " " + ad.currency}}</p>
-                            </div>
+                        <div class="col-md">
+                            <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
                         </div>
                     </div>
                 </div>

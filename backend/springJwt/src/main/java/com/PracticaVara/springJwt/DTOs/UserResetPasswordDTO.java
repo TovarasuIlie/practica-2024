@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserResetPasswordDTO {
 
-    @NotEmpty(message = "Codul este obligatoriu.
+    @NotEmpty(message = "Codul este obligatoriu.")
     private String code;
 
     @NotEmpty(message = "Parola este obligatorie.")

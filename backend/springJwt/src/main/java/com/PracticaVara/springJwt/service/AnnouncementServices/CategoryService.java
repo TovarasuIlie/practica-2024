@@ -49,15 +49,15 @@ public class CategoryService {
     public ResponseEntity<?> addCategory(CategoryDTO categoryDTO, MultipartFile file) throws IOException {
         Category category = new Category();
         if (!file.isEmpty()) {
-
-            String imageName = categoryDTO.getName().replaceAll("[^a-zA-Z0-9]", "-").toLowerCase() + ".png";
+            String name = categoryDTO.getName().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-");
 //            File dest = new File(uploadDir + imageName);
 //            file.transferTo(dest);
 //            category.setIconUrl(imageName);
-            Path destinationFile = rootLocation.resolve(Paths.get(imageName)).normalize().toAbsolutePath();
+            Path destinationFile = rootLocation.resolve(Paths.get(name + ".png")).normalize().toAbsolutePath();
             Files.copy(file.getInputStream(), destinationFile);
-            category.setIconUrl(imageName);
-            category.setSearchLink(category.getName().replaceAll("[^a-zA-Z0-9]", "-").toLowerCase());
+            category.setName(categoryDTO.getName());
+            category.setIconUrl(name + ".png");
+            category.setSearchLink(name);
             categoryRepository.save(category);
             return ResponseEntity.status(HttpStatus.CREATED).body(category);
         } else {

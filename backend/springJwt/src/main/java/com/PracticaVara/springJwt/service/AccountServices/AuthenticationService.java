@@ -142,6 +142,10 @@ public class AuthenticationService {
         User user = optionalUser.get();
         Optional<SuspendedAccount> currentSuspendedAccount = suspendedAccountRepository.findSuspendedAccountByUserSuspend(user);
         if(currentSuspendedAccount.isEmpty()) {
+            if(!optionalUser.get().isEmailVerifed()) {
+                return CompletableFuture.completedFuture(ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new APIMessage(HttpStatus.BAD_REQUEST, "Pentru a te putea autentifica pe cont, trebuie sa ai contul de email verificat.")));
+            }
             try {
                 Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
                 if(auth.isAuthenticated()) {
