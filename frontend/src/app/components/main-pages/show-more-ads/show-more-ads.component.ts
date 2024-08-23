@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AnnouncementManageService } from '../../../services/announcement-manage.service';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { Announcement } from '../../../models/announcement';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-show-more-ads',
@@ -12,7 +13,7 @@ export class ShowMoreAdsComponent implements OnInit {
   ads: Announcement[] = [];
   loadingAds: boolean = true;
 
-  constructor(private adService: AnnouncementService) {}
+  constructor(private adService: AnnouncementService, public authService: AuthService) {}
 
   ngOnInit(): void {
     this.initializeAds();

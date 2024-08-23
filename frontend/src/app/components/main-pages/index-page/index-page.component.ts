@@ -3,6 +3,7 @@ import { Announcement } from '../../../models/announcement';
 import { AnnouncementService } from '../../../services/announcement.service';
 import { CategoryService } from '../../../services/category.service';
 import { Category } from '../../../models/category';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-index-page',
@@ -15,7 +16,7 @@ export class IndexPageComponent implements OnInit {
   loadingAds: boolean = true;
   loadingCategory: boolean = true;
 
-  constructor(private adService: AnnouncementService, private categoryService: CategoryService) {}
+  constructor(private adService: AnnouncementService, private categoryService: CategoryService, public authService: AuthService) {}
   
   ngOnInit(): void {
     this.initializeAds();

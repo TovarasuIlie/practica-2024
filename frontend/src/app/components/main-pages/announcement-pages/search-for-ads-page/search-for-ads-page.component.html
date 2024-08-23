@@ -27,8 +27,15 @@
                 </div>
                 <div class="col-md">
                     <div class="row">
-                        <div class="col-md">
+                        <div class="col">
                             <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                        </div>
+                        <div class="col">
+                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != ad.id" [current-ad]="ad"></app-favorite-button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
                             <p class="text-muted">{{ ad.address }}</p>
                             <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
                         </div>

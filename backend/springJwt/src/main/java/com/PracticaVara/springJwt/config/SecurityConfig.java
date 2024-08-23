@@ -58,8 +58,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/DashboardDetails/**").hasAnyRole("ADMIN", "MODERATOR");
                         req.requestMatchers("/api/Wishlist/**").authenticated();
                         req.requestMatchers("/api/LogHistory/**").hasAnyRole("ADMIN");
-
-                        req.anyRequest().denyAll();
+                        req.anyRequest().permitAll();
                     }
                 )
                 .userDetailsService(userDetailsServiceImp)

@@ -19,7 +19,7 @@ export class AddAdvertismentPageComponent implements OnInit {
   addAdForm: FormGroup = new FormGroup({});
   defaultContactName: string = "";
   errorMessages: string[] = [];
-  countries: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
+  counties: string[] = ["Alba", "Arad", "Argeș", "Bacău", "Bihor", "Bistrița-Năsăud", "Botoșani", "Brașov", "Brăila", "București", "Buzău", "Caraș-Severin", "Călărași", "Cluj", "Constanța", "Covasna", "Dâmbovița", "Dolj", "Galați", "Giurgiu", "Gorj", "Harghita", "Hunedoara", "Ialomița", "Iași", "Ilfov", "Maramureș", "Mehedinți", "Mureș", "Neamț", "Olt", "Prahova", "Satu Mare", "Sălaj", "Sibiu", "Suceava", "Teleorman", "Timiș", "Tulcea", "Vaslui", "Vâlcea", "Vrancea"];
 
   pondOptions = {
     class: 'my-filepond',
@@ -43,11 +43,11 @@ export class AddAdvertismentPageComponent implements OnInit {
       title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70)]],
       content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000)]],
       category: [null, [Validators.required]],
-      address: [null, [Validators.required]],
-      country: [null, [Validators.required]],
+      address: [null, [Validators.required, Validators.minLength(2)]],
+      county: [null, [Validators.required]],
       contactPersonName: [this.defaultContactName, [Validators.required]],
-      phoneNumber: [null, [Validators.required]],
-      price: [null, [Validators.required, Validators.pattern(/[0-9]/)]],
+      phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9]{10}$/g)]],
+      price: [null, [Validators.required, Validators.pattern(/^[0-9]/g)]],
       currency: [null, [Validators.required]],
       image: [[]]
     })

@@ -67,7 +67,7 @@ public class FavoriteAnnouncementService {
                 Optional<FavoriteAnnouncement> favoriteAnnouncement = favoriteAnnouncementRepository.findByUserAndAnnouncement(user, announcement);
                 if(favoriteAnnouncement.isPresent()) {
                     favoriteAnnouncementRepository.delete(favoriteAnnouncement.get());
-                    return ResponseEntity.status(HttpStatus.NO_CONTENT).body(favoriteAnnouncement);
+                    return ResponseEntity.status(HttpStatus.OK).body(true);
                 } else {
                     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul din lista de favorite nu a fost gasit."));
                 }
@@ -93,5 +93,15 @@ public class FavoriteAnnouncementService {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));
         }
+    }
+
+    public Boolean checkAdAdded(Integer id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Optional<User> currentUser = userRepository.findByUsername(authentication.getName());
+        Optional<Announcement> currentAd = announcementRepository.findById(id);
+        if(favoriteAnnouncementRepository.findByUserAndAnnouncement(currentUser.get(), currentAd.get()).isPresent()) {
+            return true;
+        }
+        return false;
     }
 }

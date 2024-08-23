@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Announcement } from '../../../../models/announcement';
 import { AnnouncementService } from '../../../../services/announcement.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthService } from '../../../../services/auth.service';
 
 @Component({
   selector: 'app-search-for-ads-page',
@@ -15,7 +16,7 @@ export class SearchForAdsPageComponent implements OnInit {
   keyword!: string;
   loadingAds: boolean = true;
 
-  constructor(private adService: AnnouncementService, private activatedRoute: ActivatedRoute) {
+  constructor(private adService: AnnouncementService, private activatedRoute: ActivatedRoute, public authService: AuthService) {
     this.keyword = this.activatedRoute.snapshot.queryParams['keyword'];
   }
 

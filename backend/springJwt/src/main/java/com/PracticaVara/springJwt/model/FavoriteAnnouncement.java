@@ -18,11 +18,11 @@ public class FavoriteAnnouncement {
     @Column(name = "id",unique = true, nullable = false)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne
     @JoinColumn(name = "announcement_id", nullable = false)
     private Announcement announcement;
 

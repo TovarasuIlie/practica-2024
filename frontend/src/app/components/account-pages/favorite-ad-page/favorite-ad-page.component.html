@@ -24,7 +24,7 @@
         <h4>Anunturi favorite</h4>
         <div class="row row-cols-1 row-cols-lg-3 g-3 g-lg-3 mb-5">
             <div class="col d-flex align-items-stretch" *ngFor="let ad of ads">
-                <div class="card shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
+                <div class="card shadow border-0 p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
                     <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top"
                         alt="...">
                     <div class="card-body">
@@ -33,7 +33,7 @@
                                 <h6 class="card-title">{{ ad.title }}</h6>
                             </div>
                             <div class="col-2">
-                                <i class="far fa-heart"></i>
+                                <button (click)="removeFromFavorite(ad.id)" class="btn btn-outline-danger btn-borderless float-end"><i class="fa-solid fa-heart fs-4"></i></button>
                             </div>
                         </div>
                         <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>

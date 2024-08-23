@@ -8,8 +8,8 @@
             <form [formGroup]="categoryForm" (ngSubmit)="addCategory()">
                 <div class="modal-body">
                     <mat-form-field class="w-100 mb-3">
-                        <mat-label>Adauga titlu</mat-label>
-                        <input formControlName="name" matInput #name placeholder="Ex. iPhone 11 aproape nou">
+                        <mat-label>Nume categorie</mat-label>
+                        <input formControlName="name" matInput #name placeholder="Ex. Electronice">
                         <mat-hint align="start">Introdu cel puțin 3 caractere</mat-hint>
                         <mat-hint align="end">{{name.value.length}} / 70</mat-hint>
                         @if (categoryForm.get('name')?.hasError('required')) {

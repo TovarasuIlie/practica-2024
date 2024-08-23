@@ -17,6 +17,7 @@ import { ToastComponent } from './toast/toast.component';
 import { NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { AdChatComponent } from './ad-chat/ad-chat.component';
 import { SharedPipesModule } from '../../shared-pipes/shared-pipes.module';
+import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 
 
 
@@ -27,7 +28,8 @@ import { SharedPipesModule } from '../../shared-pipes/shared-pipes.module';
     SearchBarComponent,
     LoginModalComponent,
     ToastComponent,
-    AdChatComponent
+    AdChatComponent,
+    FavoriteButtonComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +51,8 @@ import { SharedPipesModule } from '../../shared-pipes/shared-pipes.module';
     FooterComponent,
     SearchBarComponent,
     ToastComponent,
-    AdChatComponent
+    AdChatComponent,
+    FavoriteButtonComponent
   ],
   providers: [
     {provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher}

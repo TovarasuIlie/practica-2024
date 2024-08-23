@@ -62,15 +62,15 @@
 
     <div *ngIf="!loadingAds" class="row row-cols-1 row-cols-lg-4 g-3 g-lg-3 mb-5">
         <div class="col d-flex" *ngFor="let ad of ads">
-            <div class="card shadow-sm p-3 mb-3 bg-body rounded w-100" [routerLink]="['anunt', ad.url]" id="ad-card">
+            <div class="card shadow-sm p-3 mb-3 bg-body rounded w-100" id="ad-card">
                 <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                 <div class="card-body">
                     <div class="row">
                         <div class="col">
-                            <h6 class="card-title">{{ ad.title }}</h6>
+                            <h6 [routerLink]="['anunt', ad.url]" class="card-title">{{ ad.title }}</h6>
                         </div>
-                        <div class="col-2">
-                            <i class="far fa-heart"></i>
+                        <div class="col-1">
+                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != ad.id" [current-ad]="ad"></app-favorite-button>
                         </div>
                     </div>
                     <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>

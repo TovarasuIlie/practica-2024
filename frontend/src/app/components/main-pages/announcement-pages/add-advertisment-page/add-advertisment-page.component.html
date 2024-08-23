@@ -40,6 +40,9 @@
                     </mat-option>
                     }
                 </mat-select>
+                @if (addAdForm.get('category')?.hasError('required')) {
+                    <mat-error>Categoria este <strong>obligatorie</strong>.</mat-error>
+                }
             </mat-form-field>
         </div>
         <div class="container bg-white p-5 mb-3 shadow">
@@ -53,10 +56,10 @@
                 @if (addAdForm.get('content')?.hasError('required')) {
                 <mat-error>Titlul unui anunt este <strong>obligatoru</strong>.</mat-error>
                 }
-                @if (addAdForm.get('content')?.hasError('minlength') && !addAdForm.get('title')?.hasError('required')) {
+                @if (addAdForm.get('content')?.hasError('minlength') && !addAdForm.get('content')?.hasError('required')) {
                 <mat-error>Titlul trebuie sa contina minim <strong>16 caractere</strong>.</mat-error>
                 }
-                @if (addAdForm.get('content')?.hasError('maxlength') && !addAdForm.get('title')?.hasError('required')) {
+                @if (addAdForm.get('content')?.hasError('maxlength') && !addAdForm.get('content')?.hasError('required')) {
                 <mat-error>Titlul trebuie sa contina maxim <strong>9000 caractere</strong>.</mat-error>
                 }
             </mat-form-field>
@@ -64,7 +67,13 @@
                 <div class="col">
                     <mat-form-field class="w-100">
                         <mat-label>Pret</mat-label>
-                        <input formControlName="price" matInput placeholder="123 lei">
+                        <input type="number" formControlName="price" matInput placeholder="123 lei">
+                        @if (addAdForm.get('price')?.hasError('required')) {
+                            <mat-error>Pretul este <strong>obligatoru</strong>.</mat-error>
+                        }
+                        @if (addAdForm.get('price')?.hasError('pattern')) {
+                            <mat-error>Pretul este <strong>invalid</strong>.</mat-error>
+                        }
                     </mat-form-field>
                 </div>
                 <div class="col-3">
@@ -75,6 +84,9 @@
                             <mat-option [value]="currency">{{ currency }}</mat-option>
                             }
                         </mat-select>
+                        @if (addAdForm.get('currency')?.hasError('required')) {
+                            <mat-error>Trebuie sa selectezi o moneda <strong>obligatoru</strong>.</mat-error>
+                        }
                     </mat-form-field>
                 </div>
             </div>
@@ -82,17 +94,26 @@
                 <div class="col-md">
                     <mat-form-field class="w-100">
                         <mat-label>Judet</mat-label>
-                        <mat-select formControlName="country">
-                            @for (country of countries; track country) {
-                            <mat-option [value]="country">{{ country }}</mat-option>
+                        <mat-select formControlName="county">
+                            @for (county of counties; track county) {
+                            <mat-option [value]="county">{{ county }}</mat-option>
                             }
                         </mat-select>
+                        @if (addAdForm.get('county')?.hasError('required')) {
+                            <mat-error>Trebuie sa selectezi un judet <strong>obligatoru</strong>.</mat-error>
+                        }
                     </mat-form-field>
                 </div>
                 <div class="col-md">
                     <mat-form-field class="w-100">
                         <mat-label>Localitate</mat-label>
                         <input formControlName="address" matInput placeholder="Ex. Beius">
+                        @if (addAdForm.get('address')?.hasError('required')) {
+                            <mat-error>Localitatea este <strong>obligatorie</strong>.</mat-error>
+                        }
+                        @if (addAdForm.get('address')?.hasError('minlength') && !addAdForm.get('address')?.hasError('required')) {
+                            <mat-error>Localitatea trebuie sa contina <strong>2 caractere</strong>.</mat-error>
+                        }
                     </mat-form-field>
                 </div>
             </div>
@@ -109,6 +130,9 @@
                 <mat-label>Persoana de contact</mat-label>
                 <input formControlName="contactPersonName" matInput placeholder="Ex. Popescu Ionel"
                     [value]="(authService.user$ | async)?.firstName + ' ' + (authService.user$ | async)?.lastName">
+                    @if (addAdForm.get('contactPersonName')?.hasError('required')) {
+                        <mat-error>Localitatea este <strong>obligatorie</strong>.</mat-error>
+                    }
             </mat-form-field>
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Adresa de email</mat-label>
@@ -118,6 +142,12 @@
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Numarul de telefon</mat-label>
                 <input formControlName="phoneNumber" matInput placeholder="Ex. 0712312312">
+                @if (addAdForm.get('phoneNumber')?.hasError('required')) {
+                    <mat-error>Numarul de telefon este <strong>obligatoru</strong>.</mat-error>
+                }
+                @if (addAdForm.get('phoneNumber')?.hasError('pattern')) {
+                    <mat-error>Numarul de telefon este <strong>invalid</strong>.</mat-error>
+                }
             </mat-form-field>
         </div>
         <div class="container bg-white shadow p-4">

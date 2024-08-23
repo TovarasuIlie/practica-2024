@@ -9,6 +9,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReportService } from '../../../../services/report.service';
 import { ChatroomService } from '../../../../services/chatroom.service';
 import { Chatroom } from '../../../../models/chatroom';
+import { FavoriteAdService } from '../../../../services/favorite-ad.service';
 
 @Component({
   selector: 'app-advertisement-page',

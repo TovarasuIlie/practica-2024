@@ -98,8 +98,7 @@
                                 "dd-MM-yyyy HH:mm" }}</p>
                         </div>
                         <div class="col-lg">
-                            <button class="btn btn-sm btn-outline-danger float-end"><i class="far fa-heart"></i> Adauga
-                                la favorite</button>
+                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != currentAd.id"  [current-ad]="currentAd"></app-favorite-button>
                         </div>
                     </div>
                     <h3 class="mb-5">{{ currentAd.title }}</h3>
