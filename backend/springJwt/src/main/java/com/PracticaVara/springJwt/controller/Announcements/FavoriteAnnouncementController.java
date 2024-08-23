@@ -20,14 +20,14 @@ public class FavoriteAnnouncementController {
         return favoriteAnnouncementService.showCurrentUserWishlist();
     }
 
-    @PostMapping("add-to-wishlist")
-    public ResponseEntity<?> addToWishlist(@RequestParam Integer announcementId) {
-        return favoriteAnnouncementService.addToFavorites(announcementId);
+    @PostMapping("add-to-wishlist/{id}")
+    public ResponseEntity<?> addToWishlist(@PathVariable Integer id) {
+        return favoriteAnnouncementService.addToFavorites(id);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> removeFromWishlist(@RequestParam Integer announcementId) {
-        return favoriteAnnouncementService.removeFromFavorites(announcementId);
+    @DeleteMapping("remove-from-wishlist/{id}")
+    public ResponseEntity<?> removeFromWishlist(@PathVariable Integer id) {
+        return favoriteAnnouncementService.removeFromFavorites(id);
     }
 
 }

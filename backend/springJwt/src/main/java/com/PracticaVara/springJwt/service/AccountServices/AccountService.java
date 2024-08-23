@@ -26,7 +26,7 @@ public class AccountService {
     private final EmailService emailService;
 
     public ResponseEntity<APIMessage> forgotPassword(String email) {
-        if(!userRepository.findByEmail(email).isEmpty()) {
+        if(userRepository.findByEmail(email).isPresent()) {
             User user = userRepository.findByEmail(email).get();
             if(resetPasswordCodeRepository.findByUser(user).isEmpty()) {
                 ResetPasswordCode resetPasswordCode = new ResetPasswordCode();
@@ -36,7 +36,8 @@ public class AccountService {
                 try {
                     emailService.sendHtmlCodeEmail(user, resetPasswordCode.getCode());
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()));
                 }
                 return ResponseEntity.ok(new APIMessage(HttpStatus.OK, "Un email a fost trimis pe adresa de email asociata contului!"));
             } else {
@@ -51,7 +52,7 @@ public class AccountService {
         String code = requestBody.getCode();
         String password = requestBody.getPassword();
         if(!code.isEmpty() && !password.isEmpty()) {
-            if(!resetPasswordCodeRepository.findByCode(code).isEmpty()) {
+            if(resetPasswordCodeRepository.findByCode(code).isPresent()) {
                 password = passwordEncoder.encode(password);
                 ResetPasswordCode resetPasswordCode = resetPasswordCodeRepository.findByCode(code).get();
                 User user = userRepository.findById(resetPasswordCode.getUser().getId()).get();
@@ -72,7 +73,7 @@ public class AccountService {
         String token = requestBody.getToken();
         if(!email.isEmpty() && !token.isEmpty()) {
             Optional<User> user = userRepository.findByEmail(email);
-            if(!user.isEmpty()) {
+            if(user.isPresent()) {
                 user.get().setEmailVerifed(true);
                 userRepository.save(user.get());
             } else {
