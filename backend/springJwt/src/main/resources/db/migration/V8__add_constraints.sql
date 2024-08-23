@@ -7,7 +7,7 @@ ALTER TABLE suspended_accounts
   ADD CONSTRAINT FK_user_id FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE;
 
 ALTER TABLE announcements
-  ADD CONSTRAINT FK_Announcemets_user_id FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE;
+  ADD CONSTRAINT FK_Announcements_user_id FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE;
 
 ALTER TABLE ip_logs
   ADD CONSTRAINT FK_ip_logs_user_id FOREIGN KEY (user_id) REFERENCES Users(id) ON DELETE CASCADE;
