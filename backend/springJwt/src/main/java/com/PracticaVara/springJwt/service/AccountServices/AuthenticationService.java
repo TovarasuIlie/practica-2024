@@ -6,6 +6,7 @@ import com.PracticaVara.springJwt.DTOs.UserRegisterDTO;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.model.Account.IPLogs;
 import com.PracticaVara.springJwt.model.Account.User;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.SuspendedAccount;
 import com.PracticaVara.springJwt.repository.IPLogsRepository;
 import com.PracticaVara.springJwt.repository.SuspendedAccountRepository;
@@ -75,6 +76,12 @@ public class AuthenticationService {
                         user.setRegisteredDate(LocalDateTime.now());
                         user.setIpAddress(servletRequest.getRemoteAddr());
 
+                        LogHistory newLogHistory = new LogHistory();
+                        newLogHistory.setUser(user);
+                        newLogHistory.setAction("S-a inregistrat cu succes.");
+                        newLogHistory.setIpAddress(user.getIpAddress());
+                        newLogHistory.setActionDate(LocalDateTime.now());
+
                         repository.save(user);
                         try {
                             emailService.sendHtmlVerificationEmail(user);
@@ -111,6 +118,12 @@ public class AuthenticationService {
                     user.setRole(Role.ROLE_USER);
                     user.setRegisteredDate(LocalDateTime.now());
                     user.setIpAddress(servletRequest.getRemoteAddr());
+
+                    LogHistory newLogHistory = new LogHistory();
+                    newLogHistory.setUser(user);
+                    newLogHistory.setAction("S-a inregistrat cu succes.");
+                    newLogHistory.setIpAddress(user.getIpAddress());
+                    newLogHistory.setActionDate(LocalDateTime.now());
 
                     repository.save(user);
                     try {
@@ -157,6 +170,12 @@ public class AuthenticationService {
                         ipLogs.setUsedFrom(LocalDateTime.now());
                         ipLogsRepository.save(ipLogs);
                         repository.save(user);
+
+                        LogHistory newLogHistory = new LogHistory();
+                        newLogHistory.setUser(user);
+                        newLogHistory.setAction("S-a autentificat cu succes.");
+                        newLogHistory.setIpAddress(user.getIpAddress());
+                        newLogHistory.setActionDate(LocalDateTime.now());
                     }
                     user.setJwt(jwtService.generateToken(user));
                     return CompletableFuture.completedFuture(ResponseEntity

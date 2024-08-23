@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.DTOs.UserDTO;
 import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.service.AccountServices.UserService;

@@ -5,6 +5,7 @@ import com.PracticaVara.springJwt.DTOs.UserResetPasswordDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.ResetPasswordCode;
 import com.PracticaVara.springJwt.model.Account.User;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.repository.ResetPasswordCodeRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.Random;
 
@@ -25,6 +27,7 @@ public class AccountService {
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
 
+
     public ResponseEntity<APIMessage> forgotPassword(String email) {
         if(userRepository.findByEmail(email).isPresent()) {
             User user = userRepository.findByEmail(email).get();
@@ -33,6 +36,13 @@ public class AccountService {
                 resetPasswordCode.setCode(getSaltString());
                 resetPasswordCode.setUser(user);
                 resetPasswordCodeRepository.save(resetPasswordCode);
+
+                LogHistory newLogHistory = new LogHistory();
+                newLogHistory.setUser(user);
+                newLogHistory.setAction("Solicitare parola.");
+                newLogHistory.setIpAddress(user.getIpAddress());
+                newLogHistory.setActionDate(LocalDateTime.now());
+
                 try {
                     emailService.sendHtmlCodeEmail(user, resetPasswordCode.getCode());
                 } catch (Exception e) {
@@ -58,6 +68,13 @@ public class AccountService {
                 User user = userRepository.findById(resetPasswordCode.getUser().getId()).get();
                 user.setPassword(password);
                 userRepository.save(user);
+
+                LogHistory newLogHistory = new LogHistory();
+                newLogHistory.setUser(user);
+                newLogHistory.setAction("Resetare parola.");
+                newLogHistory.setIpAddress(user.getIpAddress());
+                newLogHistory.setActionDate(LocalDateTime.now());
+
                 resetPasswordCodeRepository.delete(resetPasswordCode);
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new APIMessage(HttpStatus.ACCEPTED, "Parola a fost resetata cu succes! Acum te poti conecta cu noua parola!"));
             } else {

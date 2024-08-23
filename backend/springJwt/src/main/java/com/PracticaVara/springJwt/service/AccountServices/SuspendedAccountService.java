@@ -2,6 +2,7 @@ package com.PracticaVara.springJwt.service.AccountServices;
 
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.SuspendedAccount;
 import com.PracticaVara.springJwt.repository.SuspendedAccountRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
@@ -60,6 +61,20 @@ public class SuspendedAccountService {
                 suspendedAccount.setStartingDate(now);
                 suspendedAccount.setEndingDate(now.plusDays(numberOfDaysSuspended));
                 suspendedAccountRepository.save(suspendedAccount);
+
+                LogHistory newLogHistoryAdmin = new LogHistory();
+                newLogHistoryAdmin.setUser(adminUser);
+                newLogHistoryAdmin.setAction("A suspendat utilizatorul " + suspendedUser.getUsername() + "pana pe data " +suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))+". \n Motiv: " + suspendedAccount.getSuspendReason());
+                newLogHistoryAdmin.setIpAddress(adminUser.getIpAddress());
+                newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+
+                LogHistory newLogHistoryUser = new LogHistory();
+                newLogHistoryUser.setUser(suspendedUser);
+                newLogHistoryUser.setAction("A fost suspendat de catre " + suspendedAccount.getAdminUsername() + "pana pe data " +suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))+ ". Motiv: " + suspendedAccount.getSuspendReason());
+                newLogHistoryUser.setIpAddress(suspendedUser.getIpAddress());
+                newLogHistoryUser.setActionDate(LocalDateTime.now());
+
+
                 return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Utilizatorul " +suspendedUser.getUsername() + " a fost suspendat pana pe data de: " + suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));
@@ -74,6 +89,19 @@ public class SuspendedAccountService {
         Optional<SuspendedAccount> suspendedAccount = suspendedAccountRepository.findById(id);
         if (suspendedAccount.isPresent()) {
             suspendedAccountRepository.delete(suspendedAccount.get());
+
+            LogHistory newLogHistoryAdmin = new LogHistory();
+            newLogHistoryAdmin.setUser(suspendedAccount.get().getAdmin());
+            newLogHistoryAdmin.setAction("A revocat suspendarea utilizatorului: " + suspendedAccount.get().getUserSuspend().getUsername());
+            newLogHistoryAdmin.setIpAddress(suspendedAccount.get().getAdmin().getIpAddress());
+            newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+
+            LogHistory newLogHistoryUser = new LogHistory();
+            newLogHistoryUser.setUser(suspendedAccount.get().getUserSuspend());
+            newLogHistoryUser.setAction("A fost revocata suspendarea de catre " + suspendedAccount.get().getAdminUsername());
+            newLogHistoryUser.setIpAddress(suspendedAccount.get().getUserSuspend().getIpAddress());
+            newLogHistoryUser.setActionDate(LocalDateTime.now());
+
             return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUserSuspend().getUsername()+ " nu mai este suspendat." ));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu a fost gasit."));

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -23,9 +25,9 @@ public class LogHistory {
     @Column(name = "action", nullable = false)
     private String action;
 
-    @Column(name = "ipAdress", nullable = false)
-    private String ipAdress;
+    @Column(name = "ip_address", nullable = false)
+    private String ipAddress;
 
     @Column(name = "action_date", nullable = false)
-    private String actionDate;
+    private LocalDateTime actionDate;
 }
