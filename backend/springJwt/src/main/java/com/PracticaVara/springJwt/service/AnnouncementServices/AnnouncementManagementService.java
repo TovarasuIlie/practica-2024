@@ -4,7 +4,9 @@ import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import jakarta.servlet.ServletContext;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,8 @@ public class AnnouncementManagementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
     private final Path rootLocation;
+    private final LogHistoryRepository logHistoryRepository;
+
     {
         try {
             rootLocation = Paths.get(ServletContext.class.getClassLoader().getResource("public/ads-imgs").toURI());
@@ -37,9 +41,10 @@ public class AnnouncementManagementService {
         }
     }
 
-    public AnnouncementManagementService(AnnouncementRepository announcementRepository, UserRepository userRepository) {
+    public AnnouncementManagementService(AnnouncementRepository announcementRepository, UserRepository userRepository, LogHistoryRepository logHistoryRepository) {
         this.announcementRepository = announcementRepository;
         this.userRepository = userRepository;
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     public ResponseEntity<Object> approveAnnouncement(Integer id) {
@@ -74,6 +79,7 @@ public class AnnouncementManagementService {
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
         if(currentUser.isPresent()){
+            User admin = currentUser.get();
             Optional<Announcement> announcement = announcementRepository.findById(id);
             if (announcement.isPresent()) {
                 String folderPath = announcement.get().getImageUrl();
@@ -95,6 +101,22 @@ public class AnnouncementManagementService {
                     }
                 }
                 announcementRepository.deleteById(id);
+
+                LogHistory newLogHistoryAdmin = new LogHistory();
+                newLogHistoryAdmin.setUser(admin);
+                newLogHistoryAdmin.setAction("A sters anuntul cu id-ul " +announcement.get().getId());
+                newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
+                newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
+
+                LogHistory newLogHistoryUser = new LogHistory();
+                newLogHistoryUser.setUser(announcement.get().getUser());
+                newLogHistoryUser.setAction("A avut anuntul cu id-ul " +announcement.get().getId()+ " sters de catre administratorul " +admin.getUsername());
+                newLogHistoryUser.setIpAddress(announcement.get().getUser().getIpAddress());
+                newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
+
+
                 return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anuntul a fost sters cu succes."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul nu a fost gasit." ));
@@ -107,7 +129,7 @@ public class AnnouncementManagementService {
         LocalDateTime now = LocalDateTime.now();
         List<Announcement> expiredAnnouncements = announcementRepository.findByExpirationDateBefore(now);
         for (Announcement announcement : expiredAnnouncements) {
-            deleteById(announcement.getId());
+            deleteById(announcement.getId()); // aici trebuie modificat
         }
     }
 
@@ -117,6 +139,7 @@ public class AnnouncementManagementService {
         Optional<User> currentUser = userRepository.findByUsername(username);
 
         if(currentUser.isPresent()){
+            User admin = currentUser.get();
             Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
 
             if (existingAnnouncement.isPresent()) {
@@ -158,6 +181,20 @@ public class AnnouncementManagementService {
                 } else {
                     throw new RuntimeException("Please provide at least one image for the announcement update.");
                 }
+
+                LogHistory newLogHistoryAdmin = new LogHistory();
+                newLogHistoryAdmin.setUser(admin);
+                newLogHistoryAdmin.setAction("A editat anuntul cu id-ul " + announcement.getId());
+                newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
+                newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
+
+                LogHistory newLogHistoryUser = new LogHistory();
+                newLogHistoryUser.setUser(announcement.getUser());
+                newLogHistoryUser.setAction("A avut anuntul cu id-ul " + announcement.getId() + " editat de catre administratorul " +admin.getUsername());
+                newLogHistoryUser.setIpAddress(announcement.getUser().getIpAddress());
+                newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
 
                 return announcementRepository.save(announcement);
 

@@ -6,6 +6,7 @@ import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.ResetPasswordCode;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.LogHistory;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.ResetPasswordCodeRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -26,6 +27,7 @@ public class AccountService {
     private final ResetPasswordCodeRepository resetPasswordCodeRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final LogHistoryRepository logHistoryRepository;
 
 
     public ResponseEntity<APIMessage> forgotPassword(String email) {
@@ -42,6 +44,7 @@ public class AccountService {
                 newLogHistory.setAction("Solicitare parola.");
                 newLogHistory.setIpAddress(user.getIpAddress());
                 newLogHistory.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistory);
 
                 try {
                     emailService.sendHtmlCodeEmail(user, resetPasswordCode.getCode());
@@ -74,6 +77,8 @@ public class AccountService {
                 newLogHistory.setAction("Resetare parola.");
                 newLogHistory.setIpAddress(user.getIpAddress());
                 newLogHistory.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistory);
+
 
                 resetPasswordCodeRepository.delete(resetPasswordCode);
                 return ResponseEntity.status(HttpStatus.ACCEPTED).body(new APIMessage(HttpStatus.ACCEPTED, "Parola a fost resetata cu succes! Acum te poti conecta cu noua parola!"));

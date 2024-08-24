@@ -3,14 +3,20 @@ package com.PracticaVara.springJwt.service.AnnouncementServices;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.Report;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.ReportRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import com.PracticaVara.springJwt.service.AccountServices.LogHistoryService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +25,14 @@ public class ReportManagementService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
     private final AnnouncementRepository announcementRepository;
+    private final LogHistoryRepository logHistoryRepository;
 
-    public ReportManagementService(ReportRepository reportRepository, UserRepository userRepository, AnnouncementRepository announcementRepository) {
+    public ReportManagementService(ReportRepository reportRepository, UserRepository userRepository, AnnouncementRepository announcementRepository, LogHistoryRepository logHistoryRepository) {
         this.reportRepository = reportRepository;
         this.userRepository = userRepository;
         this.announcementRepository = announcementRepository;
+
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     public ResponseEntity<?> getReportById(Integer reportId){
@@ -63,11 +72,31 @@ public class ReportManagementService {
         return ResponseEntity.status(HttpStatus.OK).body(reports);
     }
     public ResponseEntity<?> updateReportStatus(Integer reportId, boolean status){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> currentAdmin = userRepository.findByUsername(username);
         Optional<Report> report = reportRepository.findById(reportId);
-        if (report.isPresent()) {
+        if (report.isPresent() && currentAdmin.isPresent()) {
+            User admin = currentAdmin.get();
+
             Report updatedReport = report.get();
             updatedReport.setSolved(status);
             reportRepository.save(updatedReport);
+
+            LogHistory newLogHistoryAdmin = new LogHistory();
+            newLogHistoryAdmin.setUser(admin);
+            newLogHistoryAdmin.setAction("A editat reportul creat de catre utilizatorul " + updatedReport.getUser().getUsername());
+            newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
+            newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistoryAdmin);
+
+            LogHistory newLogHistoryUser = new LogHistory();
+            newLogHistoryUser.setUser(updatedReport.getUser());
+            newLogHistoryUser.setAction("Reportul cu id-ul " + updatedReport.getId() + " a fost editat de catre administratorul " +admin.getUsername());
+            newLogHistoryUser.setIpAddress(updatedReport.getUser().getIpAddress());
+            newLogHistoryUser.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistoryUser);
+
             return ResponseEntity.status(HttpStatus.OK)
                     .body(new APIMessage(HttpStatus.OK, "Statusul reportului a fost schimbat cu succes."));
         } else {

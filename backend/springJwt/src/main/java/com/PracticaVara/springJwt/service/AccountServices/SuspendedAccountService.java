@@ -4,6 +4,7 @@ import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.SuspendedAccount;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.SuspendedAccountRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,12 @@ import java.util.Optional;
 public class SuspendedAccountService {
     private final SuspendedAccountRepository suspendedAccountRepository;
     private final UserRepository userRepository;
+    private final LogHistoryRepository logHistoryRepository;
 
-    public SuspendedAccountService(SuspendedAccountRepository suspendedAccountRepository, UserRepository userRepository) {
+    public SuspendedAccountService(SuspendedAccountRepository suspendedAccountRepository, UserRepository userRepository, LogHistoryRepository logHistoryRepository) {
         this.suspendedAccountRepository = suspendedAccountRepository;
         this.userRepository = userRepository;
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     public ResponseEntity<?> getAllSuspendedAccounts() {
@@ -67,12 +70,14 @@ public class SuspendedAccountService {
                 newLogHistoryAdmin.setAction("A suspendat utilizatorul " + suspendedUser.getUsername() + "pana pe data " +suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))+". \n Motiv: " + suspendedAccount.getSuspendReason());
                 newLogHistoryAdmin.setIpAddress(adminUser.getIpAddress());
                 newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
 
                 LogHistory newLogHistoryUser = new LogHistory();
                 newLogHistoryUser.setUser(suspendedUser);
                 newLogHistoryUser.setAction("A fost suspendat de catre " + suspendedAccount.getAdminUsername() + "pana pe data " +suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))+ ". Motiv: " + suspendedAccount.getSuspendReason());
                 newLogHistoryUser.setIpAddress(suspendedUser.getIpAddress());
                 newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
 
 
                 return ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Utilizatorul " +suspendedUser.getUsername() + " a fost suspendat pana pe data de: " + suspendedAccount.getEndingDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"))));
@@ -95,12 +100,14 @@ public class SuspendedAccountService {
             newLogHistoryAdmin.setAction("A revocat suspendarea utilizatorului: " + suspendedAccount.get().getUserSuspend().getUsername());
             newLogHistoryAdmin.setIpAddress(suspendedAccount.get().getAdmin().getIpAddress());
             newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistoryAdmin);
 
             LogHistory newLogHistoryUser = new LogHistory();
             newLogHistoryUser.setUser(suspendedAccount.get().getUserSuspend());
             newLogHistoryUser.setAction("A fost revocata suspendarea de catre " + suspendedAccount.get().getAdminUsername());
             newLogHistoryUser.setIpAddress(suspendedAccount.get().getUserSuspend().getIpAddress());
             newLogHistoryUser.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistoryUser);
 
             return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul " + suspendedAccount.get().getUserSuspend().getUsername()+ " nu mai este suspendat." ));
         } else {

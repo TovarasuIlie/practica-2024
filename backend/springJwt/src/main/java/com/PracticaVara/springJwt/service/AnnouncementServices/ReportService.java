@@ -4,8 +4,10 @@ import com.PracticaVara.springJwt.DTOs.ReportDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.Report;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.ReportRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import jakarta.validation.Valid;
@@ -15,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -22,28 +25,40 @@ public class ReportService {
     private final ReportRepository reportRepository;
     private final UserRepository userRepository;
     private final AnnouncementRepository announcementRepository;
+    private final LogHistoryRepository logHistoryRepository;
 
 
-    public ReportService(ReportRepository reportRepository, UserRepository userRepository, AnnouncementRepository announcementRepository) {
+    public ReportService(ReportRepository reportRepository, UserRepository userRepository, AnnouncementRepository announcementRepository, LogHistoryRepository logHistoryRepository) {
         this.reportRepository = reportRepository;
         this.userRepository = userRepository;
         this.announcementRepository = announcementRepository;
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     public ResponseEntity<APIMessage> createReport(@Valid ReportDTO request) {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
-        Optional<User> user = userRepository.findByUsername(username);
-        if(user.isPresent()){
-            Optional<Announcement> announcement = announcementRepository.findById(request.getAnnouncementId());
-            if(announcement.isPresent()){
+        Optional<User> currentUser = userRepository.findByUsername(username);
+        if(currentUser.isPresent()){
+            Optional<Announcement> currentAnnouncement = announcementRepository.findById(request.getAnnouncementId());
+            if(currentAnnouncement.isPresent()){
+                Announcement announcement = currentAnnouncement.get();
+                User user = currentUser.get();
                 Report report = new Report();
-                report.setAnnouncement(announcement.get());
-                report.setUser(user.get());
+                report.setAnnouncement(announcement);
+                report.setUser(user);
                 report.setMessage(request.getMessage());
                 report.setSolved(false);
                 reportRepository.save(report);
+
+                LogHistory newLogHistory = new LogHistory();
+                newLogHistory.setUser(user);
+                newLogHistory.setAction("A creat reportul cu id-ul " +report.getId());
+                newLogHistory.setIpAddress(user.getIpAddress());
+                newLogHistory.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistory);
+
                 return  ResponseEntity.status(HttpStatus.CREATED).body(new APIMessage(HttpStatus.CREATED, "Reportul a fost realizat cu succes!"));
 
             } else {
@@ -54,9 +69,22 @@ public class ReportService {
         }
     }
     public ResponseEntity<APIMessage> deleteReport(Integer reportId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName();
+        Optional<User> userOptional = userRepository.findByUsername(username);
         Optional<Report> reportOptional = reportRepository.findById(reportId);
-        if (reportOptional.isPresent()) {
+        if (reportOptional.isPresent() && userOptional.isPresent()) {
+            User user = userOptional.get();
+
+            LogHistory newLogHistory = new LogHistory();
+            newLogHistory.setUser(user);
+            newLogHistory.setAction("A sters reportul cu id-ul " +reportId);
+            newLogHistory.setIpAddress(user.getIpAddress());
+            newLogHistory.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistory);
+
             reportRepository.deleteById(reportId);
+
             return ResponseEntity.status(HttpStatus.NO_CONTENT)
                     .body(new APIMessage(HttpStatus.NO_CONTENT, "Reportul a fost sters cu succes."));
         } else {

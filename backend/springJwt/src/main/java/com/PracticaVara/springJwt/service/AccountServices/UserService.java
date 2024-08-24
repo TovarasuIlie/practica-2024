@@ -7,6 +7,7 @@ import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.Role;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.LogHistory;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,9 +19,11 @@ import com.PracticaVara.springJwt.repository.UserRepository;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final LogHistoryRepository logHistoryRepository;
 
-    public UserService(UserRepository userRepository){
+    public UserService(UserRepository userRepository, LogHistoryRepository logHistoryRepository){
         this.userRepository = userRepository;
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     public ResponseEntity<?> findAllUsersOrdered(){
@@ -53,12 +56,14 @@ public class UserService {
                 newLogHistoryAdmin.setAction("A editat detaliile utilizatorului " + updatedUserDetails.getUsername());
                 newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
                 newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
 
                 LogHistory newLogHistoryUser = new LogHistory();
                 newLogHistoryUser.setUser(updatedUserDetails);
                 newLogHistoryUser.setAction("A avut detaliile editate de catre administratorul " + admin.getUsername());
                 newLogHistoryUser.setIpAddress(admin.getIpAddress());
                 newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
 
                 return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizator editat cu succes."));
             } else {
@@ -90,12 +95,14 @@ public class UserService {
                     newLogHistoryAdmin.setAction("A schimbat rolul utilizatorului " + existingUser.get().getUsername() + " in rolul de "+ existingUser.get().getRole());
                     newLogHistoryAdmin.setIpAddress(user.getIpAddress());
                     newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                    logHistoryRepository.save(newLogHistoryAdmin);
 
                     LogHistory newLogHistoryUser = new LogHistory();
                     newLogHistoryUser.setUser(existingUser.get());
                     newLogHistoryUser.setAction("I-a fost schimbat rolul din " + previousRole + " in rolul de "+ existingUser.get().getRole());
                     newLogHistoryUser.setIpAddress(existingUser.get().getIpAddress());
                     newLogHistoryUser.setActionDate(LocalDateTime.now());
+                    logHistoryRepository.save(newLogHistoryUser);
 
                     return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizator editat cu succes."));
                 } else {
@@ -128,12 +135,14 @@ public class UserService {
                 newLogHistoryAdmin.setAction("A sters utilizatorul " +user.getUsername());
                 newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
                 newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
 
                 LogHistory newLogHistoryUser = new LogHistory();
                 newLogHistoryUser.setUser(user);
                 newLogHistoryUser.setAction("Utilizatorul a fost sters de catre administratorul " + admin.getUsername());
                 newLogHistoryUser.setIpAddress(user.getIpAddress());
                 newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
 
                 return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul o fost sters cu succes."));
             } else {
@@ -167,12 +176,14 @@ public class UserService {
                 newLogHistoryAdmin.setAction("A confirmat adresa de email a utilizatorului " + user.getUsername());
                 newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
                 newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryAdmin);
 
                 LogHistory newLogHistoryUser = new LogHistory();
                 newLogHistoryUser.setUser(user);
                 newLogHistoryUser.setAction("A avut adresa de email confirmata de catre administratorul " + admin.getUsername());
                 newLogHistoryUser.setIpAddress(user.getIpAddress());
                 newLogHistoryUser.setActionDate(LocalDateTime.now());
+                logHistoryRepository.save(newLogHistoryUser);
 
                 return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Emailul a fost confirmat."));
             } else {

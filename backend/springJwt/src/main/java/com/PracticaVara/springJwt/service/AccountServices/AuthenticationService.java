@@ -9,6 +9,7 @@ import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.SuspendedAccount;
 import com.PracticaVara.springJwt.repository.IPLogsRepository;
+import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.SuspendedAccountRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.PracticaVara.springJwt.model.APIMessage;
@@ -44,8 +45,9 @@ public class AuthenticationService {
     private final IPLogsRepository ipLogsRepository;
     private final SuspendedAccountRepository suspendedAccountRepository;
     private final HttpSession httpSession;
+    private final LogHistoryRepository logHistoryRepository;
 
-    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, BearerTokenWrapper tokenWrapper, EmailService emailService, HttpServletRequest servletRequest, IPLogsRepository ipLogsRepository, SuspendedAccountRepository suspendedAccountRepository, HttpSession httpSession) {
+    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, BearerTokenWrapper tokenWrapper, EmailService emailService, HttpServletRequest servletRequest, IPLogsRepository ipLogsRepository, SuspendedAccountRepository suspendedAccountRepository, HttpSession httpSession, LogHistoryRepository logHistoryRepository) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -55,6 +57,7 @@ public class AuthenticationService {
         this.ipLogsRepository = ipLogsRepository;
         this.suspendedAccountRepository = suspendedAccountRepository;
         this.httpSession = httpSession;
+        this.logHistoryRepository = logHistoryRepository;
     }
 
     //@Async("asyncTaskExecutor")     // Vede ilie daca are nevoie de linia asta :)
@@ -81,6 +84,7 @@ public class AuthenticationService {
                         newLogHistory.setAction("S-a inregistrat cu succes.");
                         newLogHistory.setIpAddress(user.getIpAddress());
                         newLogHistory.setActionDate(LocalDateTime.now());
+                        logHistoryRepository.save(newLogHistory);
 
                         repository.save(user);
                         try {
@@ -118,14 +122,16 @@ public class AuthenticationService {
                     user.setRole(Role.ROLE_USER);
                     user.setRegisteredDate(LocalDateTime.now());
                     user.setIpAddress(servletRequest.getRemoteAddr());
+                    repository.save(user);
 
                     LogHistory newLogHistory = new LogHistory();
                     newLogHistory.setUser(user);
                     newLogHistory.setAction("S-a inregistrat cu succes.");
                     newLogHistory.setIpAddress(user.getIpAddress());
                     newLogHistory.setActionDate(LocalDateTime.now());
+                    logHistoryRepository.save(newLogHistory);
 
-                    repository.save(user);
+
                     try {
                         emailService.sendHtmlVerificationEmail(user);
                     } catch (Exception e) {
@@ -176,6 +182,7 @@ public class AuthenticationService {
                         newLogHistory.setAction("S-a autentificat cu succes.");
                         newLogHistory.setIpAddress(user.getIpAddress());
                         newLogHistory.setActionDate(LocalDateTime.now());
+                        logHistoryRepository.save(newLogHistory);
                     }
                     user.setJwt(jwtService.generateToken(user));
                     return CompletableFuture.completedFuture(ResponseEntity
