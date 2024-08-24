@@ -22,4 +22,5 @@ public class UserDTO {
     private String jwt;
     private LocalDateTime registeredDate;
     private Role role;
+    private String address;
 }

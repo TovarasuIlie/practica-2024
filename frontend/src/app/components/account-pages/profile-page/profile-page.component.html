@@ -1,5 +1,59 @@
 <app-header></app-header>
 
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editeaza cont</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="editUserForm" (ngSubmit)="editUser()">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field class="w-100 mb-2">
+                                <mat-label><i class="fas fa-user-tie"></i> Nume</mat-label>
+                                <input formControlName="firstName" matInput placeholder="Popescu"
+                                    [errorStateMatcher]="matcher">
+                                @if (editUserForm.get('firstName')?.hasError('required')) {
+                                <mat-error>Numele este <strong>obligatoriu</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field class="w-100 mb-2">
+                                <mat-label><i class="fas fa-user-tie"></i> Prenume</mat-label>
+                                <input formControlName="lastName" matInput placeholder="Ionel"
+                                    [errorStateMatcher]="matcher">
+                                @if (editUserForm.get('lastName')?.hasError('required')) {
+                                <mat-error>Prenumele este <strong>obligatoriu</strong>.</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <mat-form-field class="w-100 mb-2">
+                        <mat-label><i class="fas fa-key"></i> Adresa</mat-label>
+                        <input formControlName="address" matInput type="text" placeholder="Scrie parola..."
+                            [errorStateMatcher]="matcher">
+                        @if (editUserForm.get('password')?.hasError('required')) {
+                        <mat-error>Adresa este <strong>obligatorie</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <div *ngIf="errorMessages.length > 0" class="alert alert-danger">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                    <button type="submit" class="btn btn-primary">Salveaza schimbarile!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid pt-5 mt-5 bg-white shadow rounded">
     <div class="container-lg">
         <h3 class="fw-semibold mb-5 mt-3">Profil</h3>
@@ -31,42 +85,42 @@
                     <tbody>
                         <tr>
                             <td>Nume complet:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.firstName + " " + (authService.user$ | async)?.lastName }}</td>
+                            <td class="fw-semibold">{{ user?.firstName + " " + user?.lastName }}</td>
                         </tr>
                         <tr>
                             <td>Nume Utilizator:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.username }}</td>
+                            <td class="fw-semibold">{{ user?.username }}</td>
                         </tr>
                         <tr>
                             <td>Email:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.email }}</td>
+                            <td class="fw-semibold">{{ user?.email }}</td>
                         </tr>
                         <tr>
                             <td>Adresa:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.address }}</td>
+                            <td class="fw-semibold">{{ user?.address }}</td>
                         </tr>
                         <tr>
                             <td>Numar Telefon:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.address }}</td>
+                            <td class="fw-semibold">{{ user?.address }}</td>
                         </tr>
                         <tr>
                             <td>Cont creat in:</td>
-                            <td class="fw-semibold">{{ (authService.user$ | async)?.registeredDate | date:"dd.MM.YYYY HH:mm" }}</td>
+                            <td class="fw-semibold">{{ user?.registeredDate | date:"dd.MM.YYYY HH:mm" }}</td>
                         </tr>
                         <tr>
                             <td>Rol:</td>
                             <td>
-                                @if ((authService.user$ | async)?.role == "ROLE_ADMIN") {
+                                @if (user?.role == "ROLE_ADMIN") {
                                     <div class="badge bg-danger">
                                         Admin
                                     </div>
                                 }
-                                @if ((authService.user$ | async)?.role == "ROLE_MODERATOR") {
+                                @if (user?.role == "ROLE_MODERATOR") {
                                     <div class="badge bg-primary">
                                         Moderator
                                     </div>
                                 }
-                                @if ((authService.user$ | async)?.role == "ROLE_USER") {
+                                @if (user?.role == "ROLE_USER") {
                                     <div class="badge bg-secondary">
                                         Client
                                     </div>
@@ -75,7 +129,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <button class="btn btn-dark w-100">Actualizeaza date personale</button>
+                <button data-bs-target="#edit-modal" data-bs-toggle="modal" class="btn btn-dark w-100">Actualizeaza date personale</button>
             </div>
         </div>
     </div>

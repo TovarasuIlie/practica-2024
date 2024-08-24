@@ -45,7 +45,16 @@ export class AnnouncementService {
   }
 
   updateAnnouncement(id: number, editedAd: EditAnnouncement) {
-    return this.http.put(environment.API_URL + "/api/Announcements/edit-ad/" + id, editedAd);
+    const headers = new HttpHeaders().append("Content-Disposition", 'multipart/form-data')
+    // editedAd.address = editedAd.country + ", " + editedAd.address;
+    let adData = new FormData();
+    adData.append("announcement", new Blob([JSON.stringify(editedAd)], {type: "application/json"}));
+    if(editedAd.image.length > 0) {
+      editedAd.image.forEach(e => {
+        adData.append("image", e);
+      })
+    }
+    return this.http.put<Announcement>(environment.API_URL + "/api/Announcements/edit-ad/" + id, adData, {headers});
   }
 
   deleteAnnouncement(id: number) {

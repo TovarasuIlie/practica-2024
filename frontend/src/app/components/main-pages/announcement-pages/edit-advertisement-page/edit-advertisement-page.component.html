@@ -20,14 +20,30 @@
                 }
             </mat-form-field>
 
-            <!-- <mat-form-field class="w-100">
+            <mat-form-field class="w-100">
                 <mat-label>Categoria</mat-label>
-                <mat-select>
-                    @for (food of foods; track food) {
-                    <mat-option [value]="food">{{food}}</mat-option>
+                <mat-select formControlName="category">
+                    @for (category of categories; track category) {
+                    <mat-option class="w-100" [value]="category">
+                        <div class="card card-width bg-transparent border-0">
+                            <div class="row g-0">
+                                <div class="col-md-1">
+                                    <img [src]="getImage(category.iconUrl)" class="img-fluid rounded-start object-fit" alt="...">
+                                </div>
+                                <div class="col-md">
+                                    <div class="card-body d-flex">
+                                        <h6 class="card-title mt-2">{{ category.name }}</h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-option>
                     }
                 </mat-select>
-            </mat-form-field> -->
+                @if (editAdForm.get('category')?.hasError('required')) {
+                    <mat-error>Categoria este <strong>obligatorie</strong>.</mat-error>
+                }
+            </mat-form-field>
         </div>
         <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-5">
@@ -68,12 +84,13 @@
                 <input formControlName="address" matInput placeholder="Ex. Beius">
             </mat-form-field>
         </div>
-        <!-- <div class="container bg-white p-5 mb-3 shadow">
+        <div class="container bg-white p-5 mb-3 shadow">
             <h5 class="mb-3">Imagini</h5>
-            <file-pond [options]="pondOptions" (onaddfile)="onChange($event)" (onremovefile)="onDelete($event)"></file-pond>
+            <file-pond [options]="pondOptions" (onaddfile)="onChange($event)"
+                (onremovefile)="onDelete($event)"></file-pond>
             <mat-hint class="float-start">Incarca minim 2 poze cu produsul</mat-hint>
             <mat-hint class="float-end">{{imageArray.length}} / 8</mat-hint>
-        </div> -->
+        </div>
         <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Persoana de contact</mat-label>

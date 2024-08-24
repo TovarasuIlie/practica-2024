@@ -54,6 +54,12 @@ export interface UserEdit {
     address: string;
 }
 
+export interface EditProfile {
+    firstName: string;
+    lastName: string;
+    address: string;
+}
+
 export interface IPLogs {
     ipAddress: string;
     usedFrom: string;

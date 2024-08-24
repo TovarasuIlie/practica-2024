@@ -36,10 +36,12 @@ export interface AddAnnouncement {
 
 export interface EditAnnouncement {
     title: string;
+    category: Category;
     content: string;
+    price: number;
+    currency: string;
     address: string;
     contactPersonName: string;
     phoneNumber: string;
-    price: number;
-    currency: string;
+    image: File[];
 }

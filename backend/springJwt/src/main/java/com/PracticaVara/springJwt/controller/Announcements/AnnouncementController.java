@@ -64,7 +64,7 @@ public class AnnouncementController {
 
 
     @PutMapping("edit-ad/{id}")
-    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDTO announcement, @RequestParam("image") MultipartFile[] imageFile) {
+    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestPart("announcement") AnnouncementDTO announcement, @RequestPart("image") MultipartFile[] imageFile) {
         //announcement.setId(id);
         try {
             return announcementService.updateAnnouncement(id, announcement, imageFile);

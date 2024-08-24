@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.service.AccountServices;
 
+import com.PracticaVara.springJwt.DTOs.UpdateUserDTO;
 import com.PracticaVara.springJwt.DTOs.UserConfirmEmailDTO;
 import com.PracticaVara.springJwt.DTOs.UserResetPasswordDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
@@ -9,10 +10,11 @@ import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.ResetPasswordCodeRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
-import com.fasterxml.jackson.databind.JsonNode;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -107,7 +109,7 @@ public class AccountService {
         return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Email a fost confirmat cu succes! Acuma poti sa intri pe cont!"));
     }
 
-    private String getSaltString() {
+    public static String getSaltString() {
         String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
@@ -117,5 +119,29 @@ public class AccountService {
         }
         String saltStr = salt.toString();
         return saltStr;
+    }
+
+    public ResponseEntity<?> updateProfile(UpdateUserDTO requestBody) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userRepository.findByUsername(authentication.getName()).get();
+
+        currentUser.setFirstName(requestBody.getFirstName());
+        currentUser.setLastName(requestBody.getLastName());
+        currentUser.setAddress(requestBody.getAddress());
+
+        LogHistory newLogHistory = new LogHistory();
+        newLogHistory.setUser(currentUser);
+        newLogHistory.setAction("Resetare parola.");
+        newLogHistory.setIpAddress(currentUser.getIpAddress());
+        newLogHistory.setActionDate(LocalDateTime.now());
+        logHistoryRepository.save(newLogHistory);
+        userRepository.save(currentUser);
+        return ResponseEntity.ok(currentUser);
+    }
+
+    public ResponseEntity<?> getAccount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User currentUser = userRepository.findByUsername(authentication.getName()).get();
+        return ResponseEntity.ok(currentUser);
     }
 }

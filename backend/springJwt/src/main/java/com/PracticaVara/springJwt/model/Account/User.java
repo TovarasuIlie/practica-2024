@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.model.Account;
 
+import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.model.SuspendedAccount;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -70,6 +71,11 @@ public class User implements UserDetails {
     @Fetch(value = FetchMode.SUBSELECT)
     @JsonManagedReference
     private List<IPLogs> ipLogs;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @Fetch(value = FetchMode.SUBSELECT)
+    @JsonManagedReference
+    private List<LogHistory> logHistoryList;
 
     @OneToOne(mappedBy = "userSuspend", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JsonManagedReference(value = "userSuspendReference")

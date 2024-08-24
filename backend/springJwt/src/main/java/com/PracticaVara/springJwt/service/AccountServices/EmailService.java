@@ -30,7 +30,7 @@ public class EmailService {
         message.setSubject("Resetare parola contului " + user.getUsername());
         String htmlTemplate = null;
         try {
-            htmlTemplate = readFile("D:\\Proiect\\practica-2024\\backend\\springJwt\\src\\main\\resources\\templates\\forgot-password-template.html");
+            htmlTemplate = readFile(Paths.get("templates/forgot-password-template.html").toFile().getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class EmailService {
         String htmlTemplate = null;
         String link = "http://localhost:4200/contul-meu/confirma-email?token=" + jwtService.generateToken(user) + "&email=" + user.getEmail();
         try {
-            htmlTemplate = readFile("D:\\Proiect\\practica-2024\\backend\\springJwt\\src\\main\\resources\\templates\\confirm-email-template.html");
+            htmlTemplate = readFile(Paths.get("templates/confirm-email-template.html").toFile().getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
         }

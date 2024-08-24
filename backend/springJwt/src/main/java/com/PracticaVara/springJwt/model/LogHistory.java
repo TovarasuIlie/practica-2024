@@ -1,6 +1,7 @@
 package com.PracticaVara.springJwt.model;
 
 import com.PracticaVara.springJwt.model.Account.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -18,8 +19,9 @@ public class LogHistory {
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonBackReference
     private User user;
 
     @Column(name = "action", nullable = false)

@@ -1,5 +1,6 @@
 package com.PracticaVara.springJwt.controller.Accounts;
 
+import com.PracticaVara.springJwt.DTOs.UpdateUserDTO;
 import com.PracticaVara.springJwt.DTOs.UserConfirmEmailDTO;
 import com.PracticaVara.springJwt.DTOs.UserResetPasswordDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
@@ -32,5 +33,15 @@ public class AccountController {
     @PutMapping("confirm-email")
     public ResponseEntity<APIMessage> confirmEmail(@RequestBody UserConfirmEmailDTO requestBody) {
         return accountService.confirmEmail(requestBody);
+    }
+
+    @PutMapping("update-profile")
+    public ResponseEntity<?> updateProfile(@RequestBody UpdateUserDTO requestBody) {
+        return accountService.updateProfile(requestBody);
+    }
+
+    @GetMapping("get-account")
+    public ResponseEntity<?> getAccount() {
+        return accountService.getAccount();
     }
 }

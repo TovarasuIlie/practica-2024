@@ -136,14 +136,6 @@ public class UserService {
                 newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
                 newLogHistoryAdmin.setActionDate(LocalDateTime.now());
                 logHistoryRepository.save(newLogHistoryAdmin);
-
-                LogHistory newLogHistoryUser = new LogHistory();
-                newLogHistoryUser.setUser(user);
-                newLogHistoryUser.setAction("Utilizatorul a fost sters de catre administratorul " + admin.getUsername());
-                newLogHistoryUser.setIpAddress(user.getIpAddress());
-                newLogHistoryUser.setActionDate(LocalDateTime.now());
-                logHistoryRepository.save(newLogHistoryUser);
-
                 return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Utilizatorul o fost sters cu succes."));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista."));

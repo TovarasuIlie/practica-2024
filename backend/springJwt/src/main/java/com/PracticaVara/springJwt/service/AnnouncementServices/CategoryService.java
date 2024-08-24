@@ -33,16 +33,16 @@ public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
-
-    private final Path rootLocation;
     @Autowired
     private UserRepository userRepository;
     private final LogHistoryRepository logHistoryRepository;
-
+    private final Path rootLocation = Paths.get("public/category-imgs");;
     {
         try {
-            rootLocation = Paths.get(ServletContext.class.getClassLoader().getResource("public/category-imgs").toURI());
-        } catch (URISyntaxException e) {
+            if (!Files.exists(rootLocation)) {
+                Files.createDirectories(rootLocation);
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }

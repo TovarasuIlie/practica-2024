@@ -8,6 +8,7 @@ import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
 import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
+import com.PracticaVara.springJwt.service.AccountServices.AccountService;
 import jakarta.servlet.ServletContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -32,11 +34,13 @@ public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
     private final LogHistoryRepository logHistoryRepository;
-    private final Path rootLocation;
+    private final Path rootLocation = Paths.get("public/ads-imgs");
     {
         try {
-            rootLocation = Paths.get(ServletContext.class.getClassLoader().getResource("public/ads-imgs").toURI());
-        } catch (URISyntaxException e) {
+            if (!Files.exists(rootLocation)) {
+                Files.createDirectories(rootLocation);
+            }
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
@@ -79,7 +83,7 @@ public class AnnouncementService {
             LocalDateTime now = LocalDateTime.now();
             announcement.setCreatedDate(now);
             announcement.setExpirationDate(now.plusDays(60));
-            announcement.setUrl(announcementDTO.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
+            announcement.setUrl(announcementDTO.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-") + "-" + AccountService.getSaltString().toLowerCase());
 
             if (imageFile != null && imageFile.length > 1) {
                 String folderUUID = UUID.randomUUID().toString();
@@ -186,33 +190,27 @@ public class AnnouncementService {
                 Announcement announcement = existingAnnouncement.get();
                 announcement.setTitle(updatedAnnouncement.getTitle());
                 announcement.setContent(updatedAnnouncement.getContent());
+                announcement.setCategory(updatedAnnouncement.getCategory());
                 announcement.setPrice(updatedAnnouncement.getPrice());
                 announcement.setCurrency(updatedAnnouncement.getCurrency());
                 announcement.setAddress(updatedAnnouncement.getAddress());
                 announcement.setContactPersonName(updatedAnnouncement.getContactPersonName());
                 announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
-                announcement.setUrl(updatedAnnouncement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-"));
+                announcement.setUrl(updatedAnnouncement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-") + "-" + AccountService.getSaltString().toLowerCase());
                 announcement.setExpirationDate(LocalDateTime.now().plusDays(60));
                 //announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
                 announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
 
                 if (imageFiles != null && imageFiles.length > 1) {
-                    String folderUUID = UUID.randomUUID().toString();
-                    Path userDir = rootLocation.resolve(folderUUID);
-                    if (!Files.exists(userDir)) {
-                        Files.createDirectories(userDir);
-                    }
 
                     for (int i = 0; i < imageFiles.length; i++) {
                         MultipartFile file = imageFiles[i];
                         if (!file.isEmpty()) {
-                            String filename = folderUUID + "-" + i + "-" + file.getOriginalFilename();
-                            Path destinationFile = userDir.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-                            Files.copy(file.getInputStream(), destinationFile);
+                            String filename = announcement.getImageUrl() + "-" + i + ".jpeg";
+                            Path destinationFile = rootLocation.resolve(Paths.get(filename)).normalize().toAbsolutePath();
+                            Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
                         }
                     }
-
-                    announcement.setImageUrl(userDir.toString());
                     announcement.setPhotoNumber(imageFiles.length);
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim 2 poze."));
@@ -227,7 +225,7 @@ public class AnnouncementService {
                 newLogHistory.setActionDate(LocalDateTime.now());
                 logHistoryRepository.save(newLogHistory);
 
-                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anuntul a fost editat."));
+                return ResponseEntity.status(HttpStatus.OK).body(announcement);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul nu exista"));
             }
@@ -238,6 +236,7 @@ public class AnnouncementService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }
+
     public ResponseEntity<List<Announcement>> getMyAds() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
