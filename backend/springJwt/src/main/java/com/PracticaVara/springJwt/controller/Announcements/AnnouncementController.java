@@ -4,6 +4,7 @@ import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementServices.AnnouncementService;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

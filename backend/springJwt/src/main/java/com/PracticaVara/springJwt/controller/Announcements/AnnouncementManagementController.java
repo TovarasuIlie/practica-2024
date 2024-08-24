@@ -3,6 +3,7 @@ package com.PracticaVara.springJwt.controller.Announcements;
 import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.service.AnnouncementServices.AnnouncementManagementService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

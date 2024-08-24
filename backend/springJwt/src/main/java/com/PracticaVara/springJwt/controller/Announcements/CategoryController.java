@@ -3,6 +3,7 @@ package com.PracticaVara.springJwt.controller.Announcements;
 import com.PracticaVara.springJwt.DTOs.CategoryDTO;
 import com.PracticaVara.springJwt.model.Category;
 import com.PracticaVara.springJwt.service.AnnouncementServices.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CategoryController {
     }
 
     @PutMapping("edit-category/{id}")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestPart("category") CategoryDTO categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
+    public ResponseEntity<?> updateCategory(@PathVariable Long id,@RequestPart("category") CategoryDTO categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
        return categoryService.updateCategory(id, categoryDetails, file);
     }
 

@@ -33,12 +33,18 @@ public class FavoriteAnnouncementService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
+        Optional<Announcement> currentAnnouncement = announcementRepository.findById(announcementId);
         if(currentUser.isPresent()) {
             User user = currentUser.get();
-            Optional<Announcement> currentAnnouncement = announcementRepository.findById(announcementId);
-
             if(currentAnnouncement.isPresent()) {
                 Announcement announcement = currentAnnouncement.get();
+                Optional<FavoriteAnnouncement> favoriteAnnouncementAlreadyExisting = favoriteAnnouncementRepository.findByUserAndAnnouncement(user, announcement);
+                if(user.getUsername().equals(announcement.getUser().getUsername())) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Nu poti adauga anunturile tale la favorite."));
+                }
+                if(favoriteAnnouncementAlreadyExisting.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new APIMessage(HttpStatus.BAD_REQUEST, "Nu poti adauga acelasi anunt la favorite."));
+                }
                 FavoriteAnnouncement favoriteAnnouncement = new FavoriteAnnouncement();
                 favoriteAnnouncement.setAnnouncement(announcement);
                 favoriteAnnouncement.setUser(user);
