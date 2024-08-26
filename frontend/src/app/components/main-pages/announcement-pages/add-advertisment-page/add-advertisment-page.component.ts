@@ -6,6 +6,7 @@ import { ToastService } from '../../../../services/toast.service';
 import { Router } from '@angular/router';
 import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-add-advertisment-page',
@@ -40,14 +41,14 @@ export class AddAdvertismentPageComponent implements OnInit {
 
   initializeFrom() {
     this. addAdForm = this.fb.group({
-      title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70)]],
-      content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000)]],
+      title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       category: [null, [Validators.required]],
-      address: [null, [Validators.required, Validators.minLength(2)]],
+      address: [null, [Validators.required, Validators.minLength(2), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       county: [null, [Validators.required]],
-      contactPersonName: [this.defaultContactName, [Validators.required]],
+      contactPersonName: [this.defaultContactName, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9]{10}$/g)]],
-      price: [null, [Validators.required, Validators.pattern(/^[0-9]/g)]],
+      price: [null, [Validators.required, Validators.pattern(/[0-9]/g)]],
       currency: [null, [Validators.required]],
       image: [[]]
     })
@@ -75,7 +76,6 @@ export class AddAdvertismentPageComponent implements OnInit {
   }
 
   addNewAd() {
-    console.log(this.addAdForm.value);
     if(this.addAdForm.valid) {
       this.adService.addNewAd(this.addAdForm.value).subscribe({
         next: (response: any) => {
@@ -90,6 +90,6 @@ export class AddAdvertismentPageComponent implements OnInit {
   }
 
   getImage(fileName: string) {
-    return "http://localhost:8080/category-imgs/" + fileName;
+    return environment.API_URL + "/category-imgs/" + fileName;
   }
 }

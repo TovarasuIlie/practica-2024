@@ -8,6 +8,7 @@ import { Chatroom, ChatroomMessage } from '../../../models/chatroom';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { environment } from '../../../../environments/environment.development';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-messages-buy-page',
@@ -26,12 +27,20 @@ export class MessagesBuyPageComponent {
   chatSelectedID!: string;
   loadingMessages: boolean = true;
   loadingChatrooms: boolean = true;
+  chatroomUsers: User[] = [];
 
   constructor(private adService: AnnouncementService, private chatroomService: ChatroomService, public authService: AuthService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.chatroomService.getMyBuyChatrooms().subscribe(chatrooms => {
       this.chatrooms = chatrooms;
+      for(let i = 0; i < chatrooms.length; i++) {
+        if(typeof(chatrooms[i].seller) == "object") {
+          this.chatroomUsers.push(chatrooms[i].seller);
+        } else {
+          this.chatrooms[i].seller = this.chatroomUsers[(this.chatrooms[i].seller as any) - 1]
+        }
+      }
       this.loadingChatrooms = false;
     });
     this.initilizeForm();
@@ -63,7 +72,7 @@ export class MessagesBuyPageComponent {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 
   initilizeForm() {

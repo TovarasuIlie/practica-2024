@@ -44,6 +44,7 @@ export interface UserAdmin {
     address: string;
     ipAddress: string;
     ipLogs: IPLogs[];
+    logHistoryList: LogHistory[]
     suspendDetails: SuspendDetail;
 }
 
@@ -63,4 +64,10 @@ export interface EditProfile {
 export interface IPLogs {
     ipAddress: string;
     usedFrom: string;
+}
+
+export interface LogHistory {
+    ipAddress: string;
+    action: string;
+    actionDate: string;
 }

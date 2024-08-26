@@ -4,6 +4,8 @@ import { AuthService } from '../../../../services/auth.service';
 import { Announcement } from '../../../../models/announcement';
 import { AnnouncementManageService } from '../../../../services/announcement-manage.service';
 import { PageEvent } from '@angular/material/paginator';
+import { ToastService } from '../../../../services/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-ads-management',
@@ -24,7 +26,9 @@ export class AdsManagementComponent implements OnInit {
 
   pageEvent!: PageEvent;
 
-  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private adsManageService: AnnouncementManageService) {}
+  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private adsManageService: AnnouncementManageService,
+              private toastService: ToastService, private router: Router              
+) {}
 
   ngOnInit(): void {
     this.initializeAds();
@@ -39,5 +43,11 @@ export class AdsManagementComponent implements OnInit {
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
+  }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigateByUrl("/");
+    this.toastService.show({title: "Iesire din cont!", message: "Te-ai delogat cu succes!", classname: "text-success"});
   }
 }

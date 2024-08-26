@@ -40,7 +40,7 @@ public class Announcement {
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property="id")
-    @JsonIgnoreProperties(allowSetters = true, value = {"logHistoryList","password", "emailVerifed", "role", "registeredDate", "ipAddress", "jwt", "ipLogs", "suspendDetails", "enabled", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
+    @JsonIgnoreProperties(allowSetters = true, value = {"logHistoryList", "password", "emailVerifed", "role", "ipAddress", "jwt", "ipLogs", "suspendDetails", "enabled", "authorities", "credentialsNonExpired", "accountNonExpired", "accountNonLocked"})
     private User user;
     @Column(name = "is_deactivated", nullable = false)
     private boolean isDeactivated = false;

@@ -6,11 +6,12 @@ import { Category } from '../../../models/category';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatSort, Sort } from '@angular/material/sort';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CategoryService } from '../../../services/category.service';
 import { ToastService } from '../../../services/toast.service';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-category-page',
@@ -22,6 +23,7 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ['id', 'image', 'name', 'actions'];
   dataSource!: MatTableDataSource<Category>;
   categoryForm: FormGroup = new FormGroup({})
+  categoryEditForm: FormGroup = new FormGroup({})
   imageArray!: File;
   errorMessages: string[] = [];
   pondOptions = {
@@ -36,7 +38,7 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, private _liveAnnouncer: LiveAnnouncer, public authService: AuthService,
-              private activatedRoute: ActivatedRoute, private fb: FormBuilder, private categoryService: CategoryService, private toastService: ToastService) {}
+              private activatedRoute: ActivatedRoute, private fb: FormBuilder, private categoryService: CategoryService, private toastService: ToastService, private router: Router) {}
 
   ngOnInit(): void {
     this.initializeCategories();
@@ -58,6 +60,11 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
       name: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
       image: [[]]
     })
+    this.categoryEditForm = this.fb.group({
+      id: [0],
+      nameEdit: [null, [Validators.required, Validators.minLength(3), Validators.maxLength(70)]],
+      image: [[]]
+    })
   }
 
   refreshCategory() {
@@ -65,7 +72,7 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
   }
 
   getImage(fileName: string) {
-    return "http://localhost:8080/category-imgs/" + fileName;
+    return environment.API_URL + "/category-imgs/" + fileName;
   }
 
   ngAfterViewInit() {
@@ -85,17 +92,29 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onEditChange($event: any) {
+    this.categoryEditForm.patchValue({
+      image: $event.file.file
+    });
+  }
+
+  onEditDelete($event: any) {
+    this.categoryEditForm.patchValue({
+      image: this.imageArray
+    });
+  }
+
   addCategory() {
     this.errorMessages = []
     if(this.categoryForm.valid) {
       this.categoryService.addCategory(this.categoryForm.value).subscribe({
         next: (value) => {
           this.refreshCategory();
-          this.toastService.show({title: "Categorie stearsa", message: "Categoria a fost stearsa cu succes!", classname: "text-success"});
+          this.toastService.show({title: "Categorie adaugata", message: "Categoria a fost adaugata cu succes!", classname: "text-success"});
           this.closeModal.forEach(x => x.nativeElement.click());
         },
         error: (response) => {
-          console.log(response)
+          this.toastService.show({title: "Eroare", message: response.message, classname: "text-danger"});
         }
       })
     } else {
@@ -105,6 +124,14 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
 
   selectCategory(id: number) {
     this.selectedCategory = id;
+  }
+
+  selectEditCategory(id: number) {
+    this.categoryService.getCategory(id).subscribe({
+      next: (value) => {
+        this.categoryEditForm.patchValue({id: value.id, nameEdit: value.name});
+      }
+    })
   }
 
   deleteCategory() {
@@ -126,5 +153,29 @@ export class CategoryPageComponent implements OnInit, AfterViewInit {
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
+  }
+
+  editCategory() {
+    this.errorMessages = []
+    if(this.categoryEditForm.valid) {
+      this.categoryService.editCategory(this.categoryEditForm.value).subscribe({
+        next: (value) => {
+          this.refreshCategory();
+          this.toastService.show({title: "Categorie editata", message: "Categoria a fost editata cu succes!", classname: "text-success"});
+          this.closeModal.forEach(x => x.nativeElement.click());
+        },
+        error: (response) => {
+          this.toastService.show({title: "Eroare", message: response.message, classname: "text-danger"});
+        }
+      })
+    } else {
+      this.errorMessages.push("Toate campurile trebuie completate!")
+    }
+  }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigateByUrl("/");
+    this.toastService.show({title: "Iesire din cont!", message: "Te-ai delogat cu succes!", classname: "text-success"});
   }
 }

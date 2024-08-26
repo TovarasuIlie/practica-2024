@@ -33,17 +33,6 @@ public class AnnouncementManagementController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PutMapping("edit-ad/{id}")
-    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDTO announcement, @RequestParam("image") MultipartFile[] imageFile) {
-        //announcement.setId(id);
-        try {
-            return ResponseEntity.ok(announcementManagementService.updateAnnouncement(id, announcement, imageFile));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.badRequest().body("A avut loc o eroare!");
-    }
-
     @GetMapping("approve/{id}")
     public ResponseEntity<?> approveAnnouncement(@PathVariable Integer id) {
         return announcementManagementService.approveAnnouncement(id);

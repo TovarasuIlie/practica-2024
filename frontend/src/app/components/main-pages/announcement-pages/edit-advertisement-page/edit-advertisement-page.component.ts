@@ -8,6 +8,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Announcement } from '../../../../models/announcement';
 import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-edit-advertisement-page',
@@ -57,15 +58,13 @@ export class EditAdvertisementPageComponent {
 
   initializeForm() {
     this. editAdForm = this.fb.group({
-      title: [this.currentAd.title, [Validators.required, Validators.minLength(16), Validators.maxLength(70)]],
-      content: [this.currentAd.content, [Validators.required, Validators.minLength(40), Validators.maxLength(9000)]],
-      address: [this.currentAd.address, [Validators.required]],
-      category: [this.currentAd.category, [Validators.required]],
-      contactPersonName: [this.currentAd.contactPersonName, [Validators.required]],
+      title: [this.currentAd.title, [Validators.required, Validators.minLength(16), Validators.maxLength(70), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      content: [this.currentAd.content, [Validators.required, Validators.minLength(40), Validators.maxLength(9000), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      address: [this.currentAd.address, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      contactPersonName: [this.currentAd.contactPersonName, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       phoneNumber: [this.currentAd.phoneNumber, [Validators.required]],
       price: [this.currentAd.price, [Validators.required, Validators.pattern(/[0-9]/)]],
       currency: [this.currentAd.currency, [Validators.required]],
-      image: [[]],
     })
   }
 
@@ -81,23 +80,8 @@ export class EditAdvertisementPageComponent {
 
     }
   }
-
-  onChange($event: any) {
-    this.imageArray.push($event.file.file)
-    this.editAdForm.patchValue({
-      image: this.imageArray
-    });
-  }
-
-  onDelete($event: any) {
-    const index = this.imageArray.findIndex(i => i.lastModified === $event.file.file.lastModified && i.name === $event.file.file.name);
-    this.imageArray.splice(index, 1);
-    this.editAdForm.patchValue({
-      image: this.imageArray
-    });
-  }
   
   getImage(fileName: string) {
-    return "http://localhost:8080/category-imgs/" + fileName;
+    return environment.API_URL + "/category-imgs/" + fileName;
   }
 }

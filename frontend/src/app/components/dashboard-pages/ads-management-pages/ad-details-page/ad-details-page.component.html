@@ -128,9 +128,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>
@@ -201,10 +209,10 @@
                                             <div *ngIf="ad.approved" class="badge bg-success me-1">
                                                 Aprobat
                                             </div>
-                                            <div *ngIf="ad.isDeactivated" class="badge bg-danger mx-1">
+                                            <div *ngIf="ad.deactivated" class="badge bg-danger mx-1">
                                                 Inactiv
                                             </div>
-                                            <div *ngIf="!ad.isDeactivated" class="badge bg-success mx-1">
+                                            <div *ngIf="!ad.deactivated" class="badge bg-success mx-1">
                                                 Activ
                                             </div>
                                         </td>
@@ -222,9 +230,6 @@
                         <div class="card-body">
                             <button *ngIf="!ad.approved" class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#approve-modal">Aproba Anunt</button>
                             <button *ngIf="ad.approved" class="btn btn-outline-warning w-100" data-bs-toggle="modal" data-bs-target="#reject-modal">Respinge Anunt</button>
-                            <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#edit-modal">Editeaza Anunt</button>
-                            <!-- <button class="btn btn-outline-warning w-100" (click)="forceConfirmEmail()">Confirma Fortat
-                                Email-ul</button> -->
                             <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Anunt</button>
                         </div>
                     </div>

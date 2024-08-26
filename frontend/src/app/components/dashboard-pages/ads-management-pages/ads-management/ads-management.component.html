@@ -60,9 +60,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>

@@ -28,6 +28,7 @@ import { AdsListByCategoryComponent } from './components/main-pages/announcement
 import { SharedPipesModule } from './shared-pipes/shared-pipes.module';
 import { SearchForAdsPageComponent } from './components/main-pages/announcement-pages/search-for-ads-page/search-for-ads-page.component';
 import { ShowMoreAdsComponent } from './components/main-pages/show-more-ads/show-more-ads.component';
+import { MatOptionModule } from '@angular/material/core';
 
 registerPlugin(FilePondPluginImagePreview);
 registerPlugin(FilePondPluginFileValidateType);
@@ -57,7 +58,8 @@ registerPlugin(FilePondPluginFileValidateType);
     MatSelectModule,
     BrowserAnimationsModule,
     FilePondModule,
-    SharedPipesModule
+    SharedPipesModule,
+    MatOptionModule
   ],
   providers: [
     provideAnimationsAsync(),

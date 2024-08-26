@@ -36,9 +36,6 @@ public class AnnouncementDTO {
     @NotEmpty
     private String address;
 
-//    @NotEmpty(message = "Este necesara cel putin o imagine.")
-//    private MultipartFile[] imageFiles;
-
     @NotEmpty
     private String contactPersonName;
 

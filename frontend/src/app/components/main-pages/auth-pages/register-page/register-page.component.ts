@@ -6,6 +6,7 @@ import { response } from 'express';
 import { Router } from '@angular/router';
 import { UserRegister } from '../../../../models/user';
 import { confirmPasswordValidator, CustomValidators } from '../../../../validators/confirm-password.validator';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-register-page',
@@ -18,7 +19,7 @@ export class RegisterPageComponent {
   matcher = new ErrorStateMatcher();
   errorMessages: string[] = [];
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router, private toastService: ToastService) {
 
   }
 
@@ -28,8 +29,8 @@ export class RegisterPageComponent {
 
   initializeForm() {
     this.registerForm = this.fb.group({
-      firstName:        [null, [Validators.required]],
-      lastName:         [null, [Validators.required]],
+      firstName:        [null, [Validators.required, Validators.pattern(/([A-Za-z])/i)]],
+      lastName:         [null, [Validators.required, Validators.pattern(/([A-Za-z])/i)]],
       username:         [null, [Validators.required, Validators.pattern(/^(?![_.])(?!.*[_.]{2})[a-z0-9._-]+(?<![_.])$/), Validators.minLength(8), Validators.maxLength(20)]],
       email:            [null, [Validators.required, Validators.email, Validators.pattern(/\.[A-Za-z0-9]{2,4}$/i)]],
       password:         [null, [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@$!%*#?&^_-]).{8,}/)]],
@@ -47,7 +48,7 @@ export class RegisterPageComponent {
     if(this.registerForm.valid) {
       this.authService.registerUser(this.registerForm.value).subscribe({
         next: (response: any) => {
-          
+          this.toastService.show({title: "Cont creat!", message: "Contul a fost creat cu succes. Vei primi un email cu link-ul de validare pentru a putea intra pe cont.", classname: "text-succes"});
           this.router.navigateByUrl('/');
         },
         error: (response) => {

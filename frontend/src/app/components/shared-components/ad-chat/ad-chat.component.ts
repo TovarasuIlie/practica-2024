@@ -70,7 +70,7 @@ export class AdChatComponent implements OnChanges {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 
   sendMessage() {

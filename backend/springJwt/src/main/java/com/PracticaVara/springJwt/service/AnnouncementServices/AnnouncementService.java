@@ -4,8 +4,10 @@ import com.PracticaVara.springJwt.DTOs.AnnouncementDTO;
 import com.PracticaVara.springJwt.model.APIMessage;
 import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
+import com.PracticaVara.springJwt.model.Category;
 import com.PracticaVara.springJwt.model.LogHistory;
 import com.PracticaVara.springJwt.repository.AnnouncementRepository;
+import com.PracticaVara.springJwt.repository.CategoryRepository;
 import com.PracticaVara.springJwt.repository.LogHistoryRepository;
 import com.PracticaVara.springJwt.repository.UserRepository;
 import com.PracticaVara.springJwt.service.AccountServices.AccountService;
@@ -33,6 +35,7 @@ import java.util.UUID;
 public class AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
     private final LogHistoryRepository logHistoryRepository;
     private final Path rootLocation = Paths.get("public/ads-imgs");
     {
@@ -45,9 +48,10 @@ public class AnnouncementService {
         }
     }
 
-    public AnnouncementService(AnnouncementRepository announcementRepository, UserRepository userRepository, LogHistoryRepository logHistoryRepository) {
+    public AnnouncementService(AnnouncementRepository announcementRepository, UserRepository userRepository, CategoryRepository categoryRepository, LogHistoryRepository logHistoryRepository) {
         this.announcementRepository = announcementRepository;
         this.userRepository = userRepository;
+        this.categoryRepository = categoryRepository;
         this.logHistoryRepository = logHistoryRepository;
     }
 
@@ -61,6 +65,17 @@ public class AnnouncementService {
 
     public Optional<Announcement> findByUrl(String url) {
         return announcementRepository.findByUrl(url);
+    }
+
+    public List<Announcement> findByCategory(String categoryUrl) {
+        Optional<Category> category = categoryRepository.findBySearchLink(categoryUrl);
+        return announcementRepository.findByCategory(category.get());
+    }
+
+
+    public List<Announcement> findByUser(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        return announcementRepository.findByUser(user.get());
     }
 
     public ResponseEntity<Object> save(AnnouncementDTO announcementDTO, MultipartFile[] imageFile) throws IOException {
@@ -162,35 +177,32 @@ public class AnnouncementService {
                 newLogHistory.setIpAddress(user.getIpAddress());
                 newLogHistory.setActionDate(LocalDateTime.now());
                 logHistoryRepository.save(newLogHistory);
-
                 announcementRepository.deleteById(id);
+                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Anunt tau a fost sters cu succes!"));
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Anuntul nu a fost gasit." ));
             }
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new APIMessage(HttpStatus.INTERNAL_SERVER_ERROR, "Eroare interna"));
     }
 
-    public ResponseEntity<Object> updateAnnouncement(Integer id, AnnouncementDTO updatedAnnouncement, MultipartFile[] imageFiles) throws IOException {
+    public ResponseEntity<Object> updateAnnouncement(Integer id, AnnouncementDTO updatedAnnouncement) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentUser = userRepository.findByUsername(username);
-
 
         if(currentUser.isPresent()){
             User user = currentUser.get();
             Optional<Announcement> existingAnnouncement = announcementRepository.findById(id);
             if(existingAnnouncement.isPresent()){
                 if (existingAnnouncement.get().getUser().getId() != currentUser.get().getId()){
-                    throw new RuntimeException("Eroare! Poti edita doar anunturile tale!");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Poti sa iti editezi doar anunturile postate de tine!"));
                 }
 
                 Announcement announcement = existingAnnouncement.get();
                 announcement.setTitle(updatedAnnouncement.getTitle());
                 announcement.setContent(updatedAnnouncement.getContent());
-                announcement.setCategory(updatedAnnouncement.getCategory());
                 announcement.setPrice(updatedAnnouncement.getPrice());
                 announcement.setCurrency(updatedAnnouncement.getCurrency());
                 announcement.setAddress(updatedAnnouncement.getAddress());
@@ -198,23 +210,7 @@ public class AnnouncementService {
                 announcement.setPhoneNumber(updatedAnnouncement.getPhoneNumber());
                 announcement.setUrl(updatedAnnouncement.getTitle().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-") + "-" + AccountService.getSaltString().toLowerCase());
                 announcement.setExpirationDate(LocalDateTime.now().plusDays(60));
-                //announcement.setExpirationDate(updatedAnnouncement.getExpirationDate());
-                announcement.setApproved(false); //M-am gandit sa pun mereu ca nu e aprobat daca e modificat, sa stergi asta daca nu vrei sa fie asa
-
-                if (imageFiles != null && imageFiles.length > 1) {
-
-                    for (int i = 0; i < imageFiles.length; i++) {
-                        MultipartFile file = imageFiles[i];
-                        if (!file.isEmpty()) {
-                            String filename = announcement.getImageUrl() + "-" + i + ".jpeg";
-                            Path destinationFile = rootLocation.resolve(Paths.get(filename)).normalize().toAbsolutePath();
-                            Files.copy(file.getInputStream(), destinationFile, StandardCopyOption.REPLACE_EXISTING);
-                        }
-                    }
-                    announcement.setPhotoNumber(imageFiles.length);
-                } else {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new APIMessage(HttpStatus.UNAUTHORIZED, "Anuntul trebuie sa contina minim 2 poze."));
-                }
+                announcement.setApproved(false);
 
                 announcementRepository.save(announcement);
 
@@ -232,7 +228,6 @@ public class AnnouncementService {
 
 
         } else {
-            //throw new RuntimeException("User not found");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Utilizatorul nu exista"));
         }
     }
@@ -247,5 +242,17 @@ public class AnnouncementService {
         return announcementRepository.findByTitleContainingIgnoreCaseAndIsApprovedTrue(title);
     }
 
+    public ResponseEntity<?> activateAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id).get();
+        announcement.setDeactivated(false);
+        announcementRepository.save(announcement);
+        return ResponseEntity.ok(new APIMessage(HttpStatus.OK, "Anuntul a fost activat cu succes!"));
+    }
 
+    public ResponseEntity<?> dezactivateAnnouncement(Integer id) {
+        Announcement announcement = announcementRepository.findById(id).get();
+        announcement.setDeactivated(true);
+        announcementRepository.save(announcement);
+        return ResponseEntity.ok(new APIMessage(HttpStatus.OK, "Anuntul a fost dezactivat cu succes!"));
+    }
 }

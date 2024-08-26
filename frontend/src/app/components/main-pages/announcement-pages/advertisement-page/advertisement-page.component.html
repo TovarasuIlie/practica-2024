@@ -98,7 +98,7 @@
                                 "dd-MM-yyyy HH:mm" }}</p>
                         </div>
                         <div class="col-lg">
-                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != currentAd.id && (authService.user$ | async)?.id != null"  [current-ad]="currentAd"></app-favorite-button>
+                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != currentAd.user.id && (authService.user$ | async)?.id != null"  [current-ad]="currentAd"></app-favorite-button>
                         </div>
                     </div>
                     <h3 class="mb-5">{{ currentAd.title }}</h3>
@@ -109,7 +109,7 @@
                         <p class="text-break">{{ currentAd.content }}</p>
                     </div>
                     <hr>
-                    <a *ngIf="(authService.user$ | async)?.id != null" href="#" data-bs-toggle="modal" data-bs-target="#report-modal"
+                    <a *ngIf="(authService.user$ | async)?.id != null && (authService.user$ | async)?.id != currentAd.user.id" href="#" data-bs-toggle="modal" data-bs-target="#report-modal"
                         class="text-danger fw-semibold float-end text-decoration-none"><i class="far fa-flag"></i>
                         Raporteaza</a>
                 </div>
@@ -123,7 +123,7 @@
                         </div>
                         <div class="col-lg p-3">
                             <p class="fw-semibold lh-5">{{ currentAd.contactPersonName }}</p>
-                            <p class="text-muted" style="font-size: 13px;">Pe [nume] din {{
+                            <p class="text-muted" style="font-size: 13px;">Pe LaTzanc.ro din {{
                                 currentAd.user.registeredDate | date: "dd-MM-yyyy HH:mm"}}</p>
                         </div>
                     </div>

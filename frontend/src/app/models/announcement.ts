@@ -9,8 +9,8 @@ export interface Announcement {
     createdDate: string;
     expirationDate: string;
     imageUrl: string;
-    user: User;
-    isDeactivated: boolean,
+    user: any;
+    deactivated: boolean,
     price: number;
     currency: string;
     url: string;
@@ -26,7 +26,7 @@ export interface AddAnnouncement {
     content: string;
     category: Category;
     image: File[];
-    country: string;
+    county: string;
     address: string;
     contactPersonName: string;
     phoneNumber: string;
@@ -36,12 +36,11 @@ export interface AddAnnouncement {
 
 export interface EditAnnouncement {
     title: string;
-    category: Category;
+    county: string;
     content: string;
     price: number;
     currency: string;
     address: string;
     contactPersonName: string;
     phoneNumber: string;
-    image: File[];
 }

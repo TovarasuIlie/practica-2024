@@ -8,28 +8,40 @@
         </ol>
     </nav>
     <div *ngIf="!loadingAds">
-        <div class="card card-body shadow border-0 mb-4" *ngFor="let ad of ads">
-            <div class="row">
-                <div class="col-md-4" id="ad-card">
-                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid object-fit">
-                </div>
-                <div class="col-md">
-                    <div class="row">
-                        <div class="col-md">
-                            <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
-                            <p class="text-muted">{{ ad.address }}</p>
-                            <p class="text-muted">{{ ad.category.name }}</p>
-                            <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
-                        </div>
-                        <div class="col d-flex flex-column align-items-center">
-                            <div class="container">
-                                <button class="btn btn-outline-danger btn-borderless float-end"><i class="fa-regular fa-heart"></i></button>
+        <div *ngIf="ads.length">
+            <div class="card card-body shadow border-0 mb-4" *ngFor="let ad of ads">
+                <div class="row">
+                    <div class="col-md-4" id="ad-card">
+                        <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid object-fit">
+                    </div>
+                    <div class="col-md">
+                        <div class="row">
+                            <div class="col">
+                                <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                             </div>
-                            <div class="container text-end">
-                                <p class="fw-semibold fs-4 mt-4">{{ ad.price + " " + ad.currency}}</p>
+                            <div class="col">
+                                <app-favorite-button *ngIf="(authService.user$ | async)?.id != ad.id" [current-ad]="ad"></app-favorite-button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md">
+                                <p class="text-muted">{{ ad.address }}</p>
+                                <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                            </div>
+                            <div class="col-md">
+                                <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!ads.length" class="container my-5 pt-5">
+            <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
+                <div class="d-flex flex-column align-items-center my-5">
+                    <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
+                    <h4 class="fw-semibold">Momentan, nu este postat nici un anunt in categoria aleasa.</h4>
+                    <p class="text-muted">Mai incearca si pe viitor. Speram sa gasesti ceea ce iti doresti.</p>
                 </div>
             </div>
         </div>

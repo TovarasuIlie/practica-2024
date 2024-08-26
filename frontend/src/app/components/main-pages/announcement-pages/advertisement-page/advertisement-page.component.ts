@@ -10,6 +10,7 @@ import { ReportService } from '../../../../services/report.service';
 import { ChatroomService } from '../../../../services/chatroom.service';
 import { Chatroom } from '../../../../models/chatroom';
 import { FavoriteAdService } from '../../../../services/favorite-ad.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-advertisement-page',
@@ -73,7 +74,7 @@ export class AdvertisementPageComponent implements OnInit {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 
   changeText() {

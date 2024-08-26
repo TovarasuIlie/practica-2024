@@ -1,4 +1,4 @@
-<!-- <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger">
@@ -11,23 +11,6 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
                 <button type="button" class="btn btn-danger" (click)="deleteAd()">Sterge cont!</button>
-            </div>
-        </div>
-    </div>
-</div>
-<div *ngIf="!report.announcement.approved" class="modal fade" id="approve-modal" tabindex="-1" aria-labelledby="exampleModalLabel" data-bs-backdrop="static" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-success">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Aproba anunt</h1>
-                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Esti sigur ca vrei sa marchezi ca si aprobat?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
-                <button type="button" class="btn btn-success" (click)="approveAd()">Aproba anunt!</button>
             </div>
         </div>
     </div>
@@ -48,7 +31,7 @@
             </div>
         </div>
     </div>
-</div> -->
+</div>
 <div class="modal fade" id="description-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
         <div class="modal-content">
@@ -61,6 +44,30 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="solved-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Schimba status raportare</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca vrei sa schimbi statusul in 
+                <div *ngIf="!report.solved" class="badge bg-success">
+                    Resolvat
+                </div>
+                <div *ngIf="report.solved" class="badge bg-info">
+                    In curs de rezolvare
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" (click)="updateStatus()">Schimba status</button>
             </div>
         </div>
     </div>
@@ -128,9 +135,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>
@@ -176,9 +191,12 @@
                             Admin Tools
                         </div>
                         <div class="card-body">
-                            <button *ngIf="!report.solved" class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#solved-modal">Rezolvat</button>
-                            <button *ngIf="report.announcement.approved" class="btn btn-outline-warning w-100" data-bs-toggle="modal" data-bs-target="#reject-modal">Respinge Anunt</button>
-                            <button class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#delete-modal">Sterge Anunt</button>
+                            <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
+                                data-bs-target="#solved-modal">Schimba status</button>
+                            <button *ngIf="report.announcement.approved && !report.solved" class="btn btn-outline-warning w-100"
+                                data-bs-toggle="modal" data-bs-target="#reject-modal">Respinge Anunt</button>
+                            <button *ngIf="!report.solved" class="btn btn-outline-danger w-100" data-bs-toggle="modal"
+                                data-bs-target="#delete-modal">Sterge Anunt</button>
                         </div>
                     </div>
                 </div>
@@ -198,12 +216,13 @@
                                     </tr>
                                     <tr>
                                         <td>Titlu:</td>
-                                        <td class="fw-semibold">{{ report.announcement.title }}</td>
+                                        <td class="fw-semibold"><a [attr.href]="['/dashboard/management-anunturi/detalii-anunt/' + report.announcement.id]" class="pe-auto text-decoration-none">{{ report.announcement.title }}</a></td>
                                     </tr>
                                     <tr>
                                         <td>Descriere:</td>
                                         <td class="fw-semibold">
-                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#description-modal">Vezi Descrierea</button>
+                                            <button class="btn btn-sm btn-secondary" data-bs-toggle="modal"
+                                                data-bs-target="#description-modal">Vezi Descrierea</button>
                                         </td>
                                     </tr>
                                     <tr>
@@ -216,11 +235,15 @@
                                     </tr>
                                     <tr>
                                         <td>Pret:</td>
-                                        <td class="fw-semibold">{{ report.announcement.price + " " + report.announcement.currency }}</td>
+                                        <td class="fw-semibold">{{ report.announcement.price + " " +
+                                            report.announcement.currency }}</td>
                                     </tr>
                                     <tr>
                                         <td>Publicat de:</td>
-                                        <td class="fw-semibold">{{ report.announcement.user.firstName + " " + report.announcement.user.lastName }} <a class="text-decoration-none" [routerLink]="['/dashboard/utilizatori/detalii-utilizator', report.announcement.user.id]">{{ "(" + report.announcement.user.username + ")" }}</a></td>
+                                        <td class="fw-semibold">{{ report.announcement.user.firstName + " " +
+                                            report.announcement.user.lastName }} <a class="text-decoration-none"
+                                                [routerLink]="['/dashboard/utilizatori/detalii-utilizator', report.announcement.user.id]">{{
+                                                "(" + report.announcement.user.username + ")" }}</a></td>
                                     </tr>
                                     <tr>
                                         <td>Numele persoanei de contact:</td>
@@ -243,10 +266,10 @@
                                             <div *ngIf="report.announcement.approved" class="badge bg-success me-1">
                                                 Aprobat
                                             </div>
-                                            <div *ngIf="report.announcement.isDeactivated" class="badge bg-danger mx-1">
+                                            <div *ngIf="report.announcement.deactivated" class="badge bg-danger mx-1">
                                                 Inactiv
                                             </div>
-                                            <div *ngIf="!report.announcement.isDeactivated" class="badge bg-success mx-1">
+                                            <div *ngIf="!report.announcement.deactivated" class="badge bg-success mx-1">
                                                 Activ
                                             </div>
                                         </td>
@@ -263,8 +286,10 @@
                         </div>
                         <div class="card-body mx-5">
                             <div class="row row-cols-2 row-cols-lg-2 g-2 g-lg-3">
-                                <div class="col" *ngFor="let photo of [].constructor(report.announcement.photoNumber); let i = index">
-                                    <img [src]="getImage(report.announcement.imageUrl, i.toString())" class="img-fluid w-100">
+                                <div class="col"
+                                    *ngFor="let photo of [].constructor(report.announcement.photoNumber); let i = index">
+                                    <img [src]="getImage(report.announcement.imageUrl, i.toString())"
+                                        class="img-fluid w-100">
                                 </div>
                             </div>
                         </div>

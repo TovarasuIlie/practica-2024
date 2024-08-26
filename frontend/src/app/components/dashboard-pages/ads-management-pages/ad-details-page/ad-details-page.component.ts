@@ -7,6 +7,7 @@ import { FormBuilder } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Announcement } from '../../../../models/announcement';
 import { AnnouncementManageService } from '../../../../services/announcement-manage.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-ad-details-page',
@@ -39,7 +40,7 @@ export class AdDetailsPageComponent implements OnInit {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 
   deleteAd() {
@@ -79,5 +80,11 @@ export class AdDetailsPageComponent implements OnInit {
         console.log(response)
       }
     })
+  }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigateByUrl("/");
+    this.toastService.show({title: "Iesire din cont!", message: "Te-ai delogat cu succes!", classname: "text-success"});
   }
 }

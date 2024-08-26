@@ -13,7 +13,7 @@ export class AnnouncementService {
 
   addNewAd(ad: AddAnnouncement) {
     const headers = new HttpHeaders().append("Content-Disposition", 'multipart/form-data')
-    ad.address = ad.country + ", " + ad.address;
+    ad.address = ad.county + ", " + ad.address;
     let adData = new FormData();
     adData.append("announcement", new Blob([JSON.stringify(ad)], {type: "application/json"}));
     if(ad.image.length > 0) {
@@ -36,6 +36,14 @@ export class AnnouncementService {
     return this.http.get<Announcement>(environment.API_URL + "/api/Announcements/get-ad-by-url/" + url);
   }
 
+  getAnnouncementsByCategory(url: string) {
+    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-ads-by-category/" + url);
+  }
+
+  getAnnouncementsByUser(username: string) {
+    return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/get-ads-for-user/" + username);
+  }
+
   getAnnouncementsByTitle(title: string) {
     return this.http.get<Announcement[]>(environment.API_URL + "/api/Announcements/search-for-ads?title=" + title);
   }
@@ -45,20 +53,19 @@ export class AnnouncementService {
   }
 
   updateAnnouncement(id: number, editedAd: EditAnnouncement) {
-    const headers = new HttpHeaders().append("Content-Disposition", 'multipart/form-data')
-    // editedAd.address = editedAd.country + ", " + editedAd.address;
-    let adData = new FormData();
-    adData.append("announcement", new Blob([JSON.stringify(editedAd)], {type: "application/json"}));
-    if(editedAd.image.length > 0) {
-      editedAd.image.forEach(e => {
-        adData.append("image", e);
-      })
-    }
-    return this.http.put<Announcement>(environment.API_URL + "/api/Announcements/edit-ad/" + id, adData, {headers});
+    return this.http.put<Announcement>(environment.API_URL + "/api/Announcements/edit-ad/" + id, editedAd);
   }
 
   deleteAnnouncement(id: number) {
     return this.http.delete(environment.API_URL + "/api/Announcements/delete-ad/" + id);
+  }
+
+  activateAnnouncement(id: number) {
+    return this.http.get(environment.API_URL + "/api/Announcements/activate/" + id);
+  }
+
+  deactivateAnnouncement(id: number) {
+    return this.http.get(environment.API_URL + "/api/Announcements/deactivate/" + id);
   }
 
 }

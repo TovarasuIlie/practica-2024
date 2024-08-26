@@ -224,7 +224,7 @@ public class AuthenticationService {
                 ipLogsRepository.save(ipLogs);
                 repository.save(user.get());
             }
-            user.get().setJwt(jwt);
+            user.get().setJwt(jwtService.generateToken(user.get()));
             if(jwtService.isValid(jwt, user.get())) {
                 return ResponseEntity.ok(new UserDTO(user.get().getId(), user.get().getUsername(), user.get().getEmail(), user.get().getFirstName(), user.get().getLastName(), user.get().getJwt(), user.get().getRegisteredDate(), user.get().getRole(), user.get().getAddress()));
             } else {

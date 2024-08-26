@@ -21,8 +21,8 @@
                         <div class="col">
                             <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                         </div>
-                        <div class="col">
-                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != ad.id" [current-ad]="ad"></app-favorite-button>
+                        <div class="col" *ngIf="((authService.user$ | async)?.id != ad.user.id && (authService.user$ | async)?.id != null) && ((authService.user$ | async)?.id != ad.user && (authService.user$ | async)?.id != null)">
+                            <app-favorite-button [current-ad]="ad"></app-favorite-button>
                         </div>
                     </div>
                     <div class="row">

@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/spring_jwt
-    username: root
-    password:
+    url: jdbc:mysql://latzanc.ctskucikmx00.eu-central-1.rds.amazonaws.com:3306/latzanc
+    username: latzanc_admin
+    password: LaTzanc123!
     driver-class-name: com.mysql.cj.jdbc.Driver
   mail:
     hostname: smtp-relay.brevo.com
@@ -12,21 +12,18 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         format_sql: true
     database: mysql
     database-platform: org.hibernate.dialect.MySQL8Dialect
   flyway:
-    user: root
-    password:
-    schemas: spring_jwt
-    url: jdbc:mysql://localhost:3306/spring_jwt
+    user: latzanc_admin
+    password: LaTzanc123!
+    schemas: latzanc
+    url: jdbc:mysql://latzanc.ctskucikmx00.eu-central-1.rds.amazonaws.com:3306/latzanc
   originUrl: http://localhost:4200
-file:
-  upload-dir: uploads
-
 
 
 

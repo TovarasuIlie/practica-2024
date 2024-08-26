@@ -4,6 +4,7 @@ import com.PracticaVara.springJwt.model.Account.User;
 import com.PracticaVara.springJwt.model.Announcement;
 import com.PracticaVara.springJwt.model.Report;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;

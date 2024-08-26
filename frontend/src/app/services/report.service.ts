@@ -25,4 +25,8 @@ export class ReportService {
   getReportById(id: number) {
     return this.http.get<Report>(environment.API_URL + "/api/Reports-management/get-report/" + id);
   }
+
+  updateStatus(id: number) {
+    return this.http.get(environment.API_URL + "/api/Reports-management/update-report-status/" + id);
+  }
 }

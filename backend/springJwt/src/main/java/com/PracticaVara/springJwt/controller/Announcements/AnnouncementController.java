@@ -51,6 +51,16 @@ public class AnnouncementController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("get-ads-by-category/{category-url}")
+    public ResponseEntity<List<Announcement>> getAnnouncementByCategory(@PathVariable("category-url") String categoryUrl){
+        return ResponseEntity.ok(announcementService.findByCategory(categoryUrl));
+    }
+
+    @GetMapping("get-ads-for-user/{username}")
+    public ResponseEntity<List<Announcement>> getAnnouncementByUser(@PathVariable("username") String username){
+        return ResponseEntity.ok(announcementService.findByUser(username));
+    }
+
     @PostMapping(value = "create-ad", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Object> createAnnouncement(@RequestPart("announcement") AnnouncementDTO announcement, @RequestPart("image") MultipartFile[] imageFile){
         try {
@@ -64,10 +74,10 @@ public class AnnouncementController {
 
 
     @PutMapping("edit-ad/{id}")
-    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestPart("announcement") AnnouncementDTO announcement, @RequestPart("image") MultipartFile[] imageFile) {
+    public ResponseEntity<Object> updateAnnouncement(@PathVariable Integer id, @RequestBody AnnouncementDTO announcement) {
         //announcement.setId(id);
         try {
-            return announcementService.updateAnnouncement(id, announcement, imageFile);
+            return announcementService.updateAnnouncement(id, announcement);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,10 +94,19 @@ public class AnnouncementController {
         return ResponseEntity.ok(announcements);
     }
 
-
     @DeleteMapping("delete-ad/{id}")
     public ResponseEntity<?> deleteAnnouncementById(@PathVariable Integer id){
         return announcementService.deleteById(id);
+    }
+
+    @GetMapping("activate/{id}")
+    public ResponseEntity<?> activateAnnouncement(@PathVariable Integer id) {
+        return announcementService.activateAnnouncement(id);
+    }
+
+    @GetMapping("deactivate/{id}")
+    public ResponseEntity<?> deactivateAnnouncement(@PathVariable Integer id) {
+        return announcementService.dezactivateAnnouncement(id);
     }
 
 }

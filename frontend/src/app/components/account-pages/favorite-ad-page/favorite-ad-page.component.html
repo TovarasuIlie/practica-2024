@@ -20,26 +20,34 @@
     </div>
 </div>
 <div class="container-lg mt-5">
-    <div class="container bg-white p-5 mb-5">
+    <div *ngIf="ads.length" class="container bg-white p-5 mb-5">
         <h4>Anunturi favorite</h4>
         <div class="row row-cols-1 row-cols-lg-3 g-3 g-lg-3 mb-5">
             <div class="col d-flex align-items-stretch" *ngFor="let ad of ads">
-                <div class="card shadow border-0 p-3 mb-5 bg-body rounded" [routerLink]="['anunt', ad.url]">
-                    <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top"
-                        alt="...">
+                <div class="card shadow border-0 p-3 mb-5 bg-body rounded w-100" id="ad-card">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                     <div class="card-body">
+                        <h6 [routerLink]="['anunt', ad.url]" class="card-title">{{ ad.title }}</h6>
+                        <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
                         <div class="row">
-                            <div class="col">
-                                <h6 class="card-title">{{ ad.title }}</h6>
+                            <div class="col d-flex flex-row align-items-center">
+                                <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
                             </div>
-                            <div class="col-2">
-                                <button (click)="removeFromFavorite(ad.id)" class="btn btn-outline-danger btn-borderless float-end"><i class="fa-solid fa-heart fs-4"></i></button>
+                            <div class="col-2 d-flex flex-row align-items-center justify-content-center" (click)="refreshAd()">
+                                <app-favorite-button [current-ad]="ad"></app-favorite-button>
                             </div>
                         </div>
-                        <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
-                        <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!ads.length" class="container bg-white p-5 mb-5">
+        <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
+            <div class="d-flex flex-column align-items-center my-5">
+                <img src="assets/site-imgs/wishlist/wishlist-icon.png" class="img-fluid w-75" alt="Not Found Image">
+                <h4 class="fw-semibold">Momentan nu ai nici anunt adaugat la favorite.</h4>
+                <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au fost activate.</p>
             </div>
         </div>
     </div>

@@ -8,6 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { environment } from '../../../../environments/environment.development';
+import { User } from '../../../models/user';
 
 @Component({
   selector: 'app-messages-sell-page',
@@ -25,12 +26,20 @@ export class MessagesSellPageComponent implements OnInit {
   chatSelectedID!: string;
   loadingMessages: boolean = true;
   loadingChatrooms: boolean = true;
+  chatroomUsers: User[] = [];
 
   constructor(private adService: AnnouncementService, private chatroomService: ChatroomService, public authService: AuthService, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.chatroomService.getMySellChatrooms().subscribe(chatrooms => {
       this.chatrooms = chatrooms;
+      for(let i = 0; i < chatrooms.length; i++) {
+        if(typeof(chatrooms[i].buyer) == "object") {
+          this.chatroomUsers.push(chatrooms[i].buyer);
+        } else {
+          this.chatrooms[i].buyer = this.chatroomUsers[(this.chatrooms[i].buyer as any) - 1]
+        }
+      }
       this.loadingChatrooms = false;
     });
     this.initilizeForm();
@@ -62,7 +71,7 @@ export class MessagesSellPageComponent implements OnInit {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 
   initilizeForm() {

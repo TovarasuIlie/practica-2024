@@ -4,6 +4,8 @@ import { DOCUMENT } from '@angular/common';
 import { User } from '../../../../models/user';
 import { UserManagementService } from '../../../../services/user-management.service';
 import { PageEvent } from '@angular/material/paginator';
+import { Router } from '@angular/router';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-users-list-page',
@@ -24,7 +26,9 @@ export class UsersListPageComponent implements OnInit {
 
   pageEvent!: PageEvent;
   
-  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private userManageService: UserManagementService) {}
+  constructor(private _renderer2: Renderer2, @Inject(DOCUMENT) private _document: Document, public authService: AuthService, private userManageService: UserManagementService, private router: Router,
+              private toastService: ToastService
+) {}
   
   ngOnInit(): void {
     this.initializeUsers();
@@ -39,5 +43,11 @@ export class UsersListPageComponent implements OnInit {
     this.length = e.length;
     this.pageSize = e.pageSize;
     this.pageIndex = e.pageIndex;
+  }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigateByUrl("/");
+    this.toastService.show({title: "Iesire din cont!", message: "Te-ai delogat cu succes!", classname: "text-success"});
   }
 }

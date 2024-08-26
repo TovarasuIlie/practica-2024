@@ -18,6 +18,9 @@
                 @if (addAdForm.get('title')?.hasError('maxlength') && !addAdForm.get('title')?.hasError('required')) {
                 <mat-error>Titlul trebuie sa contina maxim <strong>70 caractere</strong>.</mat-error>
                 }
+                @if (addAdForm.get('title')?.hasError('pattern') && !addAdForm.get('title')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                }
             </mat-form-field>
 
             <mat-form-field class="w-100">
@@ -61,6 +64,9 @@
                 }
                 @if (addAdForm.get('content')?.hasError('maxlength') && !addAdForm.get('content')?.hasError('required')) {
                 <mat-error>Titlul trebuie sa contina maxim <strong>9000 caractere</strong>.</mat-error>
+                }
+                @if (addAdForm.get('content')?.hasError('pattern') && !addAdForm.get('content')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
                 }
             </mat-form-field>
             <div class="row mb-4">
@@ -114,6 +120,9 @@
                         @if (addAdForm.get('address')?.hasError('minlength') && !addAdForm.get('address')?.hasError('required')) {
                             <mat-error>Localitatea trebuie sa contina <strong>2 caractere</strong>.</mat-error>
                         }
+                        @if (addAdForm.get('address')?.hasError('pattern') && !addAdForm.get('address')?.hasError('required')) {
+                            <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                        }
                     </mat-form-field>
                 </div>
             </div>
@@ -132,6 +141,9 @@
                     [value]="(authService.user$ | async)?.firstName + ' ' + (authService.user$ | async)?.lastName">
                     @if (addAdForm.get('contactPersonName')?.hasError('required')) {
                         <mat-error>Localitatea este <strong>obligatorie</strong>.</mat-error>
+                    }
+                    @if (addAdForm.get('contactPersonName')?.hasError('pattern') && !addAdForm.get('contactPersonName')?.hasError('required')) {
+                        <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
                     }
             </mat-form-field>
             <mat-form-field class="w-100 mb-3">

@@ -5,6 +5,7 @@ import { Announcement } from '../../../../models/announcement';
 import { AnnouncementService } from '../../../../services/announcement.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../../../services/auth.service';
+import { environment } from '../../../../../environments/environment.development';
 
 @Component({
   selector: 'app-search-for-ads-page',
@@ -33,10 +34,9 @@ export class SearchForAdsPageComponent implements OnInit {
       }
       this.loadingAds = false;
     })
-    console.log(this.ads)
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 }

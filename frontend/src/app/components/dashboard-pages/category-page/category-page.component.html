@@ -41,6 +41,49 @@
     </div>
 </div>
 
+<div class="modal fade" id="edit-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Editeaza categorie</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form [formGroup]="categoryEditForm" (ngSubmit)="editCategory()">
+                <div class="modal-body">
+                    <mat-form-field class="w-100 mb-3">
+                        <mat-label>Nume categorie</mat-label>
+                        <input formControlName="nameEdit" matInput #nameEdit placeholder="Ex. Electronice">
+                        <mat-hint align="start">Introdu cel puțin 3 caractere</mat-hint>
+                        <mat-hint align="end">{{nameEdit.value.length}} / 70</mat-hint>
+                        @if (categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul unui anunt este <strong>obligatoru</strong>.</mat-error>
+                        }
+                        @if (categoryForm.get('name')?.hasError('minlength') && !categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul trebuie sa contina minim <strong>16 caractere</strong>.</mat-error>
+                        }
+                        @if (categoryForm.get('name')?.hasError('maxlength') && !categoryForm.get('name')?.hasError('required')) {
+                            <mat-error>Titlul trebuie sa contina maxim <strong>70 caractere</strong>.</mat-error>
+                        }
+                    </mat-form-field>
+                    <h5 class="mb-5">Imagini</h5>
+                    <file-pond [options]="pondOptions" (onaddfile)="onEditChange($event)" (onremovefile)="onEditDelete($event)"></file-pond>
+                    <mat-hint class="float-start">Incarca un icon</mat-hint>
+                    <mat-hint class="float-end">{{imageArray}} / 1</mat-hint>
+                    <div *ngIf="errorMessages.length > 0" class="alert alert-danger m-5 mb-2">
+                        <ul>
+                            <li *ngFor="let error of errorMessages">{{ error }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                    <button type="submit" class="btn btn-primary">Salveaza</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -121,9 +164,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>
@@ -155,7 +206,7 @@
                             <th class="text-center" mat-header-cell *matHeaderCellDef> Actiuni </th>
                             <td class="text-center" mat-cell *matCellDef="let element">
                                 <button type="button" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#delete-modal" (click)="selectCategory(element.id)">Sterge</button>
-                                <button class="btn btn-sm btn-info">Editeaza</button>
+                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#edit-modal" (click)="selectEditCategory(element.id)">Editeaza</button>
                             </td>
                         </ng-container>
 

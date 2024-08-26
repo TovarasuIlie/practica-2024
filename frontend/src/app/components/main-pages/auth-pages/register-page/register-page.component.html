@@ -11,6 +11,9 @@
                                 <mat-label><i class="fas fa-user-tie"></i> Nume</mat-label>
                                 <input formControlName="firstName" matInput placeholder="Popescu"
                                     [errorStateMatcher]="matcher">
+                                @if (registerForm.get('firstName')?.hasError('pattern') && !registerForm.get('firstName')?.hasError('required')) {
+                                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                                }
                                 @if (registerForm.get('firstName')?.hasError('required')) {
                                 <mat-error>Numele este <strong>obligatoriu</strong>.</mat-error>
                                 }
@@ -21,6 +24,9 @@
                                 <mat-label><i class="fas fa-user-tie"></i> Prenume</mat-label>
                                 <input formControlName="lastName" matInput placeholder="Ionel"
                                     [errorStateMatcher]="matcher">
+                                @if (registerForm.get('lastName')?.hasError('pattern') && !registerForm.get('lastName')?.hasError('required')) {
+                                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                                }
                                 @if (registerForm.get('lastName')?.hasError('required')) {
                                 <mat-error>Prenumele este <strong>obligatoriu</strong>.</mat-error>
                                 }

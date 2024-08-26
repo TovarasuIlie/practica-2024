@@ -44,7 +44,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/Authentification/refresh-page").authenticated();
                         req.requestMatchers("/ads-imgs/**").permitAll();
                         req.requestMatchers("/category-imgs/**").permitAll();
-                        req.requestMatchers("/api/Announcements/get-all-ads", "/api/Announcements/get-ad-by-url/**", "/api/Announcements/search-for-ads").permitAll();
+                        req.requestMatchers("/api/Announcements/get-all-ads", "/api/Announcements/get-ad-by-url/**", "/api/Announcements/search-for-ads", "/api/Announcements/get-ads-by-category/**", "/api/Announcements/get-ads-for-user/**").permitAll();
                         req.requestMatchers("/api/Announcements/**").authenticated();
                         req.requestMatchers("/api/Announcements-management/**").hasAnyRole("ADMIN", "MODERATOR");
                         req.requestMatchers("/api/UserManagement/**").hasRole("ADMIN");
@@ -58,7 +58,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                         req.requestMatchers("/api/DashboardDetails/**").hasAnyRole("ADMIN", "MODERATOR");
                         req.requestMatchers("/api/Wishlist/**").authenticated();
                         req.requestMatchers("/api/LogHistory/**").hasAnyRole("ADMIN");
-                        req.anyRequest().permitAll();
+                        req.anyRequest().denyAll();
                     }
                 )
                 .userDetailsService(userDetailsServiceImp)

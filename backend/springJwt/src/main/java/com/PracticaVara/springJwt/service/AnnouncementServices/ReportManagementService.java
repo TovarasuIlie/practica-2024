@@ -71,7 +71,7 @@ public class ReportManagementService {
         List<Report> reports = reportRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(reports);
     }
-    public ResponseEntity<?> updateReportStatus(Integer reportId, boolean status){
+    public ResponseEntity<?> updateReportStatus(Integer reportId){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Optional<User> currentAdmin = userRepository.findByUsername(username);
@@ -80,7 +80,7 @@ public class ReportManagementService {
             User admin = currentAdmin.get();
 
             Report updatedReport = report.get();
-            updatedReport.setSolved(status);
+            updatedReport.setSolved(!updatedReport.isSolved());
             reportRepository.save(updatedReport);
 
             LogHistory newLogHistoryAdmin = new LogHistory();

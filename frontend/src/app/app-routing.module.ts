@@ -15,6 +15,7 @@ import { SearchForAdsPageComponent } from './components/main-pages/announcement-
 import { ConfirmEmailPageComponent } from './components/account-pages/confirm-email-page/confirm-email-page.component';
 import { searchAdsResolver } from './resovers/search-ads.resolver';
 import { ShowMoreAdsComponent } from './components/main-pages/show-more-ads/show-more-ads.component';
+import { getAdsFromResolver } from './resovers/get-ads-from.resolver';
 
 const routes: Routes = [
   {
@@ -64,7 +65,10 @@ const routes: Routes = [
   },
   {
     path: "oferte/:username",
-    component: AllAdsFromComponent
+    component: AllAdsFromComponent,
+    resolve: {
+      ads: getAdsFromResolver
+    }
   },
   {
     path: 'contul-meu',

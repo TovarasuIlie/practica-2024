@@ -185,4 +185,10 @@ export class UserDetailsPageComponent implements OnInit {
       }
     })
   }
+
+  logout() {
+    this.authService.logOut();
+    this.router.navigateByUrl("/");
+    this.toastService.show({title: "Iesire din cont!", message: "Te-ai delogat cu succes!", classname: "text-success"});
+  }
 }

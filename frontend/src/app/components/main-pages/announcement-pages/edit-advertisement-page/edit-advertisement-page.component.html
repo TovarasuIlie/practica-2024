@@ -18,32 +18,11 @@
                 @if (editAdForm.get('title')?.hasError('maxlength') && !editAdForm.get('title')?.hasError('required')) {
                     <mat-error>Titlul trebuie sa contina maxim <strong>70 caractere</strong>.</mat-error>
                 }
-            </mat-form-field>
-
-            <mat-form-field class="w-100">
-                <mat-label>Categoria</mat-label>
-                <mat-select formControlName="category">
-                    @for (category of categories; track category) {
-                    <mat-option class="w-100" [value]="category">
-                        <div class="card card-width bg-transparent border-0">
-                            <div class="row g-0">
-                                <div class="col-md-1">
-                                    <img [src]="getImage(category.iconUrl)" class="img-fluid rounded-start object-fit" alt="...">
-                                </div>
-                                <div class="col-md">
-                                    <div class="card-body d-flex">
-                                        <h6 class="card-title mt-2">{{ category.name }}</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </mat-option>
-                    }
-                </mat-select>
-                @if (editAdForm.get('category')?.hasError('required')) {
-                    <mat-error>Categoria este <strong>obligatorie</strong>.</mat-error>
+                @if (editAdForm.get('title')?.hasError('pattern') && !editAdForm.get('title')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
                 }
             </mat-form-field>
+            Categoria din care face parte anuntul: <b>{{ currentAd.category.name }}</b>
         </div>
         <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-5">
@@ -59,6 +38,9 @@
                 }
                 @if (editAdForm.get('content')?.hasError('maxlength') && !editAdForm.get('title')?.hasError('required')) {
                     <mat-error>Titlul trebuie sa contina maxim <strong>9000 caractere</strong>.</mat-error>
+                }
+                @if (editAdForm.get('content')?.hasError('pattern') && !editAdForm.get('content')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
                 }
             </mat-form-field>
             <div class="row mb-4">
@@ -84,17 +66,16 @@
                 <input formControlName="address" matInput placeholder="Ex. Beius">
             </mat-form-field>
         </div>
-        <div class="container bg-white p-5 mb-3 shadow">
-            <h5 class="mb-3">Imagini</h5>
-            <file-pond [options]="pondOptions" (onaddfile)="onChange($event)"
-                (onremovefile)="onDelete($event)"></file-pond>
-            <mat-hint class="float-start">Incarca minim 2 poze cu produsul</mat-hint>
-            <mat-hint class="float-end">{{imageArray.length}} / 8</mat-hint>
-        </div>
         <div class="container-lg bg-white p-5 mb-3 shadow">
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Persoana de contact</mat-label>
                 <input formControlName="contactPersonName" matInput placeholder="Ex. Popescu Ionel" [value]="(authService.user$ | async)?.firstName + ' ' + (authService.user$ | async)?.lastName">
+                @if (editAdForm.get('contactPersonName')?.hasError('pattern') && !editAdForm.get('contactPersonName')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                }
+                @if (editAdForm.get('contactPersonName')?.hasError('required')) {
+                    <mat-error>Persona de contact este <strong>obligatorie</strong>.</mat-error>
+                }
             </mat-form-field>
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Adresa de email</mat-label>
@@ -103,6 +84,12 @@
             <mat-form-field class="w-100 mb-3">
                 <mat-label>Numarul de telefon</mat-label>
                 <input formControlName="phoneNumber" matInput placeholder="Ex. Beius">
+                @if (editAdForm.get('phoneNumber')?.hasError('pattern') && !editAdForm.get('phoneNumber')?.hasError('required')) {
+                    <mat-error>Nu sunt permise 2 sau mai multe spatii intre cuvinte.</mat-error>
+                }
+                @if (editAdForm.get('phoneNumber')?.hasError('required')) {
+                    <mat-error>Numarul de telefon este <strong>obligatorie</strong>.</mat-error>
+                }
             </mat-form-field>
         </div>
         <div class="container-lg bg-white py-4 shadow">

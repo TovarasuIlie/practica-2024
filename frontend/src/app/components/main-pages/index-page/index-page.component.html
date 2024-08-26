@@ -27,7 +27,7 @@
         </div>
         <div *ngIf="!loadingCategory" class="row row-cols-2 row-cols-lg-6 g-3 g-lg-3">
             <div class="col d-flex align-items-stretch" *ngFor="let category of categories">
-                <div class="card text-center shadow-sm p-3 mb-5 bg-body rounded" [routerLink]="['anunturi-din-categoria', category.searchLink]">
+                <div class="card text-center shadow-sm p-3 mb-5 bg-body rounded w-100" [routerLink]="['anunturi-din-categoria', category.searchLink]">
                     <img [src]="getImageCategory(category.iconUrl)" class="img-fluid card-img-top w-50 mx-auto d-block"
                         alt="...">
                     <div class="card-body">
@@ -65,16 +65,16 @@
             <div class="card shadow-sm p-3 mb-3 bg-body rounded w-100" id="ad-card">
                 <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                 <div class="card-body">
+                    <h6 [routerLink]="['anunt', ad.url]" class="card-title">{{ ad.title }}</h6>
+                    <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
                     <div class="row">
-                        <div class="col">
-                            <h6 [routerLink]="['anunt', ad.url]" class="card-title">{{ ad.title }}</h6>
+                        <div class="col d-flex flex-row align-items-center">
+                            <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
                         </div>
-                        <div class="col-1">
-                            <app-favorite-button *ngIf="(authService.user$ | async)?.id != ad.id" [current-ad]="ad"></app-favorite-button>
+                        <div class="col-2 d-flex flex-row align-items-center justify-content-center" *ngIf="((authService.user$ | async)?.id != ad.user.id && (authService.user$ | async)?.id != null) && ((authService.user$ | async)?.id != ad.user && (authService.user$ | async)?.id != null)">
+                            <app-favorite-button [current-ad]="ad"></app-favorite-button>
                         </div>
                     </div>
-                    <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
-                    <p class="card-text text-muted" style="font-size: 13px;">{{ ad.address }}</p>
                 </div>
             </div>
         </div>

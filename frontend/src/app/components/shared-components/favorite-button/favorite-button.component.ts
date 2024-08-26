@@ -3,6 +3,7 @@ import { FavoriteAdService } from '../../../services/favorite-ad.service';
 import { Announcement } from '../../../models/announcement';
 import { ToastService } from '../../../services/toast.service';
 import { AnnouncementService } from '../../../services/announcement.service';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-favorite-button',
@@ -13,7 +14,7 @@ export class FavoriteButtonComponent implements OnChanges {
   isAddedToFavorite: any = false;
   @Input("current-ad") currentAd!: Announcement
   
-  constructor(private favoriteService: FavoriteAdService, private toastService: ToastService, private adService: AnnouncementService) {}
+  constructor(private favoriteService: FavoriteAdService, private toastService: ToastService, private adService: AnnouncementService, public authService: AuthService) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     this.currentAd = changes['currentAd'].currentValue;

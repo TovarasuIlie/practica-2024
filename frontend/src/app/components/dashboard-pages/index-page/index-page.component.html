@@ -60,9 +60,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>
@@ -108,7 +116,6 @@
                                     <div class="numbers">
                                         <p class="card-category">Anunturi</p>
                                         <p class="card-title">{{ dashboardDetails.numberOfAnnouncements }}<p>
-                                        <p class="text-success" style="font-size: 12px;">Azi: +{{ dashboardDetails.numberOfAnnouncementsToday }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -173,66 +180,40 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card ">
+                <div class="col-xxl">
+                    <div class="card shadow mb-3 border-0">
                         <div class="card-header ">
-                            <h5 class="card-title">Users Behavior</h5>
-                            <p class="card-category">24 Hours performance</p>
+                            <h5 class="card-title">Ultimele anunturi</h5>
+                            <p class="card-category">Ultimele 24 de ore</p>
                         </div>
-                        <div class="card-body ">
-                            <canvas id=chartHours width="400" height="100"></canvas>
-                        </div>
-                        <div class="card-footer ">
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-history"></i> Updated 3 minutes ago
-                            </div>
+                        <div class="card-body overflow-auto" style="height: 500px;">
+                            <table class="table">
+                                <tbody>
+                                    <tr *ngFor="let ad of dashboardDetails.last24Ads">
+                                        <td>{{ ad.title }}</td>
+                                        <td>{{ ad.contactPersonName }}</td>
+                                        <td>{{ ad.price + " " + ad.currency }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card ">
+                <div class="col-xxl">
+                    <div class="card shadow mb-3 border-0">
                         <div class="card-header ">
-                            <h5 class="card-title">Email Statistics</h5>
-                            <p class="card-category">Last Campaign Performance</p>
+                            <h5 class="card-title">Actiuni recente</h5>
+                            <p class="card-category">Ultimele 24 de ore</p>
                         </div>
-                        <div class="card-body ">
-                            <canvas id="chartEmail"></canvas>
-                        </div>
-                        <div class="card-footer ">
-                            <div class="legend">
-                                <i class="fa fa-circle text-primary"></i> Opened
-                                <i class="fa fa-circle text-warning"></i> Read
-                                <i class="fa fa-circle text-danger"></i> Deleted
-                                <i class="fa fa-circle text-gray"></i> Unopened
-                            </div>
-                            <hr>
-                            <div class="stats">
-                                <i class="fa fa-calendar"></i> Number of emails sent
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card card-chart">
-                        <div class="card-header">
-                            <h5 class="card-title">NASDAQ: AAPL</h5>
-                            <p class="card-category">Line Chart with Points</p>
-                        </div>
-                        <div class="card-body">
-                            <canvas id="speedChart" width="400" height="100"></canvas>
-                        </div>
-                        <div class="card-footer">
-                            <div class="chart-legend">
-                                <i class="fa fa-circle text-info"></i> Tesla Model S
-                                <i class="fa fa-circle text-warning"></i> BMW 5 Series
-                            </div>
-                            <hr />
-                            <div class="card-stats">
-                                <i class="fa fa-check"></i> Data information certified
-                            </div>
+                        <div class="card-body overflow-auto" style="height: 500px;">
+                            <table class="table">
+                                <tbody>
+                                    <tr *ngFor="let log of dashboardDetails.last24Logs">
+                                        <td>{{ log.action }}</td>
+                                        <td>{{ log.actionDate | date:"dd.MM.YYYY HH:mm" }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

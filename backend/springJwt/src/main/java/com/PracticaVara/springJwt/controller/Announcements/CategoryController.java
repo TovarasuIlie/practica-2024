@@ -38,7 +38,7 @@ public class CategoryController {
         return categoryService.addCategory(category, image);
     }
 
-    @PutMapping("edit-category/{id}")
+    @PostMapping("edit-category/{id}")
     public ResponseEntity<?> updateCategory(@PathVariable Long id,@RequestPart("category") CategoryDTO categoryDetails, @RequestPart("image") MultipartFile file) throws IOException {
        return categoryService.updateCategory(id, categoryDetails, file);
     }

@@ -203,6 +203,38 @@
     </div>
 </div>
 
+<div class="modal fade" id="logs-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Istoric utilizator</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Actiune</th>
+                            <th>IP</th>
+                            <th>Data</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let log of user.logHistoryList">
+                            <td>{{ log.action }}</td>
+                            <td>{{ log.ipAddress }}</td>
+                            <td>{{ log.actionDate | date:"dd.MM.YYYY HH:mm" }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Inchide</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="wrapper">
     <div class="sidebar" data-color="black" data-active-color="success">
         <div class="logo">
@@ -265,9 +297,17 @@
                         Salut {{ (authService.user$ | async)?.firstName }} {{ (authService.user$ | async)?.lastName }}
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-hand-spock"></i> Salut <b>{{ (authService.user$ | async)?.lastName }}</b></button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button [routerLink]="['/contul-meu']" class="dropdown-item"><i class="fa-solid fa-scroll"></i> Anunturi</button></li>
+                        <li><button [routerLink]="['/contul-meu/mesaje/de-vandut']" class="dropdown-item"><i class="fa-solid fa-comments"></i> Mesaje</button></li>
+                        <li><button [routerLink]="['/contul-meu/profil']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Profil</button></li>
+                        <div *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN' || (authService.user$ | async)?.role == 'ROLE_MODERATOR'">
+                            <li><hr class="dropdown-divider"></li>
+                            <li><button [routerLink]="['/dashboard']" class="dropdown-item"><i class="fa-solid fa-gears"></i> Staff Area</button></li>
+                        </div>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Iesi din cont</button></li>
                     </ul>
                 </div>
             </div>
@@ -341,6 +381,12 @@
                                     <tr>
                                         <td>Inregistrat la data de:</td>
                                         <td class="fw-semibold">{{ user.registeredDate | date:"dd.MM.YYYY HH:mm:ss" }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Istorul Actiunilor:</td>
+                                        <td>
+                                            <button class="btn btn-sm btn-secondary" data-bs-target="#logs-modal" data-bs-toggle="modal">Vezi Istoric</button>
                                         </td>
                                     </tr>
                                 </tbody>

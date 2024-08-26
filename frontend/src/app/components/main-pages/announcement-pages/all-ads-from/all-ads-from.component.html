@@ -7,10 +7,52 @@
                 <img src="assets/site-imgs/unknown-person-icon.png" alt="" class="object-fit-avatar w-50">
             </div>
             <div class="col p-3">
-                <p class="fw-semibold lh-5">Niculai Ilie-Traian</p>
-                <!-- <p class="text-muted" style="font-size: 13px;">Pe [nume] din {{
-                    currentAd.user.registeredDate | date: "dd-MM-yyyy HH:mm"}}</p> -->
-                <p class="text-muted" style="font-size: 13px;">Pe [nume] din 13.08.2024</p>
+                <p class="fw-semibold lh-5">{{ user.firstName + " " + user.lastName }}</p>
+                <p class="text-muted" style="font-size: 13px;">Pe LaTzanc.ro din {{
+                    user.registeredDate | date: "dd-MM-yyyy HH:mm"}}</p>
+                <p class="text-muted" style="font-size: 13px;">{{ user.address }}</p>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!loadingAds">
+        <div class="card card-body shadow border-0 mb-4" *ngFor="let ad of ads">
+            <div class="row">
+                <div class="col-md-4" id="ad-card">
+                    <img [src]="getImage(ad.imageUrl, '0')" class="img-fluid object-fit">
+                </div>
+                <div class="col-md">
+                    <div class="row">
+                        <div class="col">
+                            <a [routerLink]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                        </div>
+                        <div class="col">
+                            <app-favorite-button [current-ad]="ad"></app-favorite-button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md">
+                            <p class="text-muted">{{ ad.address }}</p>
+                            <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                        </div>
+                        <div class="col-md">
+                            <p class="float-end m-4 fw-semibold fs-4">{{ ad.price + " " + ad.currency}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loadingAds">
+        <div class="container bg-transparent">
+            <div class="d-flex justify-content-center vh-100 align-items-center">
+                <div class="card bg-transparent border-0">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column">
+                            <div class="spinner-border ms-2" style="width: 4rem; height: 4rem;" role="status"></div>
+                            <strong class="mt-2">Se incarca...</strong>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

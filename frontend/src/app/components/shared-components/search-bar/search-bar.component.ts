@@ -26,7 +26,9 @@ export class SearchBarComponent implements OnInit {
 
   searchFor() {
     if(this.searchForm.value.keyword) {
-      this.router.navigate(['/cauta-anunturi'], { queryParams: { keyword: this.searchForm.value.keyword }})
+      this.router.navigate(['/cauta-anunturi'], { queryParams: { keyword: this.searchForm.value.keyword }}).then(() => {
+        window.location.reload();
+      })
     }
   }
 }

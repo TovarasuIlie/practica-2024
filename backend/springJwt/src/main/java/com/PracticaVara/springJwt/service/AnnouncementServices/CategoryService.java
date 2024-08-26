@@ -47,8 +47,6 @@ public class CategoryService {
         }
     }
 
-    private final String uploadDir = "uploads/";
-
     public CategoryService(LogHistoryRepository logHistoryRepository) {
         this.logHistoryRepository = logHistoryRepository;
     }
@@ -69,9 +67,6 @@ public class CategoryService {
 
         if (!file.isEmpty() && currentUser.isPresent()) {
             String name = categoryDTO.getName().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-");
-//            File dest = new File(uploadDir + imageName);
-//            file.transferTo(dest);
-//            category.setIconUrl(imageName);
             Path destinationFile = rootLocation.resolve(Paths.get(name + ".png")).normalize().toAbsolutePath();
             Files.copy(file.getInputStream(), destinationFile);
             category.setName(categoryDTO.getName());
@@ -102,31 +97,25 @@ public class CategoryService {
         Optional<Category> categoryOptional = categoryRepository.findById(id);
         if(categoryOptional.isPresent() && currentUser.isPresent()) {
             Category category = categoryOptional.get();
-            User admin = currentUser.get();
+            if(!file.isEmpty()) {
+                File oldImageFile = new File(rootLocation.toString() + "/" + category.getIconUrl());
+                oldImageFile.delete();
+            }
+            String name = categoryDetailsDTO.getName().toLowerCase().replaceAll("[\\p{P}\\p{S}&&[^$%^*+=,./<>_-]]|[$%^*+=,./<>_-](?!(?<=\\d.)\\d)", "").replaceAll(" ", "-");
             category.setName(categoryDetailsDTO.getName());
             category.setSearchLink(category.getSearchLink());
-
-            if (!file.isEmpty()) {
-                String imageName = category.getName().replaceAll("[^a-zA-Z0-9]", "-").toLowerCase() + ".png";
-                File dest = new File(uploadDir + imageName);
-                file.transferTo(dest);
-                category.setIconUrl(imageName);
-
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Imaginea nu a fost gasita."));
-            }
-
+            category.setIconUrl(name + ".png");
+            Path destinationFile = rootLocation.resolve(Paths.get(name + ".png")).normalize().toAbsolutePath();
+            Files.copy(file.getInputStream(), destinationFile);
             categoryRepository.save(category);
-
+            User admin = currentUser.get();
             LogHistory newLogHistoryAdmin = new LogHistory();
             newLogHistoryAdmin.setUser(admin);
             newLogHistoryAdmin.setAction("A editat categoria cu id-ul " + category.getId());
             newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
             newLogHistoryAdmin.setActionDate(LocalDateTime.now());
             logHistoryRepository.save(newLogHistoryAdmin);
-
-
-            return ResponseEntity.status(HttpStatus.OK).body(category);
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Categoria a fost editata cu succes!"));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Categoria nu a fost gasita."));
         }
@@ -141,24 +130,16 @@ public class CategoryService {
         if(categoryOptional.isPresent() && currentAdmin.isPresent()) {
             Category category = categoryOptional.get();
             User admin = currentAdmin.get();
-            File file = new File(uploadDir + category.getIconUrl());
-            if (file.exists()) {
-                file.delete();
-
-                LogHistory newLogHistoryAdmin = new LogHistory();
-                newLogHistoryAdmin.setUser(admin);
-                newLogHistoryAdmin.setAction("A sters categoria cu id-ul " + category.getId());
-                newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
-                newLogHistoryAdmin.setActionDate(LocalDateTime.now());
-                logHistoryRepository.save(newLogHistoryAdmin);
-
-                categoryRepository.delete(category);
-
-                return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Categoria a fost stearsa cu succes."));
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Fisierele nu au fost gasite."));
-            }
-
+            File imageFile = new File(rootLocation.toString() + "/" + category.getIconUrl());
+            imageFile.delete();
+            LogHistory newLogHistoryAdmin = new LogHistory();
+            newLogHistoryAdmin.setUser(admin);
+            newLogHistoryAdmin.setAction("A sters categoria cu id-ul " + category.getId());
+            newLogHistoryAdmin.setIpAddress(admin.getIpAddress());
+            newLogHistoryAdmin.setActionDate(LocalDateTime.now());
+            logHistoryRepository.save(newLogHistoryAdmin);
+            categoryRepository.delete(category);
+            return ResponseEntity.status(HttpStatus.OK).body(new APIMessage(HttpStatus.OK, "Categoria a fost stearsa cu succes."));
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIMessage(HttpStatus.NOT_FOUND, "Categoria nu a fost gasita."));
         }

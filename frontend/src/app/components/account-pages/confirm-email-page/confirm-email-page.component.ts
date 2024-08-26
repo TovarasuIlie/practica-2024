@@ -26,16 +26,24 @@ export class ConfirmEmailPageComponent {
           email: params.get("email"),
           token: params.get("token")
         }
-        this.authService.confirmEmail(confirmEmail).subscribe({
-          next: (response: any) => {
-            this.toastService.show({title: "Confirmare Email", message: response.message, classname: "text-success"});
-            this.router.navigateByUrl('/')
-          },
-          error: (response) => {
-            this.toastService.show({title: "Confirmare Email", message: response.error.message, classname: "text-danger"});
-            this.router.navigateByUrl('/')
+        var setID = setInterval(() => {
+          this.progressBarValue += Math.floor(Math.random() * 50);
+          if(this.progressBarValue >= 100) {
+            this.progressBarValue = 100;
+            this.authService.confirmEmail(confirmEmail).subscribe({
+              next: (response: any) => {
+                clearInterval(setID);
+                this.toastService.show({title: "Confirmare Email", message: response.message, classname: "text-success"});
+                this.router.navigateByUrl('/')
+              },
+              error: (response) => {
+                clearInterval(setID);
+                this.toastService.show({title: "Confirmare Email", message: response.error.message, classname: "text-danger"});
+                this.router.navigateByUrl('/')
+              }
+            })
           }
-        })
+        }, 700)
       }
     });
   }

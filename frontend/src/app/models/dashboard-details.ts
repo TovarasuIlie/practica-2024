@@ -1,3 +1,6 @@
+import { Announcement } from "./announcement";
+import { LogHistory } from "./user";
+
 export interface DashboardDetails {
     numberOfUsers: number;
     numberOfUsersToday: number;
@@ -7,4 +10,6 @@ export interface DashboardDetails {
     numberOfSuspendedAccountToday: number;
     numberOfUnsolvedReports: number;
     numberOfUnsolvedReportsToday: number;
+    last24Ads: Announcement[];
+    last24Logs: LogHistory[];
 }

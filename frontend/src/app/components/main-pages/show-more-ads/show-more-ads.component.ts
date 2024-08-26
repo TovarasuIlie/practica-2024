@@ -3,6 +3,7 @@ import { AnnouncementManageService } from '../../../services/announcement-manage
 import { AnnouncementService } from '../../../services/announcement.service';
 import { Announcement } from '../../../models/announcement';
 import { AuthService } from '../../../services/auth.service';
+import { environment } from '../../../../environments/environment.development';
 
 @Component({
   selector: 'app-show-more-ads',
@@ -27,6 +28,6 @@ export class ShowMoreAdsComponent implements OnInit {
   }
 
   getImage(fileName: string, index: string) {
-    return "http://localhost:8080/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
+    return environment.API_URL + "/ads-imgs/" + fileName + "/" + fileName + "-" + index + ".jpeg";
   }
 }

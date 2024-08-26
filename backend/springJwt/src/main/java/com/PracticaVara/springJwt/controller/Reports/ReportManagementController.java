@@ -24,9 +24,9 @@ public class ReportManagementController {
         return reportManagementService.getReportById(id);
     }
 
-    @PostMapping("update-report-status/{id}")
-    public ResponseEntity<?> updateReportStatus(@PathVariable Integer id, @RequestParam boolean status) {
-        return reportManagementService.updateReportStatus(id, status);
+    @GetMapping("update-report-status/{id}")
+    public ResponseEntity<?> updateReportStatus(@PathVariable Integer id) {
+        return reportManagementService.updateReportStatus(id);
     }
 
     @GetMapping("get-reports-announcements/{id}")
