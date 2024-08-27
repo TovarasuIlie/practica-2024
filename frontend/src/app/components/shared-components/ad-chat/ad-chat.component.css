@@ -38,3 +38,10 @@
 .chat-container .you {
     background-color: rgba(25, 135, 84, 0.7);
 }
+
+#ad-chat-card .object-fit {
+    width: 100%;
+    height: 50px;
+    object-fit: contain;
+    object-position: 50% 50%;
+}

@@ -9,7 +9,7 @@ import { jwtDecode } from 'jwt-decode';
 @Injectable({
   providedIn: 'root'
 })
-export class AdminGuard implements CanActivate {
+export class AdminOnlyGuard implements CanActivate {
   constructor(private authService: AuthService, private toastService: ToastService, private router: Router) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
@@ -17,12 +17,12 @@ export class AdminGuard implements CanActivate {
       map((user: User | null) => {
         if(user) {
           const decodedToken: User = jwtDecode(user.jwt);
-          if(decodedToken.role == "ROLE_ADMIN" || decodedToken.role == "ROLE_MODERATOR") {
+          if(decodedToken.role == "ROLE_ADMIN") {
             return true;
           }
         }
         this.toastService.show({title: "Acces interzis!", message: "Nu sunteti autorizat ca sa intrati pe aceasta pagina!", classname: "text-danger"});
-        this.router.navigateByUrl('/');
+        this.router.navigateByUrl('/dashboard');
         return false;
       }) 
     )

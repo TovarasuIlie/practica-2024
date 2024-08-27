@@ -12,6 +12,7 @@ import { cateogryResolver } from '../../resovers/cateogry.resolver';
 import { ReportsListPageComponent } from './report-management-pages/reports-list-page/reports-list-page.component';
 import { ReportDetailsPageComponent } from './report-management-pages/report-details-page/report-details-page.component';
 import { reportManagementResolver } from '../../resovers/report-management.resolver';
+import { AdminOnlyGuard } from '../../route-guards/admin-only';
 
 const routes: Routes = [
   {
@@ -20,6 +21,7 @@ const routes: Routes = [
   },
   {
     path: "utilizatori",
+    canActivate: [AdminOnlyGuard],
     children: [
       {
         path: "",
@@ -53,12 +55,14 @@ const routes: Routes = [
   {
     path: "categorii",
     component: CategoryPageComponent,
+    canActivate: [AdminOnlyGuard],
     resolve: {
       categories: cateogryResolver
     }
   },
   {
     path: "raportari-anunturi",
+    canActivate: [AdminOnlyGuard],
     children: [
       {
         path: "",

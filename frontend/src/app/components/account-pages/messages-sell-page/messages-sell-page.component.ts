@@ -4,7 +4,7 @@ import { Announcement } from '../../../models/announcement';
 import { ChatroomService } from '../../../services/chatroom.service';
 import { Chatroom, ChatroomMessage } from '../../../models/chatroom';
 import { AuthService } from '../../../services/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import Stomp from 'stompjs';
 import SockJS from 'sockjs-client';
 import { environment } from '../../../../environments/environment.development';

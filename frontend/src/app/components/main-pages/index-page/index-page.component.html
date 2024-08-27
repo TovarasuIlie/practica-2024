@@ -61,7 +61,7 @@
     </div>
 
     <div *ngIf="!loadingAds" class="row row-cols-1 row-cols-lg-4 g-3 g-lg-3 mb-5">
-        <div class="col d-flex" *ngFor="let ad of ads">
+        <div class="col d-flex" *ngFor="let ad of ads.slice(0, 12)">
             <div class="card shadow-sm p-3 mb-3 bg-body rounded w-100" id="ad-card">
                 <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                 <div class="card-body">

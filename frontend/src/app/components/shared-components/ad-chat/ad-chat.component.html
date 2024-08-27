@@ -9,8 +9,8 @@
     <div class="offcanvas-body">
         <div class="container-fluid shadow-sm mx-0">
             <div class="row" style="font-size: 14px;">
-                <div class="col-3">
-                    <img [src]="getImage(chatroom.announcement.imageUrl, '0')" class="img-fluid m-0">
+                <div class="col-3" id="ad-chat-card">
+                    <img [src]="getImage(chatroom.announcement.imageUrl, '0')" class="img-fluid m-0 object-fit">
                 </div>
                 <div class="col d-flex flex-column align-items-stretch">
                     <p class="mb-0">{{ chatroom.announcement.title | limitTo: 35 }}</p>

@@ -13,7 +13,7 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li [routerLinkActive]="['active']">
+                <li *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN'" [routerLinkActive]="['active']">
                     <a [routerLink]="['/dashboard', 'utilizatori']">
                         <i class="fa-solid fa-users"></i>
                         <p>Utilizatori</p>
@@ -25,13 +25,13 @@
                         <p>Anunturi</p>
                     </a>
                 </li>
-                <li [routerLinkActive]="['active']">
+                <li *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN'" [routerLinkActive]="['active']">
                     <a [routerLink]="['/dashboard', 'categorii']">
                         <i class="fa-solid fa-layer-group"></i>
                         <p>Categorii</p>
                     </a>
                 </li>
-                <li [routerLinkActive]="['active']">
+                <li *ngIf="(authService.user$ | async)?.role == 'ROLE_ADMIN'" [routerLinkActive]="['active']">
                     <a [routerLink]="['/dashboard', 'raportari-anunturi']">
                         <i class="fa-regular fa-flag"></i>
                         <p>Raportari Anunturi</p>
