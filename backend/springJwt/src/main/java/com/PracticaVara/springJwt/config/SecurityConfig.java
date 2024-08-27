@@ -4,6 +4,10 @@ import com.PracticaVara.springJwt.filter.JwtAuthenticationFilter;
 import com.PracticaVara.springJwt.interceptors.BearerTokenInterceptor;
 import com.PracticaVara.springJwt.interceptors.BearerTokenWrapper;
 import com.PracticaVara.springJwt.service.AccountServices.UserDetailsServiceImp;
+import org.apache.catalina.connector.Connector;
+import org.springframework.boot.web.embedded.tomcat.TomcatConnectorCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -41,6 +45,7 @@ public class SecurityConfig implements WebMvcConfigurer {
                                 "/api/Account/forgot-password/**",
                                 "/api/Account/reset-password/**",
                                 "/api/Account/confirm-email").permitAll();
+                        req.requestMatchers("/api/Account/update-profile", "/api/Account/get-account").authenticated();
                         req.requestMatchers("/api/Authentification/refresh-page").authenticated();
                         req.requestMatchers("/ads-imgs/**").permitAll();
                         req.requestMatchers("/category-imgs/**").permitAll();
@@ -96,5 +101,17 @@ public class SecurityConfig implements WebMvcConfigurer {
     @Bean
     public BearerTokenWrapper bearerTokenWrapper() {
         return new BearerTokenWrapper();
+    }
+
+    @Bean
+    public ConfigurableServletWebServerFactory webServerFactory() {
+        TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+        factory.addConnectorCustomizers(new TomcatConnectorCustomizer() {
+            @Override
+            public void customize(Connector connector) {
+                connector.setProperty("relaxedQueryChars", "|{}[]");
+            }
+        });
+        return factory;
     }
 }

@@ -44,7 +44,7 @@ export class AddAdvertismentPageComponent implements OnInit {
       title: [null, [Validators.required, Validators.minLength(16), Validators.maxLength(70), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       content: [null, [Validators.required, Validators.minLength(40), Validators.maxLength(9000), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       category: [null, [Validators.required]],
-      address: [null, [Validators.required, Validators.minLength(2), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      address: [null, [Validators.required, Validators.minLength(2)]],
       county: [null, [Validators.required]],
       contactPersonName: [this.defaultContactName, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       phoneNumber: [null, [Validators.required, Validators.pattern(/^[0-9]{10}$/g)]],

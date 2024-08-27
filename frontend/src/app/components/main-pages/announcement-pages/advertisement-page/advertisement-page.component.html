@@ -132,7 +132,7 @@
                             mesaj</button>
                         <button *ngIf="(authService.user$ | async)?.id != null" class="btn btn-outline-success btn-lg w-100" (click)="changeText()"><i
                                 class="fas fa-phone-alt"></i> {{ callSeller }}</button>
-                        <a [routerLink]="['/oferte', currentAd.user.username]"
+                        <a [routerLink]="['/oferte', currentAd.user.username]" *ngIf="(authService.user$ | async)?.id != currentAd.user.id"
                             class="text-decoration-none text-muted text-center">Mai multe anunturi ale acestui
                             vanzator <i class="fas fa-chevron-circle-right"></i></a>
                     </div>

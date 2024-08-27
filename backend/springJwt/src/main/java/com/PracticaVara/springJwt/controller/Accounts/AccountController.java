@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AccountController {
     private final AccountService accountService;
-    private final EmailService emailService;
 
     @GetMapping("forgot-password/{email}")
     public ResponseEntity<APIMessage> forgotPassword(@PathVariable("email") String email) {

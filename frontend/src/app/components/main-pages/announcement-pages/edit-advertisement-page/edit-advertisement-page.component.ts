@@ -60,7 +60,7 @@ export class EditAdvertisementPageComponent {
     this. editAdForm = this.fb.group({
       title: [this.currentAd.title, [Validators.required, Validators.minLength(16), Validators.maxLength(70), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       content: [this.currentAd.content, [Validators.required, Validators.minLength(40), Validators.maxLength(9000), Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
-      address: [this.currentAd.address, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
+      address: [this.currentAd.address, [Validators.required]],
       contactPersonName: [this.currentAd.contactPersonName, [Validators.required, Validators.pattern(/([A-Za-z0-9]+( [A-Za-z0-9]+)+)/i)]],
       phoneNumber: [this.currentAd.phoneNumber, [Validators.required]],
       price: [this.currentAd.price, [Validators.required, Validators.pattern(/[0-9]/)]],

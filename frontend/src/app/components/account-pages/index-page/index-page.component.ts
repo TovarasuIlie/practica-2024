@@ -79,7 +79,9 @@ export class IndexPageComponent {
         this.closeModal.forEach(element => {
           element.nativeElement.click();
         });
+        this.refreshAds();
         this.toastService.show({title: "Anunt sters", message: "Anuntul a fost sters cu succes!", classname: "text-success"});
+        this.adId = 0;
       }
     })
   }

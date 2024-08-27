@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface AnnouncementRepository extends JpaRepository<Announcement, Integer> {
     List<Announcement> findByExpirationDateBefore(LocalDateTime now);
     List<Announcement> findByUser(User user);
-    List<Announcement> findByIsDeactivatedFalse();
+    List<Announcement> findByUserAndIsApprovedTrueAndIsDeactivatedFalse(User user);
     List<Announcement> findByIsApprovedTrue();
     List<Announcement> findByIsApprovedFalse();
     List<Announcement> findByTitleContainingIgnoreCaseAndIsApprovedTrue(String title);

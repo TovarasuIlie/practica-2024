@@ -1,5 +1,23 @@
 <app-header></app-header>
 
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Sterge anunt</h1>
+                <button #closeModal type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Esti sigur ca doresti sa stergi anuntul selectat?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Anuleaza</button>
+                <button type="button" class="btn btn-danger" (click)="deleteAd()">Sterge definitiv</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="container-fluid pt-5 mt-5 bg-white shadow rounded mb-5">
     <div class="container-lg">
         <h3 class="fw-semibold mb-5 mt-3">Anunturile tale</h3>
@@ -22,16 +40,19 @@
 <div class="container-lg">
     <ul class="nav nav-tabs" id="myTab" role="tablist">
         <li class="nav-item" role="presentation">
-            <button class="nav-link active" id="active-ads-tab" data-bs-toggle="tab" data-bs-target="#active-ads-tab-pane"
-                type="button" role="tab" aria-controls="active-ads-tab-pane" aria-selected="true">Active</button>
+            <button class="nav-link active" id="active-ads-tab" data-bs-toggle="tab"
+                data-bs-target="#active-ads-tab-pane" type="button" role="tab" aria-controls="active-ads-tab-pane"
+                aria-selected="true">Active</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="waiting-ads-tab" data-bs-toggle="tab" data-bs-target="#waiting-ads-tab-pane"
-                type="button" role="tab" aria-controls="waiting-ads-tab-pane" aria-selected="false">In Asteptare</button>
+                type="button" role="tab" aria-controls="waiting-ads-tab-pane" aria-selected="false">In
+                Asteptare</button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="disabled-ads-tab" data-bs-toggle="tab" data-bs-target="#disabled-ads-tab-pane"
-                type="button" role="tab" aria-controls="disabled-ads-tab-pane" aria-selected="false">Dezactivate</button>
+                type="button" role="tab" aria-controls="disabled-ads-tab-pane"
+                aria-selected="false">Dezactivate</button>
         </li>
     </ul>
     <div class="tab-content" id="adsTabContent">
@@ -42,7 +63,8 @@
                     <div class="d-flex flex-column align-items-center my-5">
                         <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
                         <h4 class="fw-semibold">Momentant nu ai nici un anut activ</h4>
-                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au fost activate.</p>
+                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au
+                            fost activate.</p>
                         <button class="btn btn-lg btn-success fw-semibold">Adauga anunt</button>
                     </div>
                 </div>
@@ -57,9 +79,11 @@
                         <div class="col-md">
                             <div class="row">
                                 <div class="col-md">
-                                    <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                                    <a [attr.href]="'/anunt/' + ad.url"
+                                        class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                                     <p class="text-muted">{{ ad.address }}</p>
-                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate
+                                        | date:"dd.MM.YYYY" }}</p>
                                     <div class="badge bg-success">
                                         Anunt aprobat
                                     </div>
@@ -76,21 +100,26 @@
                             <p class="text-muted m-0" style="font-size: 13px;">ID: {{ad.id}}</p>
                         </div>
                         <div class="col-md d-flex flex-row justify-content-end gap-2">
-                            <button *ngIf="!ad.deactivated" class="btn btn-sm btn-outline-warning fw-semibold" (click)="deactivateAd(ad.id)">Dezactiveaza</button>
-                            <button class="btn btn-sm btn-outline-primary fw-semibold" [routerLink]="['/adauga-anunt/editeaza', ad.id]">Editeaza</button>
-                            <button class="btn btn-sm btn-outline-danger fw-semibold" (click)="setId(ad.id)">Sterge</button>
+                            <button *ngIf="!ad.deactivated" class="btn btn-sm btn-outline-warning fw-semibold"
+                                (click)="deactivateAd(ad.id)">Dezactiveaza</button>
+                            <button class="btn btn-sm btn-outline-primary fw-semibold"
+                                [routerLink]="['/adauga-anunt/editeaza', ad.id]">Editeaza</button>
+                            <button class="btn btn-sm btn-outline-danger fw-semibold"
+                                (click)="setId(ad.id)" data-bs-target="#delete-modal" data-bs-toggle="modal">Sterge</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="waiting-ads-tab-pane" role="tabpanel" aria-labelledby="waiting-ads-tab" tabindex="0">
+        <div class="tab-pane fade" id="waiting-ads-tab-pane" role="tabpanel" aria-labelledby="waiting-ads-tab"
+            tabindex="0">
             <div *ngIf="!waitingAds.length" class="container">
                 <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
                     <div class="d-flex flex-column align-items-center my-5">
                         <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
                         <h4 class="fw-semibold">Momentant nu ai nici un anut dezactivat</h4>
-                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au fost activate.</p>
+                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au
+                            fost activate.</p>
                     </div>
                 </div>
             </div>
@@ -104,9 +133,11 @@
                         <div class="col-md">
                             <div class="row">
                                 <div class="col-md">
-                                    <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                                    <a [attr.href]="'/anunt/' + ad.url"
+                                        class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                                     <p class="text-muted">{{ ad.address }}</p>
-                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate
+                                        | date:"dd.MM.YYYY" }}</p>
                                     <div class="badge bg-warning">
                                         Anunt in curs de aprobare
                                     </div>
@@ -123,21 +154,26 @@
                             <p class="text-muted m-0" style="font-size: 13px;">ID: {{ad.id}}</p>
                         </div>
                         <div class="col-md d-flex flex-row justify-content-end gap-2">
-                            <button *ngIf="!ad.deactivated" class="btn btn-sm btn-outline-warning fw-semibold" (click)="deactivateAd(ad.id)">Dezactiveaza</button>
-                            <button class="btn btn-sm btn-outline-primary fw-semibold" [routerLink]="['/adauga-anunt/editeaza', ad.id]">Editeaza</button>
-                            <button class="btn btn-sm btn-outline-danger fw-semibold" (click)="setId(ad.id)">Sterge</button>
+                            <button *ngIf="!ad.deactivated" class="btn btn-sm btn-outline-warning fw-semibold"
+                                (click)="deactivateAd(ad.id)">Dezactiveaza</button>
+                            <button class="btn btn-sm btn-outline-primary fw-semibold"
+                                [routerLink]="['/adauga-anunt/editeaza', ad.id]">Editeaza</button>
+                            <button class="btn btn-sm btn-outline-danger fw-semibold"
+                                (click)="setId(ad.id)" data-bs-target="#delete-modal" data-bs-toggle="modal">Sterge</button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="disabled-ads-tab-pane" role="tabpanel" aria-labelledby="disabled-ads-tab" tabindex="0">
+        <div class="tab-pane fade" id="disabled-ads-tab-pane" role="tabpanel" aria-labelledby="disabled-ads-tab"
+            tabindex="0">
             <div *ngIf="!disabledAds.length" class="container">
                 <div class="d-flex align-items-center justify-content-center" style="min-height: 200px;">
                     <div class="d-flex flex-column align-items-center my-5">
                         <img src="assets/site-imgs/not-found.png" class="img-fluid w-75" alt="Not Found Image">
                         <h4 class="fw-semibold">Momentant nu ai nici un anut dezactivat</h4>
-                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au fost activate.</p>
+                        <p class="text-muted">Acest anunțuri pot fi văzute de oricine și expiră la 30 de zile după ce au
+                            fost activate.</p>
                     </div>
                 </div>
             </div>
@@ -151,9 +187,11 @@
                         <div class="col-md">
                             <div class="row">
                                 <div class="col-md">
-                                    <a [attr.href]="'/anunt/' + ad.url" class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
+                                    <a [attr.href]="'/anunt/' + ad.url"
+                                        class="fw-semibold fs-4 text-decoration-none text-dark">{{ ad.title }}</a>
                                     <p class="text-muted">{{ ad.address }}</p>
-                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate | date:"dd.MM.YYYY" }}</p>
+                                    <p class="text-muted">{{ ad.createdDate | date:"dd.MM.YYYY"}} - {{ ad.expirationDate
+                                        | date:"dd.MM.YYYY" }}</p>
                                     <div class="badge bg-danger">
                                         Anunt dezactivat
                                     </div>
@@ -170,8 +208,10 @@
                             <p class="text-muted m-0" style="font-size: 13px;">ID: {{ad.id}}</p>
                         </div>
                         <div class="col-md d-flex flex-row justify-content-end gap-2">
-                            <button *ngIf="ad.deactivated" class="btn btn-sm btn-outline-success fw-semibold" (click)="activateAd(ad.id)">Activeaza</button>
-                            <button class="btn btn-sm btn-outline-danger fw-semibold" (click)="setId(ad.id)">Sterge</button>
+                            <button *ngIf="ad.deactivated" class="btn btn-sm btn-outline-success fw-semibold"
+                                (click)="activateAd(ad.id)">Activeaza</button>
+                            <button class="btn btn-sm btn-outline-danger fw-semibold"
+                                (click)="setId(ad.id)" data-bs-target="#delete-modal" data-bs-toggle="modal">Sterge</button>
                         </div>
                     </div>
                 </div>

@@ -75,7 +75,7 @@ public class AnnouncementService {
 
     public List<Announcement> findByUser(String username) {
         Optional<User> user = userRepository.findByUsername(username);
-        return announcementRepository.findByUser(user.get());
+        return announcementRepository.findByUserAndIsApprovedTrueAndIsDeactivatedFalse(user.get());
     }
 
     public ResponseEntity<Object> save(AnnouncementDTO announcementDTO, MultipartFile[] imageFile) throws IOException {

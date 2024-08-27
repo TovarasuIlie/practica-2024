@@ -131,7 +131,7 @@ public class AccountService {
 
         LogHistory newLogHistory = new LogHistory();
         newLogHistory.setUser(currentUser);
-        newLogHistory.setAction("Resetare parola.");
+        newLogHistory.setAction("Si-a actualizat profilul sau.");
         newLogHistory.setIpAddress(currentUser.getIpAddress());
         newLogHistory.setActionDate(LocalDateTime.now());
         logHistoryRepository.save(newLogHistory);

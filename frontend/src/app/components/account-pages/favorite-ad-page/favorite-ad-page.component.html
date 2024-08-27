@@ -27,7 +27,7 @@
                 <div class="card shadow border-0 p-3 mb-5 bg-body rounded w-100" id="ad-card">
                     <img [src]="getImage(ad.imageUrl, '0')" class="card-img-top object-fit" alt="...">
                     <div class="card-body">
-                        <h6 [routerLink]="['anunt', ad.url]" class="card-title">{{ ad.title }}</h6>
+                        <a [attr.href]="'/anunt/' + ad.url" class="card-title pe-auto text-decoration-none text-dark fw-semibold fs-5">{{ ad.title }}</a>
                         <p class="card-text fw-bold">{{ ad.price + " " + ad.currency }}</p>
                         <div class="row">
                             <div class="col d-flex flex-row align-items-center">
